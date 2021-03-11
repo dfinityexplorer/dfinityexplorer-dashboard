@@ -2,7 +2,7 @@
   "name": "dfinityexplorer",
   "version": "0.0.2",
   "private": true,
-  "homepage": ".",
+  "homepage": "https://www.dfinityexplorer.org",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
