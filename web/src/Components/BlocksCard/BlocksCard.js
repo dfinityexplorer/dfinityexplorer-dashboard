@@ -104,9 +104,11 @@ import Constants from '../../constants';
       `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInMinute}`;
     axios.get(url)
       .then(res => {
-        if (res.data.data.result.length && res.data.data.result[0].values.length) {
+        if (res.data.data.result.length && res.data.data.result[0].values.length >= 2) {
           const values = res.data.data.result[0].values;
-          const lastValue = values[values.length-1];
+          // Temporary fix: Use second to last value, since dashboard.dfinity.network seems to
+          // have a bug where the last value isn't always reliable!!!
+          const lastValue = values[values.length-2];
           const blockHeight = Math.floor(lastValue[1]);
           this.setState({
             blockHeight: blockHeight
