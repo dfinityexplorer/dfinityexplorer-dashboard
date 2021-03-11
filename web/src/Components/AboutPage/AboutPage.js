@@ -319,7 +319,7 @@ class AboutPage extends TrackablePage {
             <GridParallax container direction='column' justify='center' alignItems='flex-start' breakpoint={breakpoint}>
               <Grid item>
                 <TypographyParallax breakpoint={breakpoint}>
-                  An open-source block explorer
+                  An open-source network dashboard
                   <br />
                   built by the DFINITY community
                 </TypographyParallax>
@@ -402,8 +402,8 @@ class AboutPage extends TrackablePage {
             </TypographyBody>
             <br />
             <TypographyBody>
-              {'We believe that all block explorers of public blockchains should be open source. '}
-              {'If you’re going to trust a block explorer to provide timely, accurate, and '}
+              {'We believe that all dashboards of public blockchains should be open source. '}
+              {'If you’re going to trust a dashboard to provide timely, accurate, and '}
               {'uncensored information, the code should be open for all to see.'}
             </TypographyBody>
           </Fade>

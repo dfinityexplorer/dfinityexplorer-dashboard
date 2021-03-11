@@ -2,7 +2,7 @@
 [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/dfinityexplorer/dfinityexplorer-dashboard/blob/main/LICENSE)
 [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/dfinityexplorer)
 
-[DFINITY Explorer](https://www.dfinityexplorer.org/) DFINITY Explorer is an open-source block explorer built by the DFINITY community.
+[DFINITY Explorer](https://www.dfinityexplorer.org/) DFINITY Explorer is an open-source network dashboard built by the DFINITY community.
 
 ## Open-Source Libraries Used
 * D3
