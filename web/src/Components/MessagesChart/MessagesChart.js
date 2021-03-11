@@ -127,7 +127,7 @@ class MessagesChart extends AreaChart {
    * @protected
    */
   getDomainMinY(dataMin) {
-    return Math.floor(dataMin / 1000) * 1000;
+    return Math.floor(dataMin / 100) * 100;
   }
 
   /**
@@ -137,7 +137,7 @@ class MessagesChart extends AreaChart {
    * @protected
    */
   getDomainMaxY(dataMax) {
-    return Math.ceil(dataMax / 1000) * 1000;
+    return Math.ceil(dataMax / 100) * 100;
   }
 
   /**

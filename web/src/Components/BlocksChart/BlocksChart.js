@@ -128,7 +128,7 @@ class BlocksChart extends AreaChart {
    * @protected
    */
   getDomainMinY(dataMin) {
-    return Math.floor(dataMin / 100000) * 100000;
+    return Math.floor(dataMin / 1000) * 1000;
   }
 
   /**
@@ -138,7 +138,7 @@ class BlocksChart extends AreaChart {
    * @protected
    */
   getDomainMaxY(dataMax) {
-    return Math.ceil(dataMax / 100000) * 100000;
+    return Math.ceil(dataMax / 1000) * 1000;
   }
 
   /**
