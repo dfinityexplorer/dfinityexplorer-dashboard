@@ -48,7 +48,9 @@ class BlocksChart extends AreaChart {
    * @public
    */
   componentDidMount() {
-    // Get a two weeks of daily data.
+    // Get a two weeks of daily data. Note that there is currently a bug in
+    // dashboard.dfinity.network where the last entry returned for this query is one day ago, not
+    // now.
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 15);
     const endDate = new Date();
@@ -63,7 +65,7 @@ class BlocksChart extends AreaChart {
         const blocksData = values.slice(1).map((value) => {
           const date = new Date(value[0] * 1000);
           const height = Math.floor(value[1]);
-          const numBlocks = height - prevHeight;
+          const numBlocks = Math.max(height - prevHeight, 0);
           prevHeight = height;
           return {date: date.getTime(), numBlocks: numBlocks};
         });

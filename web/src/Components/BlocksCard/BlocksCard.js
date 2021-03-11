@@ -35,7 +35,7 @@ import Constants from '../../constants';
     super(props);
 
     this.state = {
-      blockHeight: 0,
+      blockHeight: -1,
       error: false
     };
   }
@@ -73,7 +73,7 @@ import Constants from '../../constants';
     let blockHeightText;
     if (error)
       blockHeightText = 'Network error';
-    else if (blockHeight === 0)
+    else if (blockHeight === -1)
       blockHeightText = 'Loading...';
     else
       blockHeightText = blockHeight.toLocaleString();
@@ -94,14 +94,14 @@ import Constants from '../../constants';
    * @private
    */
   pollForBlockHeight() {
-    // Get two days of daily data. If there is an API to get just the current block height, we
+    // Get 10 minutes of minute data. If there is an API to get just the current block height, we
     // should use it here.
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 2);
+    startDate.setMinutes(startDate.getMinutes() - 10);
     const endDate = new Date();
-    const secondsInDay = 24 * 60 * 60;
+    const secondsInMinute = 60;
     const url =
-      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInDay}`;
+      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInMinute}`;
     axios.get(url)
       .then(res => {
         if (res.data.data.result.length && res.data.data.result[0].values.length) {

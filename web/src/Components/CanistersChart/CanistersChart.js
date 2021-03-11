@@ -63,7 +63,7 @@ class CanistersChart extends AreaChart {
         const canistersData = values.slice(1).map((value) => {
           const date = new Date(value[0] * 1000);
           const total = Math.floor(value[1]);
-          const numCanisters = total - prevTotal;
+          const numCanisters = Math.max(total - prevTotal, 0);
           prevTotal = total;
           return {date: date.getTime(), numCanisters: numCanisters};
         });

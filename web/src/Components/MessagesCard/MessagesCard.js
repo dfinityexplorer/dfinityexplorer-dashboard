@@ -35,7 +35,7 @@ class MessagesCard extends Component {
     super(props);
 
     this.state = {
-      messagesPerSecond: 0,
+      messagesPerSecond: -1,
       error: false
     };
   }
@@ -73,7 +73,7 @@ class MessagesCard extends Component {
     let messagesTimeText;
     if (error)
       messagesTimeText = 'Network error';
-    else if (messagesPerSecond === 0)
+    else if (messagesPerSecond === -1)
       messagesTimeText = 'Loading...';
     else
       messagesTimeText = messagesPerSecond.toFixed(1) + ' mps';
@@ -94,10 +94,11 @@ class MessagesCard extends Component {
    * @private
    */
   pollForMessagesTime() {
-    // Get one day of hourly data. Ideally, we would get 10 minutes of minute data, but
-    // dashboard.dfinity.network did not return any data with those settings.
+    // Get 6 hours of hourly data. Ideally, we would get 10 minutes of minute data, but
+    // dashboard.dfinity.network did not return any data with those settings. This seems
+    // like it was due to service down time.
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
+    startDate.setMinutes(startDate.getMinutes() - 360);
     const endDate = new Date();
     const secondsInHour = 60 * 60;
     const url =
@@ -108,8 +109,8 @@ class MessagesCard extends Component {
           const values = res.data.data.result[0].values;
           const firstValue = values[0];
           const lastValue = values[values.length-1];
-          const numMessages = Math.floor(lastValue[1] - firstValue[1]);
-          const seconds = lastValue[0] - firstValue[0];
+          const numMessages = Math.max(Math.floor(lastValue[1] - firstValue[1]), 0);
+          const seconds = Math.max(lastValue[0] - firstValue[0], 1);
           this.setState({
             messagesPerSecond: numMessages / seconds
           });

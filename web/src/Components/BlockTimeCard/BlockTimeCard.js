@@ -35,7 +35,7 @@ class BlockTimeCard extends Component {
     super(props);
 
     this.state = {
-      secondsPerBlock: 0,
+      secondsPerBlock: -1,
       error: false
     };
   }
@@ -73,7 +73,7 @@ class BlockTimeCard extends Component {
     let blockTimeText;
     if (error)
       blockTimeText = 'Network error';
-    else if (secondsPerBlock === 0)
+    else if (secondsPerBlock === -1)
       blockTimeText = 'Loading...';
     else
       blockTimeText = secondsPerBlock.toFixed(1) + ' s';
@@ -108,8 +108,8 @@ class BlockTimeCard extends Component {
           const values = res.data.data.result[0].values;
           const firstValue = values[0];
           const lastValue = values[values.length-1];
-          const numBlocks = Math.floor(lastValue[1] - firstValue[1]);
-          const seconds = lastValue[0] - firstValue[0];
+          const numBlocks = Math.max(Math.floor(lastValue[1] - firstValue[1]), 1);
+          const seconds = Math.max(lastValue[0] - firstValue[0], 0);
           this.setState({
             secondsPerBlock: seconds / numBlocks
           });

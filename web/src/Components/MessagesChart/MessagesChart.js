@@ -64,7 +64,7 @@ class MessagesChart extends AreaChart {
         const messagesData = values.slice(1).map((value) => {
           const date = new Date(value[0] * 1000);
           const total = Math.floor(value[1]);
-          const numMessages = total - prevTotal;
+          const numMessages = Math.max(total - prevTotal, 0);
           prevTotal = total;
           return {date: date.getTime(), numMessages: numMessages};
         });
