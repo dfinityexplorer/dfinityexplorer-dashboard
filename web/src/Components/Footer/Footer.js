@@ -193,9 +193,8 @@ class Footer extends ResponsiveComponent {
             <Grid item>
               <FooterTypography color='inherit'>
                 {'('}
-                {this.getNomicsTextDescription()}
                 <FooterA href={Constants.URI_ABOUT_NOMICS} target='_blank' rel='noopener noreferrer'>
-                  {this.getNomicsTextLink()}
+                  {this.getNomicsText()}
                 </FooterA>
                 {')'}
               </FooterTypography>
@@ -269,32 +268,17 @@ class Footer extends ResponsiveComponent {
   }
 
   /**
-   * Return the Nomics attribution description text.
-   * @return {String} The Nomics attribution description text.
-   * @private
-   */
-   getNomicsTextDescription() {
-    const breakpoint = getBreakpoint();
-    switch (breakpoint) {
-      case Breakpoints.XS:
-        return 'Price data by ';
-      default:
-        return 'Price data provided by Nomics.com ';
-    }
-  }
-
-  /**
    * Return the Nomics attribution link text.
    * @return {String} The Nomics attribution link text.
    * @private
    */
-  getNomicsTextLink() {
+  getNomicsText() {
     const breakpoint = getBreakpoint();
     switch (breakpoint) {
       case Breakpoints.XS:
-        return 'Nomics.com';
+        return 'Pricing Data By Nomics';
       default:
-        return 'Cryptocurrency Market Data API';
+        return 'Crypto Market Cap & Pricing Data Provided By Nomics';
     }
   }
 };

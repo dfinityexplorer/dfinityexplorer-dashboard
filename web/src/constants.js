@@ -11,7 +11,7 @@ const Constants = Object.freeze({
   URI_CDN_GOOGLE_FONTS:
     'https://fonts.googleapis.com/css?family=Istok+Web:400|Muli:200,300,400,500',
   URI_ABOUT_DFINITY: 'https://dfinity.org/',
-  URI_ABOUT_NOMICS: 'https://p.nomics.com/cryptocurrency-bitcoin-api',
+  URI_ABOUT_NOMICS: 'https://nomics.com/',
   URI_ABOUT_MATERIAL_UI: 'https://material-ui.com/',
   URI_ABOUT_REACT: 'https://reactjs.org/',
   URI_ABOUT_STYLED_COMPONENTS: 'https://www.styled-components.com/',
