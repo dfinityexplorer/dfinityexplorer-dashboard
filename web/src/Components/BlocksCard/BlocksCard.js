@@ -106,8 +106,8 @@ import Constants from '../../constants';
       .then(res => {
         if (res.data.data.result.length && res.data.data.result[0].values.length >= 2) {
           const values = res.data.data.result[0].values;
-          // Temporary fix: Use second to last value, since dashboard.dfinity.network seems to
-          // have a bug where the last value isn't always reliable!!!
+          // Temporary workaround fix: Use second to last value, since dashboard.dfinity.network
+          // seems to have a bug where the last value isn't always reliable!!!
           const lastValue = values[values.length-2];
           const blockHeight = Math.floor(lastValue[1]);
           this.setState({

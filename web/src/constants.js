@@ -16,7 +16,7 @@ const Constants = Object.freeze({
   URI_ABOUT_REACT: 'https://reactjs.org/',
   URI_ABOUT_STYLED_COMPONENTS: 'https://www.styled-components.com/',
   URI_GITHUB_CONTRIBUTORS: 'https://github.com/orgs/dfinityexplorer/people',
-  URI_GITHUB_DFINITY_EXPLORER_PROJECT: 'https://github.com/dfinityexplorer/dfinityexplorer',
+  URI_GITHUB_DFINITY_EXPLORER_PROJECT: 'https://github.com/dfinityexplorer/dfinityexplorer-dashboard',
   URI_GITHUB_DYLAN: 'https://github.com/dylancm4',
   URI_GITHUB_MIT_LICENSE: 'https://github.com/dfinityexplorer/dfinityexplorer/blob/master/LICENSE',
   URI_GITHUB_TODD: 'https://github.com/toddkitchens',
