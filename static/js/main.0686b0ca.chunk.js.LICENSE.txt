@@ -1,0 +1,127 @@
+/*!!!pollForBlockHeight() {//!!!
+    //!!!Access to XMLHttpRequest at 'https://dashboard.internetcomputer.org/api/metrics/block?_=1615915812209' from origin 'http://localhost:3000' has been blocked by CORS policy: The 'Access-Control-Allow-Origin' header has a value 'https://dashboard.dfinity.network' that is not equal to the supplied origin.
+    //!!!Access to XMLHttpRequest at 'https://dashboard.internetcomputer.org/api/metrics/cycles-burned?_=1615915997166' from origin 'http://localhost:3000' has been blocked by CORS policy: The 'Access-Control-Allow-Origin' header has a value 'https://dashboard.dfinity.network' that is not equal to the supplied origin.
+    const date = new Date();
+    //https://dashboard.internetcomputer.org/api/metrics/block?_=1615914772832
+    //https://dashboard.internetcomputer.org/api/metrics/cycles-burned?_=1615914772831
+    const url =
+      `https://dashboard.internetcomputer.org/api/metrics/cycles-burned?_=${date.getTime()}`;
+      //`https://dashboard.internetcomputer.org/api/metrics/block?_=${date.getTime()}`;
+    axios.get(url)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(() => {
+        this.setState({
+          error: true
+        });
+      });
+  }*/
+
+/**
+ * @file AboutPage
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file App
+ * @copyright Copyright (c) 2018-2021 Dylan Miller, Todd Kitchens, an dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file AreaChart
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file BarChart
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file BlocksChart
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file CanistersChart
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file DEAppBar
+ * @copyright Copyright (c) 2018-2021 Dylan Miller, Todd Kitchens, and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file DashCard
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file DfinitySymbolD3
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file Footer
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file HomePage
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file MessagesChart
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file getRandomInt
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file getRandomNumber
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file globalStyle
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file index
+ * @copyright Copyright (c) 2018-2021 Dylan Miller, Todd Kitchens, and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file roundDownDateToDay
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file roundDownDateToHour
+ * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @license MIT License
+ */
