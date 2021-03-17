@@ -7,14 +7,15 @@
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 import axios from 'axios';
-import AreaChart from '../AreaChart/AreaChart';
+import BarChart from '../BarChart/BarChart';
 import Constants from '../../constants';
+import roundDownDateToDay from '../../utils/roundDownDateToDay';
 
 /**
  * This component displays a number of blocks chart with data retrieved from
  * dashboard.dfinity.network.
  */
-class BlocksChart extends AreaChart { 
+class BlocksChart extends BarChart { 
   static propTypes = {
     /**
      * The current Breakpoint, taking the desktop drawer (large screens) width into account.
@@ -51,9 +52,9 @@ class BlocksChart extends AreaChart {
     // Get a two weeks of daily data. Note that there is currently a bug in
     // dashboard.dfinity.network where the last entry returned for this query is one day ago, not
     // now.
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 15);
-    const endDate = new Date();
+    const endDate = roundDownDateToDay(new Date());
+    const startDate = new Date(endDate.getTime());
+    startDate.setDate(endDate.getDate() - 15);
     const secondsInDay = 24 * 60 * 60;
     const url =
       `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInDay}`;
@@ -87,7 +88,7 @@ class BlocksChart extends AreaChart {
    */
   getTitle() {
     const { error } = this.state;
-    let title = 'Block History';
+    let title = 'Blocks';
     if (error)
       title += ' - Network Error'
     return title;
@@ -119,26 +120,6 @@ class BlocksChart extends AreaChart {
    */
   getDataKeyY() {
     return 'numBlocks';
-  }
-
-  /**
-   * Return the minimum value of the domain for the Y-axis.
-   * @param {dataMin} value The minumum value of the data.
-   * @return {String} The minimum value of the domain for the Y-axis.
-   * @protected
-   */
-  getDomainMinY(dataMin) {
-    return Math.floor(dataMin / 1000) * 1000;
-  }
-
-  /**
-   * Return the maximum value of the domain for the Y-axis.
-   * @param {dataMax} value The maximum value of the data.
-   * @return {String} The maximum value of the domain for the Y-axis.
-   * @protected
-   */
-  getDomainMaxY(dataMax) {
-    return Math.ceil(dataMax / 1000) * 1000;
   }
 
   /**
@@ -183,7 +164,7 @@ class BlocksChart extends AreaChart {
    * @protected
    */
   getGetTooltipY(value) {
-    return `New Blocks: ${value.toLocaleString()}`;
+    return `Blocks: ${value.toLocaleString()}`;
   }
 }
 

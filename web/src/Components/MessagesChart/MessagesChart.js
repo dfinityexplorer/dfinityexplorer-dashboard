@@ -7,14 +7,15 @@
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 import axios from 'axios';
-import AreaChart from '../AreaChart/AreaChart';
+import BarChart from '../BarChart/BarChart';
 import Constants from '../../constants';
+import roundDownDateToHour from '../../utils/roundDownDateToHour';
 
 /**
  * This component displays a number of messages chart with data retrieved from
  * dashboard.dfinity.network.
  */
-class MessagesChart extends AreaChart { 
+class MessagesChart extends BarChart { 
   static propTypes = {
     /**
      * The current Breakpoint, taking the desktop drawer (large screens) width into account.
@@ -50,9 +51,9 @@ class MessagesChart extends AreaChart {
   componentDidMount() {
     // Get 24 hours of hourly data. Daily data does not currently work, because
     // dashboard.dfinity.network returns glitchy data for some days within past week.
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
-    const endDate = new Date();
+    const endDate = roundDownDateToHour(new Date());
+    const startDate = new Date(endDate.getTime());
+    startDate.setDate(endDate.getDate() - 1);
     const secondsInHour = 60 * 60;
     const url =
       `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(message_state_transition_completed_ic_duration_seconds_count%7Bic%3D%22${Constants.IC_RELEASE}%22%2C%20ic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInHour}`;
@@ -86,7 +87,7 @@ class MessagesChart extends AreaChart {
    */
   getTitle() {
     const { error } = this.state;
-    let title = 'Message History';
+    let title = 'Messages';
     if (error)
       title += ' - Network Error'
     return title;
@@ -118,26 +119,6 @@ class MessagesChart extends AreaChart {
    */
   getDataKeyY() {
     return 'numMessages';
-  }
-
-  /**
-   * Return the minimum value of the domain for the Y-axis.
-   * @param {dataMin} value The minumum value of the data.
-   * @return {String} The minimum value of the domain for the Y-axis.
-   * @protected
-   */
-  getDomainMinY(dataMin) {
-    return Math.floor(dataMin / 100) * 100;
-  }
-
-  /**
-   * Return the maximum value of the domain for the Y-axis.
-   * @param {dataMax} value The maximum value of the data.
-   * @return {String} The maximum value of the domain for the Y-axis.
-   * @protected
-   */
-  getDomainMaxY(dataMax) {
-    return Math.ceil(dataMax / 100) * 100;
   }
 
   /**
@@ -182,7 +163,7 @@ class MessagesChart extends AreaChart {
    * @protected
    */
   getGetTooltipY(value) {
-    return `New Messages: ${value.toLocaleString()}`;
+    return `Messages: ${value.toLocaleString()}`;
   }
 }
 

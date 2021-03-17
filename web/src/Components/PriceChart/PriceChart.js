@@ -83,7 +83,7 @@ class PriceChart extends AreaChart {
   */
   getTitle() {
     const { error } = this.state;
-    let title = 'Price History - ICP (IOU)';
+    let title = 'Price - ICP (IOU)';
     if (error)
       title += ' - Network Error'
     return title;

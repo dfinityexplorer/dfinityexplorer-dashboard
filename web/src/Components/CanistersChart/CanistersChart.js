@@ -7,14 +7,15 @@
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 import axios from 'axios';
-import AreaChart from '../AreaChart/AreaChart';
+import BarChart from '../BarChart/BarChart';
 import Constants from '../../constants';
+import roundDownDateToDay from '../../utils/roundDownDateToDay';
 
 /**
  * This component displays a number of canisters chart with data retrieved from
  * dashboard.dfinity.network.
  */
-class CanistersChart extends AreaChart { 
+class CanistersChart extends BarChart { 
   static propTypes = {
     /**
      * The current Breakpoint, taking the desktop drawer (large screens) width into account.
@@ -49,9 +50,9 @@ class CanistersChart extends AreaChart {
    */
   componentDidMount() {
     // Get a two weeks of daily data.
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 15);
-    const endDate = new Date();
+    const endDate = roundDownDateToDay(new Date());
+    const startDate = new Date(endDate.getTime());
+    startDate.setDate(endDate.getDate() - 15);
     const secondsInDay = 24 * 60 * 60;
     const url =
       `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet%2C%20status)%20(replicated_state_registered_canisters%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInDay}`;
@@ -85,7 +86,7 @@ class CanistersChart extends AreaChart {
    */
   getTitle() {
     const { error } = this.state;
-    let title = 'Canister History';
+    let title = 'Canisters';
     if (error)
       title += ' - Network Error'
     return title;
@@ -117,26 +118,6 @@ class CanistersChart extends AreaChart {
    */
   getDataKeyY() {
     return 'numCanisters';
-  }
-
-  /**
-   * Return the minimum value of the domain for the Y-axis.
-   * @param {dataMin} value The minumum value of the data.
-   * @return {String} The minimum value of the domain for the Y-axis.
-   * @protected
-   */
-  getDomainMinY(dataMin) {
-    return Math.floor(dataMin / 100) * 100;
-  }
-
-  /**
-   * Return the maximum value of the domain for the Y-axis.
-   * @param {dataMax} value The maximum value of the data.
-   * @return {String} The maximum value of the domain for the Y-axis.
-   * @protected
-   */
-  getDomainMaxY(dataMax) {
-    return Math.ceil(dataMax / 100) * 100;
   }
 
   /**
@@ -181,7 +162,7 @@ class CanistersChart extends AreaChart {
    * @protected
    */
   getGetTooltipY(value) {
-    return `New Canisters: ${value.toLocaleString()}`;
+    return `Canisters: ${value.toLocaleString()}`;
   }
 }
 

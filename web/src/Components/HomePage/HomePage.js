@@ -39,6 +39,12 @@ const GridSection = styled(Grid)`
   }
 `;
 
+const GridSectionCharts2 = styled(GridSection)`
+  && {
+    padding-bottom: ${Constants.HOME_PAGE_MARGIN_SM_AND_UP + 'px'};
+  }
+`;
+
 const GridCard = styled(Grid)`
   && {
     padding-top: ${Constants.HOME_PAGE_MARGIN_SM_AND_UP + 'px'};
@@ -209,7 +215,7 @@ class HomePage extends TrackablePage {
             </Fade>
           </GridChart>
         </GridSection>
-        <GridSection container
+        <GridSectionCharts2 container
           direction='row'
           justify='space-between'
           alignItems='flex-start'
@@ -230,7 +236,7 @@ class HomePage extends TrackablePage {
               <MessagesChart chartHeight={chartHeight} breakpoint={breakpoint} />
             </Fade>
           </GridChart>
-        </GridSection>
+        </GridSectionCharts2>
       </Fragment>
     );
   }
