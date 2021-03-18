@@ -35,7 +35,7 @@ class BlockTimeCard extends Component {
     super(props);
 
     this.state = {
-      secondsPerBlock: -1,
+      blocksPerSecond: -1,
       error: false
     };
   }
@@ -68,21 +68,21 @@ class BlockTimeCard extends Component {
    */
   render() {
     let { cardIndex, className } = this.props;
-    let { secondsPerBlock, error } = this.state;
+    let { blocksPerSecond, error } = this.state;
     
     let blockTimeText;
     if (error)
       blockTimeText = 'Network error';
-    else if (secondsPerBlock === -1)
+    else if (blocksPerSecond === -1)
       blockTimeText = 'Loading...';
     else
-      blockTimeText = secondsPerBlock.toFixed(1) + ' s';
+      blockTimeText = blocksPerSecond.toFixed(1) + ' bps';
 
     return (
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Avg Block Time'
+        title='Avg Blocks'
         value={blockTimeText}
         svgIconPath={Constants.ICON_SVG_PATH_BLOCK_TIME}
       />
@@ -95,13 +95,14 @@ class BlockTimeCard extends Component {
    */
    pollForBlockTime() {
     // Get one day of hourly data. Ideally, we would get 10 minutes of minute data, but
-    // dashboard.dfinity.network did not return any data with those settings.
+    // dashboard.dfinity.network results are inconsistent with those settings.
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
     const endDate = new Date();
     const secondsInHour = 60 * 60;
     const url =
-      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInHour}`;
+      //IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInHour}`;
+      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInHour}`;
     axios.get(url)
       .then(res => {
         if (res.data.data.result.length && res.data.data.result[0].values.length) {
@@ -111,7 +112,7 @@ class BlockTimeCard extends Component {
           const numBlocks = Math.max(Math.floor(lastValue[1] - firstValue[1]), 1);
           const seconds = Math.max(lastValue[0] - firstValue[0], 0);
           this.setState({
-            secondsPerBlock: seconds / numBlocks,
+            blocksPerSecond: numBlocks / seconds,
             error: false
           });
         }
