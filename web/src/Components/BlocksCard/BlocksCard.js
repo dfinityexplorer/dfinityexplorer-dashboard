@@ -111,7 +111,8 @@ import Constants from '../../constants';
           const lastValue = values[values.length-2];
           const blockHeight = Math.floor(lastValue[1]);
           this.setState({
-            blockHeight: blockHeight
+            blockHeight: blockHeight,
+            error: false
           });
         }
       })

@@ -112,7 +112,8 @@ class MessagesCard extends Component {
           const numMessages = Math.max(Math.floor(lastValue[1] - firstValue[1]), 0);
           const seconds = Math.max(lastValue[0] - firstValue[0], 1);
           this.setState({
-            messagesPerSecond: numMessages / seconds
+            messagesPerSecond: numMessages / seconds,
+            error: false
           });
         }
       })

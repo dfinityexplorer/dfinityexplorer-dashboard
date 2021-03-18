@@ -111,7 +111,8 @@ class BlockTimeCard extends Component {
           const numBlocks = Math.max(Math.floor(lastValue[1] - firstValue[1]), 1);
           const seconds = Math.max(lastValue[0] - firstValue[0], 0);
           this.setState({
-            secondsPerBlock: seconds / numBlocks
+            secondsPerBlock: seconds / numBlocks,
+            error: false
           });
         }
       })

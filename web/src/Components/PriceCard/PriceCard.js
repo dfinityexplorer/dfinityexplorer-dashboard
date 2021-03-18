@@ -99,12 +99,13 @@ class PriceCard extends Component {
       .then(res => {
         const price = parseFloat(res.data[0].price);
         this.setState({
-          price: price
+          price: price,
+          error: false
         });
       })
       .catch(() => {
         this.setState({
-          error: true
+          error: true,
         });
       });
   }
