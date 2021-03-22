@@ -106,15 +106,18 @@ import Constants from '../../constants';
     axios.get(url)
       .then(res => {
         if (res.data.data.result.length && res.data.data.result[0].values.length >= 2) {
+          let { blockHeight } = this.state;
           const values = res.data.data.result[0].values;
           // Temporary workaround fix: Use second to last value, since dashboard.dfinity.network
           // seems to have a bug where the last value isn't always reliable!!!
           const lastValue = values[values.length-2];
-          const blockHeight = Math.floor(lastValue[1]);
-          this.setState({
-            blockHeight: blockHeight,
-            error: false
-          });
+          const newBlockHeight = Math.floor(lastValue[1]);
+          if (newBlockHeight > blockHeight) {
+            this.setState({
+              blockHeight: newBlockHeight,
+              error: false
+            });
+          }
         }
       })
       .catch(() => {

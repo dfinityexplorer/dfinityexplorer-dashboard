@@ -93,28 +93,41 @@ class BlockTimeCard extends Component {
    * Update the block time.
    * @private
    */
-   pollForBlockTime() {
+  pollForBlockTime() {
+    /* KEEP for now
     // Get one day of hourly data. Ideally, we would get 10 minutes of minute data, but
     // dashboard.dfinity.network results are inconsistent with those settings.
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
     const endDate = new Date();
-    const secondsInHour = 60 * 60;
+    const secondsInHour = 60 * 60;*/
+    // Get 10 minutes of minute data. This is still sometimes glitchy, but we'll try it out
+    // temporarily.
+    const startDate = new Date();
+    startDate.setMinutes(startDate.getMinutes() - 10);
+    const endDate = new Date();
+    const secondsInMinute = 60;
     const url =
-      //IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInHour}`;
-      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInHour}`;
+      //IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInMinute}`;
+      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
     axios.get(url)
       .then(res => {
-        if (res.data.data.result.length && res.data.data.result[0].values.length) {
+        if (res.data.data.result.length && res.data.data.result[0].values.length >= 2) {
           const values = res.data.data.result[0].values;
           const firstValue = values[0];
-          const lastValue = values[values.length-1];
-          const numBlocks = Math.max(Math.floor(lastValue[1] - firstValue[1]), 1);
-          const seconds = Math.max(lastValue[0] - firstValue[0], 0);
-          this.setState({
-            blocksPerSecond: numBlocks / seconds,
-            error: false
-          });
+          // Temporary workaround fix when using 10 minutes of minute data: Use second to last
+          // value, since dashboard.dfinity.network seems to have a bug where the last value isn't
+          // always reliable. Note >= 2 above as well, rather than >= 1.!!!
+          const lastValue = values[values.length-2];
+          const numBlocks = Math.max(Math.floor(lastValue[1] - firstValue[1]), 0);
+          const seconds = Math.max(lastValue[0] - firstValue[0], 1);
+          const blocksPerSecond = numBlocks / seconds;
+          if (blocksPerSecond > 0) { // ignore glitchy data from API
+            this.setState({
+              blocksPerSecond: blocksPerSecond,
+              error: false
+            });
+          }
         }
       })
       .catch(() => {
