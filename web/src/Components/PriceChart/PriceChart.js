@@ -53,7 +53,7 @@ class PriceChart extends AreaChart {
     startDate.setDate(startDate.getDate() - 14);
     const endDate = new Date();
     const url =
-      `https://api.nomics.com/v1/candles?key=${Constants.NOMICS_API_KEY}&interval=1d&currency=DFN&start=${this.dateToRfc3339(startDate)}&end=${this.dateToRfc3339(endDate)}`;
+      `https://api.nomics.com/v1/candles?key=${Constants.NOMICS_API_KEY}&interval=1d&currency=ICP&start=${this.dateToRfc3339(startDate)}&end=${this.dateToRfc3339(endDate)}`;
     axios.get(url)
       .then(res => {
         if (res.data.length > 0) {

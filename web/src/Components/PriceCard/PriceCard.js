@@ -94,7 +94,7 @@ class PriceCard extends Component {
    */
   pollForPrice() {
     const url =
-      `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=DFN&interval=1d`;
+      `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
     axios.get(url)
       .then(res => {
         const price = parseFloat(res.data[0].price);
