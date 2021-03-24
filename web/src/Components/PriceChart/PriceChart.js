@@ -143,7 +143,7 @@ class PriceChart extends AreaChart {
   * @protected
   */
   getGetTickX(value) {
-    return new Date(value).toLocaleDateString('default', { timeZone: 'UTC' });
+    return new Date(value).toLocaleDateString('default');
   }
 
   /**
@@ -163,7 +163,10 @@ class PriceChart extends AreaChart {
   * @protected
   */
   getGetTooltipX(value) {
-    return new Date(value).toLocaleDateString('default', { timeZone: 'UTC' });
+    // Display date/time with no seconds.
+    return new Date(value).toLocaleString(
+      'default',
+      {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute:'2-digit'});
   }
 
   /**
