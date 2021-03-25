@@ -34,6 +34,10 @@ class BlockTimeCard extends Component {
   constructor(props) {
     super(props);
 
+    this.startBlockHeight = 0;
+    this.startDate = null;
+    this.lastBlockHeight = 0;
+
     this.state = {
       blocksPerSecond: -1,
       error: false
@@ -91,16 +95,80 @@ class BlockTimeCard extends Component {
 
   /**
    * Update the block time.
+   * 
+   * This version was added for the "No Historical Blocks" fix!!! This function is basically a copy
+   * of pollForBlockHeight() in BlocksCard. This method of calculating the block time is intended to
+   * be temporary until we receive more reliable API data.
    * @private
    */
   pollForBlockTime() {
+    // Get 10 minutes of minute data. If there is an API to get just the current block height, we
+    // should use it here.
+    const startDate = new Date();
+    startDate.setMinutes(startDate.getMinutes() - 10);
+    const endDate = new Date();
+    const secondsInMinute = 60;
+    const url =
+      //IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInMinute}`;
+      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
+    axios.get(url)
+      .then(res => {
+        if (res.data.data.result.length && res.data.data.result[0].values.length >= 2) {
+          const values = res.data.data.result[0].values;
+          // Temporary workaround fix: Use second to last value, since dashboard.dfinity.network
+          // seems to have a bug where the last value isn't always reliable!!!
+          const lastValue = values[values.length-2];
+          const newBlockHeight = Math.floor(lastValue[1]);
+          if (newBlockHeight > this.lastBlockHeight) {
+            let blocksPerSecond;
+            if (this.startBlockHeight == 0)
+            {
+              this.startBlockHeight = newBlockHeight;
+              //console.log('this.startBlockHeight: ', this.startBlockHeight);//!!!
+              this.startDate = new Date();
+              blocksPerSecond = -1;
+            }
+            else
+            {
+              const numBlocks = newBlockHeight - this.startBlockHeight;
+              const endDate = new Date();
+              const seconds = (endDate.getTime() - this.startDate.getTime()) / 1000;
+              blocksPerSecond = numBlocks / seconds;
+              //console.log('newBlockHeight: ', newBlockHeight);//!!!
+              //console.log('numBlocks: ', numBlocks);//!!!
+              //console.log('seconds: ', seconds);//!!!
+              //console.log('blocksPerSecond: ', blocksPerSecond);//!!!
+            }
+            this.lastBlockHeight = newBlockHeight;
+            this.setState({
+              blocksPerSecond: blocksPerSecond,
+              error: false
+            });
+          }
+        }
+      })
+      .catch(() => {
+        this.setState({
+          error: true
+        });
+      });
+  }
+
+  /** KEEP: This version was removed for the "No Historical Blocks" fix. It was difficult to get
+   * consistent results by looking at historical block heights. We can hopefully go back to this
+   * version later.
+   * 
+   * Update the block time.
+   * @private
+   *
+  pollForBlockTime() {*/
     /* KEEP for now
     // Get one day of hourly data. Ideally, we would get 10 minutes of minute data, but
     // dashboard.dfinity.network results are inconsistent with those settings.
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 1);
     const endDate = new Date();
-    const secondsInHour = 60 * 60;*/
+    const secondsInHour = 60 * 60;*//*
     // Get 10 minutes of minute data. This is still sometimes glitchy, but we'll try it out
     // temporarily.
     const startDate = new Date();
@@ -135,7 +203,7 @@ class BlockTimeCard extends Component {
           error: true
         });
       });
-  }
+  }*/
 }
 
 export default BlockTimeCard;
