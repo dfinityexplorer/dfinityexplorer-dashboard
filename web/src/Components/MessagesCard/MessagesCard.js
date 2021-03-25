@@ -36,7 +36,7 @@ class MessagesCard extends Component {
 
     this.state = {
       messagesPerSecond: -1,
-      error: false
+      error: 0
     };
   }
 
@@ -71,7 +71,7 @@ class MessagesCard extends Component {
     let { messagesPerSecond, error } = this.state;
     
     let messagesTimeText;
-    if (error)
+    if (error >= Constants.NETWORK_ERROR_THRESHOLD)
       messagesTimeText = 'Network error';
     else if (messagesPerSecond === -1)
       messagesTimeText = 'Loading...';
@@ -113,14 +113,14 @@ class MessagesCard extends Component {
           const seconds = Math.max(lastValue[0] - firstValue[0], 1);
           this.setState({
             messagesPerSecond: numMessages / seconds,
-            error: false
+            error: 0
           });
         }
       })
       .catch(() => {
-        this.setState({
-          error: true
-        });
+        this.setState(prevState => ({
+          error: prevState.error + 1
+        }));
       });
   }
 }

@@ -35,7 +35,7 @@ class PriceCard extends Component {
   
     this.state = {
       price: 0,
-      error: false
+      error: 0
     };
   }
 
@@ -70,7 +70,7 @@ class PriceCard extends Component {
     let { price, error } = this.state;
     
     let priceText;
-    if (error)
+    if (error >= Constants.NETWORK_ERROR_THRESHOLD)
       priceText = 'Network error';
     else if (price === 0)
       priceText = 'Loading...';
@@ -100,13 +100,13 @@ class PriceCard extends Component {
         const price = parseFloat(res.data[0].price);
         this.setState({
           price: price,
-          error: false
+          error: 0
         });
       })
       .catch(() => {
-        this.setState({
-          error: true,
-        });
+        this.setState(prevState => ({
+          error: prevState.error + 1
+        }));
       });
   }
 }

@@ -36,7 +36,7 @@ import Constants from '../../constants';
 
     this.state = {
       blockHeight: -1,
-      error: false
+      error: 0
     };
   }
 
@@ -71,7 +71,7 @@ import Constants from '../../constants';
     let { blockHeight, error } = this.state;
     
     let blockHeightText;
-    if (error)
+    if (error >= Constants.NETWORK_ERROR_THRESHOLD)
       blockHeightText = 'Network error';
     else if (blockHeight === -1)
       blockHeightText = 'Loading...';
@@ -115,15 +115,15 @@ import Constants from '../../constants';
           if (newBlockHeight > blockHeight) {
             this.setState({
               blockHeight: newBlockHeight,
-              error: false
+              error: 0
             });
           }
         }
       })
       .catch(() => {
-        this.setState({
-          error: true
-        });
+        this.setState(prevState => ({
+          error: prevState.error + 1
+        }));
       });
   }
 }

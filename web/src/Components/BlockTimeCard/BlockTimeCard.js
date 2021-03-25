@@ -40,7 +40,7 @@ class BlockTimeCard extends Component {
 
     this.state = {
       blocksPerSecond: -1,
-      error: false
+      error: 0
     };
   }
 
@@ -75,7 +75,7 @@ class BlockTimeCard extends Component {
     let { blocksPerSecond, error } = this.state;
     
     let blockTimeText;
-    if (error)
+    if (error >= Constants.NETWORK_ERROR_THRESHOLD)
       blockTimeText = 'Network error';
     else if (blocksPerSecond === -1)
       blockTimeText = 'Loading...';
@@ -142,15 +142,15 @@ class BlockTimeCard extends Component {
             this.lastBlockHeight = newBlockHeight;
             this.setState({
               blocksPerSecond: blocksPerSecond,
-              error: false
+              error: 0
             });
           }
         }
       })
       .catch(() => {
-        this.setState({
-          error: true
-        });
+        this.setState(prevState => ({
+          error: prevState.error + 1
+        }));
       });
   }
 
@@ -193,15 +193,15 @@ class BlockTimeCard extends Component {
           if (blocksPerSecond > 0) { // ignore glitchy data from API
             this.setState({
               blocksPerSecond: blocksPerSecond,
-              error: false
+              error: 0
             });
           }
         }
       })
       .catch(() => {
-        this.setState({
-          error: true
-        });
+        this.setState(prevState => ({
+          error: prevState.error + 1
+        }));
       });
   }*/
 }
