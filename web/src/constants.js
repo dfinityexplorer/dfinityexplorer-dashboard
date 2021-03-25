@@ -106,7 +106,7 @@ const Constants = Object.freeze({
   BLOCK_TIME_POLL_INTERVAL_MS: 3000, // Changed from 10000 for the BlockTimeCard "No Historical Blocks" fix!!!
   MESSAGES_TIME_POLL_INTERVAL_MS: 30000,
   PRICE_POLL_INTERVAL_MS: 30000,
-  NETWORK_ERROR_THRESHOLD: 5,
+  NETWORK_ERROR_THRESHOLD: 10,
   IC_RELEASE: 'sodium',
   NOMICS_API_KEY: '38f4023ce681a328edc018f7a8a28e06'
 });

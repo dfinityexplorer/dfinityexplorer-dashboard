@@ -34,8 +34,7 @@ class BlockTimeCard extends Component {
   constructor(props) {
     super(props);
 
-    this.startBlockHeight = 0;
-    this.startDate = null;
+    this.blocks = [];
     this.lastBlockHeight = 0;
 
     this.state = {
@@ -78,7 +77,7 @@ class BlockTimeCard extends Component {
     if (error >= Constants.NETWORK_ERROR_THRESHOLD)
       blockTimeText = 'Network error';
     else if (blocksPerSecond === -1)
-      blockTimeText = 'Loading...';
+      blockTimeText = 'Calculating...';//"No Historical Blocks" fix!!!'Loading...';
     else
       blockTimeText = blocksPerSecond.toFixed(1) + ' bps';
 
@@ -109,7 +108,8 @@ class BlockTimeCard extends Component {
     const endDate = new Date();
     const secondsInMinute = 60;
     const url =
-      //IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInMinute}`;
+      // NOTE: IC_RELEASE vs. non IC_RELEASE is '%22${Constants.IC_RELEASE}' vs. '~%22.%2B'.
+      //IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
       `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
     axios.get(url)
       .then(res => {
@@ -119,27 +119,55 @@ class BlockTimeCard extends Component {
           // seems to have a bug where the last value isn't always reliable!!!
           const lastValue = values[values.length-2];
           const newBlockHeight = Math.floor(lastValue[1]);
-          if (newBlockHeight > this.lastBlockHeight) {
-            let blocksPerSecond;
-            if (this.startBlockHeight == 0)
-            {
-              this.startBlockHeight = newBlockHeight;
-              //console.log('this.startBlockHeight: ', this.startBlockHeight);//!!!
-              this.startDate = new Date();
-              blocksPerSecond = -1;
-            }
-            else
-            {
-              const numBlocks = newBlockHeight - this.startBlockHeight;
-              const endDate = new Date();
-              const seconds = (endDate.getTime() - this.startDate.getTime()) / 1000;
-              blocksPerSecond = numBlocks / seconds;
-              //console.log('newBlockHeight: ', newBlockHeight);//!!!
-              //console.log('numBlocks: ', numBlocks);//!!!
-              //console.log('seconds: ', seconds);//!!!
-              //console.log('blocksPerSecond: ', blocksPerSecond);//!!!
-            }
-            this.lastBlockHeight = newBlockHeight;
+
+          // Reset calculation if we get a major glitch in the API data.
+          const maxExpectedBlocksPerSecond = 50; // somewhat arbitrary, but based on observations
+          const maxExpectedBlocksPerInterval =
+            Constants.BLOCK_TIME_POLL_INTERVAL_MS / 1000 * maxExpectedBlocksPerSecond;
+          const resetCalculation =
+            newBlockHeight < this.lastBlockHeight ||
+            newBlockHeight > this.lastBlockHeight + maxExpectedBlocksPerInterval;
+          if (resetCalculation) {
+            this.blocks = [];
+            console.log('Glitch!'); //!!!
+            console.log('newBlockHeight: ', newBlockHeight); //!!!
+            console.log('this.lastBlockHeight: ', this.lastBlockHeight); //!!!
+            console.log(values);//!!!
+          }
+          this.lastBlockHeight = newBlockHeight;
+  
+          // Add a block object for this block to the blocks[] array.
+          const block = {
+            height: newBlockHeight,
+            timestamp: new Date(),
+          };
+          this.blocks.push(block);
+
+          // Remove blocks that have expired, so that we calculate blocks per second based on only
+          // the last X minutes. The goal here is to minimize the time a minor API data glitch will
+          // affect the blocks per second value.
+          const expireMs = 60 * 1000; // one minute
+          const expiredDate = new Date(block.timestamp.getTime() - expireMs);
+          while (this.blocks[0].timestamp < expiredDate)
+            this.blocks.shift();
+
+          let blocksPerSecond;
+          if (this.blocks.length >= 2) {
+            const numBlocks = this.blocks[this.blocks.length-1].height - this.blocks[0].height;
+            const seconds =
+              (this.blocks[this.blocks.length-1].timestamp - this.blocks[0].timestamp) / 1000;
+            blocksPerSecond = numBlocks / seconds;              
+          }
+          else
+            blocksPerSecond = -1;
+          
+          if (resetCalculation) {
+            // Do not set blocksPerSecond when resetting calculation, avoiding "Calculating...".
+            this.setState({
+              error: 0
+            });
+          }
+          else {
             this.setState({
               blocksPerSecond: blocksPerSecond,
               error: 0
@@ -176,7 +204,7 @@ class BlockTimeCard extends Component {
     const endDate = new Date();
     const secondsInMinute = 60;
     const url =
-      //IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${startDate.getTime() / 1000}&end=${endDate.getTime() / 1000}&step=${secondsInMinute}`;
+      //IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
       `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
     axios.get(url)
       .then(res => {
