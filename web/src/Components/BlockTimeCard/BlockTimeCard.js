@@ -129,10 +129,10 @@ class BlockTimeCard extends Component {
             newBlockHeight > this.lastBlockHeight + maxExpectedBlocksPerInterval;
           if (resetCalculation) {
             this.blocks = [];
-            console.log('Glitch!'); //!!!
-            console.log('newBlockHeight: ', newBlockHeight); //!!!
-            console.log('this.lastBlockHeight: ', this.lastBlockHeight); //!!!
-            console.log(values);//!!!
+            //console.log('Glitch!'); //!!!
+            //console.log('newBlockHeight: ', newBlockHeight); //!!!
+            //console.log('this.lastBlockHeight: ', this.lastBlockHeight); //!!!
+            //console.log(values);//!!!
           }
           this.lastBlockHeight = newBlockHeight;
   

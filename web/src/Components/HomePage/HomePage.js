@@ -8,7 +8,9 @@ import React from "react";
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
-  Grid
+  Grid,
+  Paper, // Disclaimer!!!
+  Typography // Disclaimer!!!
 } from '@material-ui/core';
 import { duration, easing } from '@material-ui/core/styles/transitions';
 import Fade from 'react-reveal/Fade';
@@ -105,6 +107,35 @@ const CardPrice = styled(PriceCard)`
   }
 `;
 
+// Disclaimer!!!
+const StyledPaper = styled(Paper)`
+  && {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: ${Constants.HOME_PAGE_MARGIN_SM_AND_UP + 'px'};
+    ${({ breakpoint }) =>
+      (breakpoint === Breakpoints.XS && `
+        margin-top: ${Constants.HOME_PAGE_MARGIN_XS + 'px'};
+      `)
+    }
+    background: ${props => props.theme.colorDashCardBackground};
+    color: ${props => props.theme.colorBodyText};
+  }
+`;
+
+// Disclaimer!!!
+const TypographyTitle = styled(Typography)`
+  && {
+    background: ${props => props.theme.colorDashCardBackground};
+    color: ${props => props.theme.colorBodyText};
+    font-family: ${Constants.FONT_PRIMARY};
+    font-weight: 300;
+    font-size: 14px;
+  }
+`;
+
 /**
  * Component for the home page.
  */
@@ -124,9 +155,35 @@ class HomePage extends TrackablePage {
   render() {
     return (
       <div>
+        {this.getSectionDisclaimer()}
         {this.getSectionCards()}
         {this.getSectionCharts()}
       </div>
+    );
+  }
+
+  /**
+   * Return the elements for the Disclaimer section based on the current breakpoint.
+   * @return {Object} The elements for the Disclaimer section based on the current breakpoint.
+   * @private
+   */
+  getSectionDisclaimer()
+  {
+    const { breakpoint } = this.props;
+
+    return (
+      <GridSection container
+        direction='row'
+        justify='center'
+        alignItems='flex-start'
+        breakpoint={breakpoint}
+      >
+        <StyledPaper elevation={1} breakpoint={breakpoint}>
+          <TypographyTitle>
+            {'Site Under Development'}
+          </TypographyTitle>
+        </StyledPaper>
+      </GridSection>
     );
   }
 
