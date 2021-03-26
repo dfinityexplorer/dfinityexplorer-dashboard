@@ -17,7 +17,7 @@ import Fade from 'react-reveal/Fade';
 import TrackablePage from '../TrackablePage/TrackablePage'
 import BlocksCard from '../BlocksCard/BlocksCard';
 import BlockTimeCard from '../BlockTimeCard/BlockTimeCard';
-import MessagesCard from '../MessagesCard/MessagesCard';
+import CyclesCard from '../CyclesCard/CyclesCard';
 import PriceCard from '../PriceCard/PriceCard';
 import BlocksChart from '../BlocksChart/BlocksChart';
 import CanistersChart from '../CanistersChart/CanistersChart';
@@ -93,7 +93,7 @@ const CardBlockTime = styled(BlockTimeCard)`
   }
 `;
 
-const CardMessages = styled(MessagesCard)`
+const CardCycles = styled(CyclesCard)`
   && {
     background: ${props => props.theme.colorDashCardBackground};
     color: ${props => props.theme.colorBodyText};
@@ -223,7 +223,7 @@ class HomePage extends TrackablePage {
             delay={100}
             timeout={500}
           >
-            <CardMessages cardIndex={2} />
+            <CardCycles cardIndex={2} />
           </Fade>
         </GridCard>
         <GridCard item breakpoint={breakpoint}>

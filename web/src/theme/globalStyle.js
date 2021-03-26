@@ -41,7 +41,7 @@ export const themeLight = {
   colorBodyTextDim: Constants.COLOR_LIGHT_BODY_TEXT_DIM_GOOGLE,
   colorBodyTextLink: Constants.COLOR_DFINITY_BLUE_700,
   colorDashCardBackground: '#FFFFFF',
-  colorDashCardIcon: [Constants.COLOR_DFINITY_BLUE_700, '#9440A6', '#DA005E', '#F79308'], // Ori's purple and orange
+  colorDashCardIcon: [Constants.COLOR_DFINITY_BLUE_700, '#9440A6', '#F79308', '#DA005E'], // Ori's purple and orange
   colorDashCardIconOpacity: 1.0,
   colorDrawerBackground: '#FFFFFF',
   colorDrawerDivider: Constants.COLOR_LIGHT_DRAWER_DIVIDER_GOOGLE,

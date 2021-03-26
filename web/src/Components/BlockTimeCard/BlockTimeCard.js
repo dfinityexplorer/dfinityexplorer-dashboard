@@ -52,7 +52,7 @@ class BlockTimeCard extends Component {
     this.pollForBlockTime();
     this.interval = setInterval(
       () => { this.pollForBlockTime() },
-      Constants.BLOCK_TIME_POLL_INTERVAL_MS);
+      Constants.BLOCK_TIME_CARD_POLL_INTERVAL_MS);
   }
 
   /**
@@ -123,7 +123,7 @@ class BlockTimeCard extends Component {
           // Reset calculation if we get a major glitch in the API data.
           const maxExpectedBlocksPerSecond = 50; // somewhat arbitrary, but based on observations
           const maxExpectedBlocksPerInterval =
-            Constants.BLOCK_TIME_POLL_INTERVAL_MS / 1000 * maxExpectedBlocksPerSecond;
+            Constants.BLOCK_TIME_CARD_POLL_INTERVAL_MS / 1000 * maxExpectedBlocksPerSecond;
           const resetCalculation =
             newBlockHeight < this.lastBlockHeight ||
             newBlockHeight > this.lastBlockHeight + maxExpectedBlocksPerInterval;
@@ -201,13 +201,13 @@ class BlockTimeCard extends Component {
           // Reset calculation if we get a major glitch in the API data.
           const maxExpectedBlocksPerSecond = 200; // somewhat arbitrary, but based on observations
           const maxExpectedBlocksPerInterval =
-            Constants.BLOCK_TIME_POLL_INTERVAL_MS / 1000 * maxExpectedBlocksPerSecond;
+            Constants.BLOCK_TIME_CARD_POLL_INTERVAL_MS / 1000 * maxExpectedBlocksPerSecond;
           const resetCalculation =
             newBlockHeight < this.lastBlockHeight ||
             newBlockHeight > this.lastBlockHeight + maxExpectedBlocksPerInterval;
           if (resetCalculation)
             this.blocks = [];
-            
+
           this.lastBlockHeight = newBlockHeight;
   
           // Add a block object for this block to the blocks[] array.
