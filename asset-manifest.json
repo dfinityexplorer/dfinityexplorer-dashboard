@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.js": "/static/js/main.2dcde328.chunk.js",
-    "main.js.map": "/static/js/main.2dcde328.chunk.js.map",
+    "main.js": "/static/js/main.217293ad.chunk.js",
+    "main.js.map": "/static/js/main.217293ad.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.ff28aa4b.js",
     "runtime-main.js.map": "/static/js/runtime-main.ff28aa4b.js.map",
     "static/css/2.aef303ae.chunk.css": "/static/css/2.aef303ae.chunk.css",
     "static/js/2.5c253b29.chunk.js": "/static/js/2.5c253b29.chunk.js",
     "static/js/2.5c253b29.chunk.js.map": "/static/js/2.5c253b29.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.7670b1f0a6106da5bb18b09af958b33b.js": "/precache-manifest.7670b1f0a6106da5bb18b09af958b33b.js",
+    "precache-manifest.903694f328766be259d11e5c42cf6bea.js": "/precache-manifest.903694f328766be259d11e5c42cf6bea.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.aef303ae.chunk.css.map": "/static/css/2.aef303ae.chunk.css.map",
     "static/js/2.5c253b29.chunk.js.LICENSE.txt": "/static/js/2.5c253b29.chunk.js.LICENSE.txt",
-    "static/js/main.2dcde328.chunk.js.LICENSE.txt": "/static/js/main.2dcde328.chunk.js.LICENSE.txt",
+    "static/js/main.217293ad.chunk.js.LICENSE.txt": "/static/js/main.217293ad.chunk.js.LICENSE.txt",
     "static/media/banner-x-horizon.png": "/static/media/banner-x-horizon.78a73653.png",
     "static/media/dfinity-explorer-logo-large.png": "/static/media/dfinity-explorer-logo-large.6854aee0.png",
     "static/media/dfinity-explorer-logo.png": "/static/media/dfinity-explorer-logo.52c54b15.png",
@@ -30,6 +30,6 @@
     "static/js/runtime-main.ff28aa4b.js",
     "static/css/2.aef303ae.chunk.css",
     "static/js/2.5c253b29.chunk.js",
-    "static/js/main.2dcde328.chunk.js"
+    "static/js/main.217293ad.chunk.js"
   ]
 }
