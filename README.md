@@ -14,8 +14,10 @@
 * prop-types
 * React
 * react-ga
+* react-globe.gl
 * react-parallax
 * react-reveal
+* react-sizeme
 * react-spring
 * react-twitter-embed
 * recharts

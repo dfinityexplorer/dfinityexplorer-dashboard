@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with seconds per block retrieved from
- * dashboard.dfinity.network.
+ * dashboard.internetcomputer.org/api.
  */
 class BlockTimeCard extends Component {
   static propTypes = {
@@ -182,7 +182,7 @@ class BlockTimeCard extends Component {
       });
   }*/
 
-  /** KEEP for now: dashboard.dfinity.network version
+  /**
    * Update the block time.
    * 
    * This version was added for the "No Historical Blocks" fix!!! This function is basically a copy
@@ -195,7 +195,7 @@ class BlockTimeCard extends Component {
       `https://dashboard.internetcomputer.org/api/metrics/block`;
     axios.get(url)
       .then(res => {
-        if (res.data.block.length == 2) {
+        if (res.data.block.length === 2) {
           const newBlockHeight = parseInt(res.data.block[1]);
 
           // Reset calculation if we get a major glitch in the API data.

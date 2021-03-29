@@ -14,7 +14,10 @@ export const GlobalStyle = createGlobalStyle`
    body {
     margin: 0;
     padding: 0;
-    background: ${props => props.theme.colorBodyBackground};
+    background: ${
+      props => props.isPageDataCenters ?
+        props.theme.colorDataCentersPageBackground : props.theme.colorBodyBackground
+    };
    }
 `;
 
@@ -43,6 +46,8 @@ export const themeLight = {
   colorDashCardBackground: '#FFFFFF',
   colorDashCardIcon: [Constants.COLOR_DFINITY_BLUE_700, '#9440A6', '#F79308', '#DA005E'], // Ori's purple and orange
   colorDashCardIconOpacity: 1.0,
+  colorDataCentersCardBackground: '#FFFFFF',
+  colorDataCentersPageBackground: '#F8F9FA', // Wikipedia (verified)
   colorDrawerBackground: '#FFFFFF',
   colorDrawerDivider: Constants.COLOR_LIGHT_DRAWER_DIVIDER_GOOGLE,
   colorDrawerIcon: Constants.COLOR_LIGHT_DRAWER_ICON_GOOGLE,
@@ -64,7 +69,8 @@ export const themeLight = {
   colorSearchText: Constants.COLOR_LIGHT_BODY_TEXT_GOOGLE,
   colorSearchIcon: '#9E9E9E', //  Material Design icon(verified)
   opacityActionDisabled: 0.26, // Material-UI createPalette.js theme.palette.action.disabled light theme
-  opacityActionHover: 0.08 // Material-UI createPalette.js theme.palette.action.hoverOpacity light theme
+  opacityActionHover: 0.08, // Material-UI createPalette.js theme.palette.action.hoverOpacity light theme
+  uriGlobeEarthImage: Constants.URI_GLOBE_EARTH_IMAGE_LIGHT
 }
 
 /**
@@ -91,6 +97,8 @@ export const themeDark = {
   colorDashCardBackground: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorDashCardIcon: ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF'],
   colorDashCardIconOpacity: 0.5,
+  colorDataCentersCardBackground: Constants.COLOR_DARK_BODY_DARKER_MAC_OS,
+  colorDataCentersPageBackground: '#000000',
   colorDrawerBackground: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorDrawerDivider: Constants.COLOR_DARK_DRAWER_DIVIDER_YOUTUBE,
   colorDrawerIcon: Constants.COLOR_DARK_TEXT_FADED,
@@ -112,5 +120,6 @@ export const themeDark = {
   colorSearchText: Constants.COLOR_LIGHT_BODY_TEXT_GOOGLE,
   colorSearchIcon: '#9E9E9E', //  Material Design icon (verified)
   opacityActionDisabled: 0.3, // Material-UI createPalette.js theme.palette.action.disabled dark theme
-  opacityActionHover: 0.1 // Material-UI createPalette.js theme.palette.action.hoverOpacity dark theme
+  opacityActionHover: 0.1, // Material-UI createPalette.js theme.palette.action.hoverOpacity dark theme
+  uriGlobeEarthImage: Constants.URI_GLOBE_EARTH_IMAGE_DARK
 }

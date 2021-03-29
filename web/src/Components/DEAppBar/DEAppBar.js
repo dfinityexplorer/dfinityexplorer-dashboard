@@ -21,6 +21,7 @@ import {
   ListItemText,
   ListItemIcon,
   SwipeableDrawer,
+  SvgIcon,
   Toolbar,
   Typography,
   Zoom
@@ -187,6 +188,14 @@ const StyledDivider = styled(Divider)`
 `;
 
 const DrawerListItemIcon = styled(ListItemIcon)``;
+
+const DrawerSvgIcon = styled(SvgIcon)`
+  && {
+    padding-left: 2px;
+    width: 20px;
+    height: 20px;
+  }
+`;
 
 const DrawerListItemText = styled(({ ...other }) => (
   <ListItemText {...other} classes={{ primary: 'primary' }} />
@@ -489,6 +498,14 @@ class DEAppBar extends ResponsiveComponent {
             </DrawerListItemIcon>
             <DrawerListItemText primary='Home' selected={this.isActiveRoute('/')} />
           </DrawerListItem>
+          <DrawerListItem button component={Link} to='/datacenters' selected={this.isActiveRoute('/datacenters')}>
+            <DrawerListItemIcon>
+              <DrawerSvgIcon>
+                <path d={Constants.ICON_SVG_PATH_DATA_CENTERS} />
+              </DrawerSvgIcon>
+            </DrawerListItemIcon>
+            <DrawerListItemText primary='Data Centers' />
+          </DrawerListItem>            
           <StyledDivider />
           <DrawerListItem button component={Link} to='/about' selected={this.isActiveRoute('/about')}>
             <DrawerListItemIcon>

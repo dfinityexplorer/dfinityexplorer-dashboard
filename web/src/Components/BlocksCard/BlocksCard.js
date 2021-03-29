@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with the current block height retrieved from
- * dashboard.dfinity.network.
+ * dashboard.internetcomputer.org/api.
  */
  class BlocksCard extends Component {
   static propTypes = {
@@ -136,7 +136,7 @@ import Constants from '../../constants';
       `https://dashboard.internetcomputer.org/api/metrics/block`;
     axios.get(url)
       .then(res => {
-        if (res.data.block.length == 2) {
+        if (res.data.block.length === 2) {
           let { blockHeight } = this.state;
           const newBlockHeight = parseInt(res.data.block[1]);
           if (newBlockHeight > blockHeight) {

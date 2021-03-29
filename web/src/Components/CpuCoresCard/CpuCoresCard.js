@@ -1,5 +1,5 @@
 /**
- * @file CyclesCard
+ * @file CpuCoresCard
  * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
  * @license MIT License
  */
@@ -11,10 +11,10 @@ import DashCard from '../DashCard/DashCard';
 import Constants from '../../constants';
 
 /**
- * This component displays a dashboard card with the cycles burned retrieved from
+ * This component displays a dashboard card with the current number of CPU cores retrieved from
  * dashboard.internetcomputer.org/api.
  */
- class CyclesCard extends Component {
+ class CpuCoresCard extends Component {
   static propTypes = {
     /**
      * The index of the card. Used for theming.
@@ -28,14 +28,14 @@ import Constants from '../../constants';
   };
 
   /**
-   * Create a CyclesCard object.
+   * Create a CpuCoresCard object.
    * @constructor
    */
   constructor(props) {
     super(props);
 
     this.state = {
-      cyclesBurned: -1,
+      numberOfCpuCores: -1,
       error: 0
     };
   }
@@ -45,20 +45,7 @@ import Constants from '../../constants';
    * @public
    */
   componentDidMount() {    
-    // Update the cycles burned using intervals.
-    this.pollForCyclesBurned();
-    this.interval = setInterval(
-      () => { this.pollForCyclesBurned() },
-      Constants.CYCLES_CARD_POLL_INTERVAL_MS);
-  }
-
-  /**
-   * Invoked by React immediately before a component is unmounted and destroyed.
-   * @public
-   */
-  componentWillUnmount() {
-    clearInterval(this.interval);
-    this.interval = null;
+    this.getNumberOfCpuCores();
   }
 
   /**
@@ -68,44 +55,41 @@ import Constants from '../../constants';
    */
   render() {
     let { cardIndex, className } = this.props;
-    let { cyclesBurned, error } = this.state;
+    let { numberOfCpuCores, error } = this.state;
     
-    let cyclesBurnedText;
+    let numberOfCpuCoresText;
     if (error >= Constants.NETWORK_ERROR_THRESHOLD)
-      cyclesBurnedText = 'Network error';
-    else if (cyclesBurned === -1)
-      cyclesBurnedText = 'Loading...';
-    else {
-      const trillionCyclesBurned = cyclesBurned / 1000000000000;
-      cyclesBurnedText = trillionCyclesBurned.toFixed(3) + 'T';
-    }
+      numberOfCpuCoresText = 'Network error';
+    else if (numberOfCpuCores === -1)
+      numberOfCpuCoresText = 'Loading...';
+    else
+      numberOfCpuCoresText = numberOfCpuCores.toLocaleString();
 
     return (
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Cycles Burned'
-        value={cyclesBurnedText}
-        svgIconPath={Constants.ICON_SVG_PATH_CYCLES_BURNED}
+        title='CPU Cores'
+        value={numberOfCpuCoresText}
+        svgIconPath={Constants.ICON_SVG_PATH_CPU_CORES}
       />
     );
   }
 
   /**
-   * Update the cycles burned.
+   * Get the number of CPU cores.
    * @private
    */
-  pollForCyclesBurned() {
-    const url =
-      `https://dashboard.internetcomputer.org/api/metrics/cycles-burned`;
+  getNumberOfCpuCores() {
+    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-cpu-cores`;
     axios.get(url)
       .then(res => {
-        if (res.data.cycles_burned.length === 2) {
-          let { cyclesBurned } = this.state;
-          const newCyclesBurned = parseInt(res.data.cycles_burned[1]);
-          if (newCyclesBurned > cyclesBurned) {
+        if (res.data.ic_cpu_cores.length === 2) {
+          let { numberOfCpuCores } = this.state;
+          const newNumberOfCpuCores = parseInt(res.data.ic_cpu_cores[1]);
+          if (newNumberOfCpuCores > numberOfCpuCores) {
             this.setState({
-              cyclesBurned: newCyclesBurned,
+              numberOfCpuCores: newNumberOfCpuCores,
               error: 0
             });
           }
@@ -119,4 +103,4 @@ import Constants from '../../constants';
   }
 }
 
-export default CyclesCard;
+export default CpuCoresCard;

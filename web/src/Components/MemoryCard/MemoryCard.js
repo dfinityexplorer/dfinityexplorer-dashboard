@@ -1,5 +1,5 @@
 /**
- * @file CyclesCard
+ * @file MemoryCard
  * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
  * @license MIT License
  */
@@ -11,10 +11,10 @@ import DashCard from '../DashCard/DashCard';
 import Constants from '../../constants';
 
 /**
- * This component displays a dashboard card with the cycles burned retrieved from
+ * This component displays a dashboard card with the memory total retrieved from
  * dashboard.internetcomputer.org/api.
  */
- class CyclesCard extends Component {
+ class MemoryCard extends Component {
   static propTypes = {
     /**
      * The index of the card. Used for theming.
@@ -28,14 +28,14 @@ import Constants from '../../constants';
   };
 
   /**
-   * Create a CyclesCard object.
+   * Create a MemoryCard object.
    * @constructor
    */
   constructor(props) {
     super(props);
 
     this.state = {
-      cyclesBurned: -1,
+      memoryTotal: -1,
       error: 0
     };
   }
@@ -45,20 +45,7 @@ import Constants from '../../constants';
    * @public
    */
   componentDidMount() {    
-    // Update the cycles burned using intervals.
-    this.pollForCyclesBurned();
-    this.interval = setInterval(
-      () => { this.pollForCyclesBurned() },
-      Constants.CYCLES_CARD_POLL_INTERVAL_MS);
-  }
-
-  /**
-   * Invoked by React immediately before a component is unmounted and destroyed.
-   * @public
-   */
-  componentWillUnmount() {
-    clearInterval(this.interval);
-    this.interval = null;
+    this.getMemoryTotal();
   }
 
   /**
@@ -68,44 +55,43 @@ import Constants from '../../constants';
    */
   render() {
     let { cardIndex, className } = this.props;
-    let { cyclesBurned, error } = this.state;
+    let { memoryTotal, error } = this.state;
     
-    let cyclesBurnedText;
+    let memoryTotalText;
     if (error >= Constants.NETWORK_ERROR_THRESHOLD)
-      cyclesBurnedText = 'Network error';
-    else if (cyclesBurned === -1)
-      cyclesBurnedText = 'Loading...';
+      memoryTotalText = 'Network error';
+    else if (memoryTotal === -1)
+      memoryTotalText = 'Loading...';
     else {
-      const trillionCyclesBurned = cyclesBurned / 1000000000000;
-      cyclesBurnedText = trillionCyclesBurned.toFixed(3) + 'T';
+      const memoryTotalPb = memoryTotal / 1000000000000000;                                    
+      memoryTotalText = memoryTotalPb.toFixed(3) + 'PB';
     }
 
     return (
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Cycles Burned'
-        value={cyclesBurnedText}
-        svgIconPath={Constants.ICON_SVG_PATH_CYCLES_BURNED}
+        title='Memory'
+        value={memoryTotalText}
+        svgIconPath={Constants.ICON_SVG_PATH_MEMORY}
       />
     );
   }
 
   /**
-   * Update the cycles burned.
+   * Get the memory total.
    * @private
    */
-  pollForCyclesBurned() {
-    const url =
-      `https://dashboard.internetcomputer.org/api/metrics/cycles-burned`;
+  getMemoryTotal() {
+    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-memory-total`;
     axios.get(url)
       .then(res => {
-        if (res.data.cycles_burned.length === 2) {
-          let { cyclesBurned } = this.state;
-          const newCyclesBurned = parseInt(res.data.cycles_burned[1]);
-          if (newCyclesBurned > cyclesBurned) {
+        if (res.data.ic_memory_total.length === 2) {
+          let { memoryTotal } = this.state;
+          const newMemoryTotal = parseInt(res.data.ic_memory_total[1]);
+          if (newMemoryTotal > memoryTotal) {
             this.setState({
-              cyclesBurned: newCyclesBurned,
+              memoryTotal: newMemoryTotal,
               error: 0
             });
           }
@@ -119,4 +105,4 @@ import Constants from '../../constants';
   }
 }
 
-export default CyclesCard;
+export default MemoryCard;

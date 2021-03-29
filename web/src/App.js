@@ -18,6 +18,7 @@ import {
 import { duration, easing } from '@material-ui/core/styles/transitions';
 import { GlobalStyle, themeLight, themeDark } from './theme/globalStyle';
 import HomePage from './Components/HomePage/HomePage';
+import DataCentersPage from './Components/DataCentersPage/DataCentersPage';
 import AboutPage from './Components/AboutPage/AboutPage';
 import DEAppBar from './Components/DEAppBar/DEAppBar';
 import Footer from './Components/Footer/Footer';
@@ -47,6 +48,7 @@ const ContentGrid = styled(Grid)`
   && {
     /* The height of the body + footer is the total viewport height - App Bar height. */
     min-height: calc(100vh - ${props => props.appbarheight + 'px'});
+  }
 `;
 
 /**
@@ -64,6 +66,7 @@ class App extends Component {
       appBarHeight: 0,
       isDesktopDrawerEnabled: true,
       isMobileDrawerOpen: false,
+      isPageDataCenters: false,
       isThemeDark: true
     };
 
@@ -72,6 +75,7 @@ class App extends Component {
     this.handleAppBarResize = this.handleAppBarResize.bind(this);
     this.handleDesktopDrawerMenuClick = this.handleDesktopDrawerMenuClick.bind(this);
     this.handleMobileDrawerMenuClick = this.handleMobileDrawerMenuClick.bind(this);
+    this.handleSetIsPageDataCenters = this.handleSetIsPageDataCenters.bind(this);
     this.handleThemeChange = this.handleThemeChange.bind(this);
   }
   
@@ -97,6 +101,7 @@ class App extends Component {
       appBarHeight,
       isDesktopDrawerEnabled,
       isMobileDrawerOpen,
+      isPageDataCenters,
       isThemeDark,
       routerRef
     } = this.state;
@@ -106,7 +111,7 @@ class App extends Component {
 
     return (
       <Fragment>
-        <GlobalStyle theme={this.getTheme()} />
+        <GlobalStyle isPageDataCenters={isPageDataCenters} theme={this.getTheme()} />
         <ThemeProvider theme={this.getTheme()}>
           <HashRouter ref={this.setRouterRef}>
             <div>
@@ -138,6 +143,17 @@ class App extends Component {
                       <HomePage
                         {...props}
                         breakpoint={breakpoint}
+                      />
+                    }
+                  />
+                  <Route
+                    exact path='/datacenters'
+                    render={(props) =>
+                      <DataCentersPage
+                        {...props}
+                        breakpoint={breakpoint}
+                        handleSetIsPageDataCenters={this.handleSetIsPageDataCenters}
+                        isThemeDark={isThemeDark}
                       />
                     }
                   />
@@ -200,6 +216,17 @@ class App extends Component {
   handleMobileDrawerMenuClick(contentRect) {
     this.setState({
       isMobileDrawerOpen: !this.state.isMobileDrawerOpen
+    });
+  }
+
+  /**
+   * Callback fired when the value isPageDataCenters changes.
+   * @param {Boolean} isPageDataCenters The value of isPageDataCenters.
+   * @public
+   */
+  handleSetIsPageDataCenters(isPageDataCenters) {
+    this.setState({
+      isPageDataCenters: isPageDataCenters
     });
   }
 

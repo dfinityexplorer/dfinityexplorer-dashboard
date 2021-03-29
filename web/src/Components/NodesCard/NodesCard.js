@@ -1,5 +1,5 @@
 /**
- * @file CyclesCard
+ * @file NodesCard
  * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
  * @license MIT License
  */
@@ -11,10 +11,10 @@ import DashCard from '../DashCard/DashCard';
 import Constants from '../../constants';
 
 /**
- * This component displays a dashboard card with the cycles burned retrieved from
+ * This component displays a dashboard card with the current number of nodes retrieved from
  * dashboard.internetcomputer.org/api.
  */
- class CyclesCard extends Component {
+ class NodesCard extends Component {
   static propTypes = {
     /**
      * The index of the card. Used for theming.
@@ -28,14 +28,14 @@ import Constants from '../../constants';
   };
 
   /**
-   * Create a CyclesCard object.
+   * Create a NodesCard object.
    * @constructor
    */
   constructor(props) {
     super(props);
 
     this.state = {
-      cyclesBurned: -1,
+      numberOfNodes: -1,
       error: 0
     };
   }
@@ -45,20 +45,7 @@ import Constants from '../../constants';
    * @public
    */
   componentDidMount() {    
-    // Update the cycles burned using intervals.
-    this.pollForCyclesBurned();
-    this.interval = setInterval(
-      () => { this.pollForCyclesBurned() },
-      Constants.CYCLES_CARD_POLL_INTERVAL_MS);
-  }
-
-  /**
-   * Invoked by React immediately before a component is unmounted and destroyed.
-   * @public
-   */
-  componentWillUnmount() {
-    clearInterval(this.interval);
-    this.interval = null;
+    this.getNumberOfNodes();
   }
 
   /**
@@ -68,44 +55,41 @@ import Constants from '../../constants';
    */
   render() {
     let { cardIndex, className } = this.props;
-    let { cyclesBurned, error } = this.state;
+    let { numberOfNodes, error } = this.state;
     
-    let cyclesBurnedText;
+    let numberOfNodesText;
     if (error >= Constants.NETWORK_ERROR_THRESHOLD)
-      cyclesBurnedText = 'Network error';
-    else if (cyclesBurned === -1)
-      cyclesBurnedText = 'Loading...';
-    else {
-      const trillionCyclesBurned = cyclesBurned / 1000000000000;
-      cyclesBurnedText = trillionCyclesBurned.toFixed(3) + 'T';
-    }
+      numberOfNodesText = 'Network error';
+    else if (numberOfNodes === -1)
+      numberOfNodesText = 'Loading...';
+    else
+      numberOfNodesText = numberOfNodes.toLocaleString();
 
     return (
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Cycles Burned'
-        value={cyclesBurnedText}
-        svgIconPath={Constants.ICON_SVG_PATH_CYCLES_BURNED}
+        title='Nodes'
+        value={numberOfNodesText}
+        svgIconPath={Constants.ICON_SVG_PATH_NODES}
       />
     );
   }
 
   /**
-   * Update the cycles burned.
+   * Get the number of nodes.
    * @private
    */
-  pollForCyclesBurned() {
-    const url =
-      `https://dashboard.internetcomputer.org/api/metrics/cycles-burned`;
+  getNumberOfNodes() {
+    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-nodes-count`;
     axios.get(url)
       .then(res => {
-        if (res.data.cycles_burned.length === 2) {
-          let { cyclesBurned } = this.state;
-          const newCyclesBurned = parseInt(res.data.cycles_burned[1]);
-          if (newCyclesBurned > cyclesBurned) {
+        if (res.data.ic_nodes_count.length === 2) {
+          let { numberOfNodes } = this.state;
+          const newNumberOfNodes = parseInt(res.data.ic_nodes_count[1]);
+          if (newNumberOfNodes > numberOfNodes) {
             this.setState({
-              cyclesBurned: newCyclesBurned,
+              numberOfNodes: newNumberOfNodes,
               error: 0
             });
           }
@@ -119,4 +103,4 @@ import Constants from '../../constants';
   }
 }
 
-export default CyclesCard;
+export default NodesCard;

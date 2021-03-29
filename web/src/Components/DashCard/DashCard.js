@@ -67,10 +67,6 @@ class DashCard extends Component {
      */
     svgIconPath: PropTypes.string.isRequired,
     /**
-     * Function to subscribe to receive new objects of the card using GraphQL.
-     */
-    subscribeToNewObjects: PropTypes.func,
-    /**
      * The title string of the card.
      */
     title: PropTypes.string.isRequired,
@@ -80,16 +76,6 @@ class DashCard extends Component {
     value: PropTypes.string.isRequired
   };
 
-  /**
-   * Invoked by React immediately after a component is mounted (inserted into the tree). 
-   * @public
-   */
-  componentDidMount() {
-    // Subscribe to receive new objects of the card using GraphQL.
-    if (this.props.subscribeToNewObjects)
-      this.props.subscribeToNewObjects();
-  }
-  
   /**
    * Return a reference to a React element to render into the DOM.
    * @return {Object} A reference to a React element to render into the DOM.
