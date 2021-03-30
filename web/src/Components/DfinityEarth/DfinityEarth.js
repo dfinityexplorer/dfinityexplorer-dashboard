@@ -236,7 +236,7 @@ class DfinityEarth extends Component {
         labelText={() => ''}
         labelLabel={location => `
           <div>${location.name}</div>
-          <div>${location.totalNodes} nodes</div>
+          <div>${location.totalNodes} node${location.totalNodes > 1 ? 's' : ''}</div>
         `} 
         labelDotRadius={d => 1}
 
