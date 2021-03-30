@@ -83,7 +83,7 @@ class DfinityEarth extends Component {
     this.globeEl = null;
 
     this.state = {
-      locations: [],
+      cities: [],
       subnetArcs: [],
       error: false
     };
@@ -110,7 +110,7 @@ class DfinityEarth extends Component {
             key: value.key,
             lat: value.latitude,
             lng: value.longitude,
-            name: value.name, // I should add a 1 or 2 to the end of this for cities with the same name!!!
+            name: value.name,
             totalNodes: value.total_nodes
           };
         });
@@ -119,6 +119,48 @@ class DfinityEarth extends Component {
         locations = locations.filter((location) => {
           return location.totalNodes > 0;
         });
+
+        // Organize the locations by city name.
+        const locationsByNameMap = new Map();
+        locations.forEach((location) => {
+          let locationsByName = locationsByNameMap.get(location.name);
+          if (typeof locationsByName === 'undefined') {
+            locationsByName = [];
+            locationsByNameMap.set(location.name, locationsByName);
+          }
+          locationsByName.push(location);
+        });
+
+        // Create an array of cities and their data centers. Consider locations within 100km of each
+        // other with the same name to be the same city (using the lat/lng of the first location).
+        const cities = [];
+        locationsByNameMap.forEach((locationsByName) => {
+          let citiesWithSameName = [];
+          locationsByName.forEach((location) => {
+            // Search for existing matching city object.
+            let city = citiesWithSameName.find(city =>
+              this.calculateDistance(location.lat, location.lng, city.lat, city.lng) <= 100);
+
+            // If no matching city was found, create a new city object and add it to
+            // citiesWithSameName[].
+            if (typeof city === 'undefined') {
+              city = {
+                name: location.name,
+                lat: location.lat,
+                lng: location.lng,
+                dataCenters: []
+              };
+              citiesWithSameName.push(city);
+            }
+
+            // Add the data center to the city.
+            city.dataCenters.push({key: location.key, totalNodes: location.totalNodes});
+          });
+
+          // Append citiesWithSameName[] to cities.
+          cities.push(...citiesWithSameName);
+        });
+
 
         // Create a random set of unique subnets.
         const nodesPerSubnet = 7; // use a Constants value for this!!!
@@ -163,7 +205,7 @@ class DfinityEarth extends Component {
         });
 
         this.setState({
-          locations: locations,
+          cities: cities,
           subnetArcs: subnetArcs
         });
       })
@@ -179,12 +221,12 @@ class DfinityEarth extends Component {
    * @return {Object} A reference to a React element to render into the DOM.
    * @public
    */
-   render() {
+  render() {
     const { height, isThemeDark, theme, width } = this.props;
-    const { locations, subnetArcs } = this.state;
+    const { cities, subnetArcs } = this.state;
 
     const OPACITY = isThemeDark ? 0.22 : 0.3;
-    let showGlobe = locations.length > 0;
+    let showGlobe = cities.length > 0;
 
     // These colors come from the DFINITY logo.
     const purple = `rgba(99, 38, 132, ${OPACITY})`;
@@ -206,6 +248,11 @@ class DfinityEarth extends Component {
     // the user can hover near the city and see the tooltip. We then use smaller, colored points to
     // mark the city locations. By doing this, the city dots can be small, but the tooltips work
     // even if the user is hovering in the general area.
+    // TODO: Adjust the size of the "large, transparent label points" based on map zoom, so that
+    // they get smaller as you zoom in. This way, tooltips will work for two points that are very
+    // close together if you zoom in enough. Ideally, we would also merge such tooltips when zoomed
+    // out. It would also make sense to adjust the size of the "smaller, colored points" based on
+    // map zoom!!!
     return (
       <Fade
         timeout={1000}
@@ -231,16 +278,27 @@ class DfinityEarth extends Component {
         arcColor={(subnetArc) => arcColorPairs[subnetArc.subnetIndex % arcColorPairs.length]}
         arcsTransitionDuration={0}
   
-        labelsData={locations}
+        labelsData={cities}
         labelColor={() => `rgba(0,0,0,0)`}
         labelText={() => ''}
-        labelLabel={location => `
-          <div>${location.name}</div>
-          <div>${location.totalNodes} node${location.totalNodes > 1 ? 's' : ''}</div>
-        `} 
+        labelLabel={city => {
+          let labelHtml = `<div>${city.name}</div>`;
+          // If there is more than one data center in a city, append the key to each nodes line.
+          if (city.dataCenters.length === 1) {
+            labelHtml +=
+              `<div>${city.dataCenters[0].totalNodes} node${city.dataCenters[0].totalNodes > 1 ? 's' : ''}</div>`;
+          }
+          else {
+            city.dataCenters.forEach((dataCenter) => {
+              labelHtml +=
+                `<div>${dataCenter.totalNodes} node${dataCenter.totalNodes > 1 ? 's' : ''} (${dataCenter.key})</div>`;
+            });
+          }
+          return labelHtml;
+        }} 
         labelDotRadius={d => 1}
 
-        pointsData={locations}
+        pointsData={cities}
         pointColor={() => lightOrangeOpaque}
         pointAltitude={0}
         pointRadius={0.3}
@@ -248,6 +306,41 @@ class DfinityEarth extends Component {
       />
       </Fade>
     );
+  }
+
+  /**
+   * Calculates the distance in km between two points using the Haversine formula. 
+   * @param {Number} lat1 Latitude of the first point.
+   * @param {Number} lng1 Longitude of the first point.
+   * @param {Number} lat2 Latitude of the second point.
+   * @param {Number} lng2 Longitude of the second point.
+   * @return {Number} The distance in km between the two points.
+   * @private
+   */
+  calculateDistance(lat1, lng1, lat2, lng2) {
+    if (lat1 === lat2 && lng1 === lng2) {
+      return 0;
+    }
+    const dLat = this.deg2rad(lat2-lat1);
+    const dLon = this.deg2rad(lng2-lng1); 
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2); 
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    const earthRadiusKm = 6371;
+    const distanceKm = earthRadiusKm * c;
+    return distanceKm;
+  }
+  
+  /**
+   * Converts degrees to radians. 
+   * @param {Number} deg The angle in degrees.
+   * @return {Number} The angle in radians.
+   * @private
+   */
+  deg2rad(deg) {
+    return deg * Math.PI / 180;
   }
 }
 
