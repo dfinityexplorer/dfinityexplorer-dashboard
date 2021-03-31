@@ -23,7 +23,7 @@ class TrackablePage extends ResponsiveComponent {
 
     const pathName = this.props.location.pathname + this.props.location.search;
     this.trackPage(pathName);
-}
+  }
 
   /**
    * Invoked by React immediately after updating occurs. This method is not called for the initial

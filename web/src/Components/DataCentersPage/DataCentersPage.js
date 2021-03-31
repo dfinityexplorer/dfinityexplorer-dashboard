@@ -145,6 +145,8 @@ class DataCentersPage extends TrackablePage {
    * @public
    */
   componentDidMount() {
+    super.componentDidMount();
+
     // Use a special background color for this component.
     const { handleSetIsPageDataCenters } = this.props;
     handleSetIsPageDataCenters(true);

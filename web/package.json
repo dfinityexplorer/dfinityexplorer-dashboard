@@ -19,7 +19,7 @@
     "react": "^16.14.0",
     "react-coinbase-commerce": "^1.4.4",
     "react-dom": "^16.14.0",
-    "react-ga": "^2.7.0",
+    "react-ga": "^3.3.0",
     "react-globe.gl": "^2.17.1",
     "react-parallax": "^2.2.4",
     "react-reveal": "^1.2.2",
