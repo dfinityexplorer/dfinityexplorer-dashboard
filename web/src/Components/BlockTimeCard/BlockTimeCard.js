@@ -34,9 +34,6 @@ class BlockTimeCard extends Component {
   constructor(props) {
     super(props);
 
-    this.blocks = [];
-    this.lastBlockHeight = 0;
-
     this.state = {
       blocksPerSecond: -1,
       error: 0
@@ -77,7 +74,7 @@ class BlockTimeCard extends Component {
     if (error >= Constants.NETWORK_ERROR_THRESHOLD)
       blockTimeText = 'Network error';
     else if (blocksPerSecond === -1)
-      blockTimeText = 'Calculating...';//"No Historical Blocks" fix!!!'Loading...';
+      blockTimeText = 'Loading...';
     else
       blockTimeText = blocksPerSecond.toFixed(1) + ' bps';
 
@@ -92,161 +89,20 @@ class BlockTimeCard extends Component {
     );
   }
 
-  /** KEEP for now: dashboard.dfinity.network version
-   * Update the block time.
-   * 
-   * This version was added for the "No Historical Blocks" fix!!! This function is basically a copy
-   * of pollForBlockHeight() in BlocksCard. This method of calculating the block time is intended to
-   * be temporary until we receive more reliable API data.
-   * @private
-   *
-  pollForBlockTime() {
-    // Get 10 minutes of minute data. If there is an API to get just the current block height, we
-    // should use it here.
-    const startDate = new Date();
-    startDate.setMinutes(startDate.getMinutes() - 10);
-    const endDate = new Date();
-    const secondsInMinute = 60;
-    const url =
-      // NOTE: IC_RELEASE vs. non IC_RELEASE is '%22${Constants.IC_RELEASE}' vs. '~%22.%2B'.
-      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
-      //NO IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
-    axios.get(url)
-      .then(res => {
-        if (res.data.data.result.length && res.data.data.result[0].values.length >= 2) {
-          const values = res.data.data.result[0].values;
-          // Temporary workaround fix: Use second to last value, since dashboard.dfinity.network
-          // seems to have a bug where the last value isn't always reliable!!!
-          const lastValue = values[values.length-2];
-          const newBlockHeight = Math.floor(lastValue[1]);
-
-          // Reset calculation if we get a major glitch in the API data.
-          const maxExpectedBlocksPerSecond = 50; // somewhat arbitrary, but based on observations
-          const maxExpectedBlocksPerInterval =
-            Constants.BLOCK_TIME_CARD_POLL_INTERVAL_MS / 1000 * maxExpectedBlocksPerSecond;
-          const resetCalculation =
-            newBlockHeight < this.lastBlockHeight ||
-            newBlockHeight > this.lastBlockHeight + maxExpectedBlocksPerInterval;
-          if (resetCalculation) {
-            this.blocks = [];
-            //console.log('Glitch!'); //!!!
-            //console.log('newBlockHeight: ', newBlockHeight); //!!!
-            //console.log('this.lastBlockHeight: ', this.lastBlockHeight); //!!!
-            //console.log(values);//!!!
-          }
-          this.lastBlockHeight = newBlockHeight;
-  
-          // Add a block object for this block to the blocks[] array.
-          const block = {
-            height: newBlockHeight,
-            timestamp: new Date(),
-          };
-          this.blocks.push(block);
-
-          // Remove blocks that have expired, so that we calculate blocks per second based on only
-          // the last X minutes. The goal here is to minimize the time a minor API data glitch will
-          // affect the blocks per second value.
-          const expireMs = 60 * 1000; // one minute
-          const expiredDate = new Date(block.timestamp.getTime() - expireMs);
-          while (this.blocks[0].timestamp < expiredDate)
-            this.blocks.shift();
-
-          let blocksPerSecond;
-          if (this.blocks.length >= 2) {
-            const numBlocks = this.blocks[this.blocks.length-1].height - this.blocks[0].height;
-            const seconds =
-              (this.blocks[this.blocks.length-1].timestamp - this.blocks[0].timestamp) / 1000;
-            blocksPerSecond = numBlocks / seconds;              
-          }
-          else
-            blocksPerSecond = -1;
-          
-          if (resetCalculation) {
-            // Do not set blocksPerSecond when resetting calculation, avoiding "Calculating...".
-            this.setState({
-              error: 0
-            });
-          }
-          else {
-            this.setState({
-              blocksPerSecond: blocksPerSecond,
-              error: 0
-            });
-          }
-        }
-      })
-      .catch(() => {
-        this.setState(prevState => ({
-          error: prevState.error + 1
-        }));
-      });
-  }*/
-
   /**
    * Update the block time.
-   * 
-   * This version was added for the "No Historical Blocks" fix!!! This function is basically a copy
-   * of pollForBlockHeight() in BlocksCard. This method of calculating the block time is intended to
-   * be temporary until we receive more reliable API data.
    * @private
    */
   pollForBlockTime() {
-    const url =
-      `https://dashboard.internetcomputer.org/api/metrics/block`;
+    const url = `https://dashboard.internetcomputer.org/api/metrics/block-rate`;
     axios.get(url)
       .then(res => {
-        if (res.data.block.length === 2) {
-          const newBlockHeight = parseInt(res.data.block[1]);
-
-          // Reset calculation if we get a major glitch in the API data.
-          const maxExpectedBlocksPerSecond = 200; // somewhat arbitrary, but based on observations
-          const maxExpectedBlocksPerInterval =
-            Constants.BLOCK_TIME_CARD_POLL_INTERVAL_MS / 1000 * maxExpectedBlocksPerSecond;
-          const resetCalculation =
-            newBlockHeight < this.lastBlockHeight ||
-            newBlockHeight > this.lastBlockHeight + maxExpectedBlocksPerInterval;
-          if (resetCalculation)
-            this.blocks = [];
-
-          this.lastBlockHeight = newBlockHeight;
-  
-          // Add a block object for this block to the blocks[] array.
-          const block = {
-            height: newBlockHeight,
-            timestamp: new Date(), // could use timestamp from API result!!!
-          };
-          this.blocks.push(block);
-
-          // Remove blocks that have expired, so that we calculate blocks per second based on only
-          // the last X minutes. The goal here is to minimize the time a minor API data glitch will
-          // affect the blocks per second value.
-          const expireMs = 60 * 1000; // one minute
-          const expiredDate = new Date(block.timestamp.getTime() - expireMs);
-          while (this.blocks[0].timestamp < expiredDate)
-            this.blocks.shift();
-
-          let blocksPerSecond;
-          if (this.blocks.length >= 2) {
-            const numBlocks = this.blocks[this.blocks.length-1].height - this.blocks[0].height;
-            const seconds =
-              (this.blocks[this.blocks.length-1].timestamp - this.blocks[0].timestamp) / 1000;
-            blocksPerSecond = numBlocks / seconds;              
-          }
-          else
-            blocksPerSecond = -1;
-          
-          if (resetCalculation) {
-            // Do not set blocksPerSecond when resetting calculation, avoiding "Calculating...".
-            this.setState({
-              error: 0
-            });
-          }
-          else {
-            this.setState({
-              blocksPerSecond: blocksPerSecond,
-              error: 0
-            });
-          }
+        if (res.data.block_rate.length >= 2) {
+          const blocksPerSecond = parseFloat(res.data.block_rate[1]);
+          this.setState({
+            blocksPerSecond: blocksPerSecond,
+            error: 0
+          });
         }
       })
       .catch(() => {
@@ -255,57 +111,6 @@ class BlockTimeCard extends Component {
         }));
       });
   }
-
-  /** KEEP: This version was removed for the "No Historical Blocks" fix. It was difficult to get
-   * consistent results by looking at historical block heights. We can hopefully go back to this
-   * version later.
-   * 
-   * Update the block time.
-   * @private
-   *
-  pollForBlockTime() {*/
-    /* KEEP for now
-    // Get one day of hourly data. Ideally, we would get 10 minutes of minute data, but
-    // dashboard.dfinity.network results are inconsistent with those settings.
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
-    const endDate = new Date();
-    const secondsInHour = 60 * 60;*//*
-    // Get 10 minutes of minute data. This is still sometimes glitchy, but we'll try it out
-    // temporarily.
-    const startDate = new Date();
-    startDate.setMinutes(startDate.getMinutes() - 10);
-    const endDate = new Date();
-    const secondsInMinute = 60;
-    const url =
-      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
-      //NO IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
-    axios.get(url)
-      .then(res => {
-        if (res.data.data.result.length && res.data.data.result[0].values.length >= 2) {
-          const values = res.data.data.result[0].values;
-          const firstValue = values[0];
-          // Temporary workaround fix when using 10 minutes of minute data: Use second to last
-          // value, since dashboard.dfinity.network seems to have a bug where the last value isn't
-          // always reliable. Note >= 2 above as well, rather than >= 1.!!!
-          const lastValue = values[values.length-2];
-          const numBlocks = Math.max(Math.floor(lastValue[1] - firstValue[1]), 0);
-          const seconds = Math.max(lastValue[0] - firstValue[0], 1);
-          const blocksPerSecond = numBlocks / seconds;
-          if (blocksPerSecond > 0) { // ignore glitchy data from API
-            this.setState({
-              blocksPerSecond: blocksPerSecond,
-              error: 0
-            });
-          }
-        }
-      })
-      .catch(() => {
-        this.setState(prevState => ({
-          error: prevState.error + 1
-        }));
-      });
-  }*/
 }
 
 export default BlockTimeCard;
