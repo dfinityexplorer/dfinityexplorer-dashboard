@@ -18,7 +18,6 @@ import Fade from 'react-reveal/Fade';
 import Flip from 'react-reveal/Flip';
 import LightSpeed from 'react-reveal/LightSpeed';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
-import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import TrackablePage from '../TrackablePage/TrackablePage';
 import DfinitySymbolD3 from '../DfinitySymbolD3/DfinitySymbolD3';
 import ImageLinkGrid from '../ImageLinkGrid/ImageLinkGrid';
@@ -315,7 +314,7 @@ class AboutPage extends TrackablePage {
     return (
       <PaperParallax elevation={2}>
         <Fade timeout={1200}>
-          <Parallax bgImage={bannerXHorizon} bgImageAlt='banner' bgImageStyle={{marginTop: '-100px'}} strength={500}>
+          <Parallax bgImage={bannerXHorizon} bgImageAlt='banner' bgImageStyle={{marginTop: '-223px'}} strength={370}>
             <GridParallax container direction='column' justify='center' alignItems='flex-start' breakpoint={breakpoint}>
               <Grid item>
                 <TypographyParallax breakpoint={breakpoint}>
@@ -505,12 +504,10 @@ class AboutPage extends TrackablePage {
               <SpanHeart>♥</SpanHeart>
               {' by '}
               <StyledA href={Constants.URI_GITHUB_DYLAN} target='_blank' rel='noopener noreferrer'>@dylancm4</StyledA>
-              {', '}
-              <StyledA href={Constants.URI_GITHUB_TODD} target='_blank' rel='noopener noreferrer'>@toddkitchens</StyledA>
-              {', and a friendly bunch of '}
+              {' and a friendly bunch of '}
               <StyledA href={Constants.URI_GITHUB_CONTRIBUTORS} target='_blank' rel='noopener noreferrer'>contributors</StyledA>
-              {' from the DFINITY community. We are passionate about DFINITY and we want to build '}
-              {'things to help it to succeed.'}
+              {' from the DFINITY community. We are passionate about the Internet Computer and we '}
+              {'want to build things to help it to succeed.'}
             </TypographyBody>
           </Fade>
         </GridTextLeft>

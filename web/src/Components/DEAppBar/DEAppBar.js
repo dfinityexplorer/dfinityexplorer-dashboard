@@ -175,7 +175,9 @@ const StyledDrawer = styled(({ ...other }) => (
 ))`
   & .paper {
     width: ${Constants.DRAWER_WIDTH + 'px'};
-    background: ${props => props.theme.colorDrawerBackground};
+    background:
+      ${props => props.isdesktopdrawertransparent === 'true' ?
+        props.theme.colorDrawerBackgroundTransparent : props.theme.colorDrawerBackground};
     border-right:
       ${props => props.theme.isDark ? `1px solid ${props.theme.colorBodyBackground}` : '0px'};
   }
@@ -276,6 +278,10 @@ class DEAppBar extends ResponsiveComponent {
      * True if the desktop drawer (large screens) is open.
      */    
     isDesktopDrawerOpen: PropTypes.bool.isRequired,
+    /**
+     * True if the desktop drawer (large screens) should be transparent.
+     */    
+    isDesktopDrawerTransparent: PropTypes.bool.isRequired,
     /**
      * True if the mobile drawer (small screens) is open.
      */    
@@ -454,9 +460,19 @@ class DEAppBar extends ResponsiveComponent {
     // The Material Design documentation states: "Modal drawer: In a responsive layout grid, at a
     // defined minimum breakpoint of at least 600dp width, a standard drawer should be replaced with
     // a modal drawer." We use a modal drawer for breakpoints xs and sm (i.e., up to 960px).
+    const {
+      handleMobileDrawerMenuClick,
+      isDesktopDrawerOpen,
+      isDesktopDrawerTransparent,
+      isMobileDrawerOpen
+    } = this.props;
     if (isBreakpointDesktop()) {
       return (
-        <StyledDrawer variant='persistent' open={this.props.isDesktopDrawerOpen}>
+        <StyledDrawer
+          variant='persistent'
+          open={isDesktopDrawerOpen}
+          isdesktopdrawertransparent={isDesktopDrawerTransparent ? 'true' : 'false'}
+        >
           {this.getDrawerContent()}
         </StyledDrawer>
       );
@@ -464,11 +480,11 @@ class DEAppBar extends ResponsiveComponent {
     else {
       return (
         <StyledSwipeableDrawer
-          open={this.props.isMobileDrawerOpen}
-          onOpen={this.props.handleMobileDrawerMenuClick}
-          onClose={this.props.handleMobileDrawerMenuClick}
+          open={isMobileDrawerOpen}
+          onOpen={handleMobileDrawerMenuClick}
+          onClose={handleMobileDrawerMenuClick}
         >
-          <div onClick={this.props.handleMobileDrawerMenuClick}>
+          <div onClick={handleMobileDrawerMenuClick}>
             {this.getDrawerContent()}
           </div>
         </StyledSwipeableDrawer>

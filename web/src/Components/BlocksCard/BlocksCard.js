@@ -89,44 +89,6 @@ import Constants from '../../constants';
     );
   }
 
-  /** KEEP for now: dashboard.dfinity.network version
-   * Update the block height.
-   * @private
-   *
-  pollForBlockHeight() {
-    // Get 10 minutes of minute data. If there is an API to get just the current block height, we
-    // should use it here.
-    const startDate = new Date();
-    startDate.setMinutes(startDate.getMinutes() - 10);
-    const endDate = new Date();
-    const secondsInMinute = 60;
-    const url =
-      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
-      //NO IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInMinute}`;
-    axios.get(url)
-      .then(res => {
-        if (res.data.data.result.length && res.data.data.result[0].values.length >= 2) {
-          let { blockHeight } = this.state;
-          const values = res.data.data.result[0].values;
-          // Temporary workaround fix: Use second to last value, since dashboard.dfinity.network
-          // seems to have a bug where the last value isn't always reliable!!!
-          const lastValue = values[values.length-2];
-          const newBlockHeight = Math.floor(lastValue[1]);
-          if (newBlockHeight > blockHeight) {
-            this.setState({
-              blockHeight: newBlockHeight,
-              error: 0
-            });
-          }
-        }
-      })
-      .catch(() => {
-        this.setState(prevState => ({
-          error: prevState.error + 1
-        }));
-      });
-  }*/
-
   /**
    * Update the block height.
    * @private

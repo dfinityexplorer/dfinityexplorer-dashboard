@@ -19,9 +19,6 @@ const Constants = Object.freeze({
   URI_GITHUB_DFINITY_EXPLORER_PROJECT: 'https://github.com/dfinityexplorer/dfinityexplorer-dashboard',
   URI_GITHUB_DYLAN: 'https://github.com/dylancm4',
   URI_GITHUB_MIT_LICENSE: 'https://github.com/dfinityexplorer/dfinityexplorer/blob/master/LICENSE',
-  URI_GITHUB_TODD: 'https://github.com/toddkitchens',
-  URI_GLOBE_EARTH_IMAGE_DARK: '//unpkg.com/three-globe/example/img/earth-night.jpg',
-  URI_GLOBE_EARTH_IMAGE_LIGHT: '//unpkg.com/three-globe/example/img/earth-day.jpg',
   URI_NASA_EXPLORER: 'https://nssdc.gsfc.nasa.gov/multi/explorer.html',
   URI_TWITTER_DFINITY_EXPLORER: 'https://twitter.com/dfinityexplorer',
   // Remove colors that are not used!!!
@@ -30,6 +27,10 @@ const Constants = Object.freeze({
   COLOR_DFINITY_BLACK_DARKER: 'rgb(27, 28, 31)', // COLOR_DFINITY_BLACK scaled darker
   COLOR_DFINITY_LIGHT_ORANGE: 'rgb(251, 176, 59)', // from dfinity.org style guide
   COLOR_DFINITY_DARK_ORANGE: 'rgb(241, 90, 36)', // from dfinity.org style guide
+  COLOR_DFINITY_BLUE_50: '#E0F3FB',
+  COLOR_DFINITY_BLUE_100: '#B0E1F5',
+  COLOR_DFINITY_BLUE_200: '#7ECDEE',
+  COLOR_DFINITY_BLUE_300: '#4DB9E6',
   COLOR_DFINITY_BLUE_400: '#29ABE2', // DFINITY logo blue
   COLOR_DFINITY_BLUE_500: '#009DDD',
   COLOR_DFINITY_BLUE_600: '#0090CF',
@@ -44,6 +45,7 @@ const Constants = Object.freeze({
   COLOR_LIGHT_TEXT_FADED: 'rgb(77, 77, 77)', // rgba(0, 0, 0, 0.7) on white, matches Material-UI Tab opacity
   COLOR_DARK_BODY_DARKER_MAC_OS: '#1B1B1B', // Calendar, Finder, iTunes, Messages
   COLOR_DARK_BODY_LIGHTER_MAC_OS: '#262626', // Finder
+  COLOR_DARK_BODY_LIGHTER_MAC_OS_ALPHA_85: 'rgba(38, 38, 38, 0.85)',
   COLOR_DARK_DRAWER_DIVIDER_MAC_OS: '#4B4B4B', // Calendar, Messages
   COLOR_DARK_DRAWER_DIVIDER_YOUTUBE: '#333333',
   COLOR_DARK_FOOTER_TEXT_ICON_NETFLIX: '#808080',
@@ -54,6 +56,7 @@ const Constants = Object.freeze({
   COLOR_LIGHT_DRAWER_DIVIDER_GOOGLE: '#E3E3E3', // Docs, Sheets
   COLOR_LIGHT_DRAWER_ICON_GOOGLE: '#5F6368', // Account, Docs, Drive, Calendar, Keep, Photos, Sheets
   COLOR_LIGHT_DRAWER_TEXT_GOOGLE: '#3C4043', // Account, Docs, Calendar, News, Photos, Sheets
+  COLOR_MATERIAL_PALETTE_LIGHT_GREEN_700_LIGHT: '#99D066',
   COLOR_TWITTER_BLUE: 'rgb(100, 164, 224)',
   COLOR_TWITTER_GREEN: 'rgb(131, 175, 97)',
   COLOR_TWITTER_ORANGE: 'rgb(244, 174, 78)',
@@ -107,18 +110,23 @@ const Constants = Object.freeze({
   ABOUT_PAGE_MARGIN_MD: 64,
   ABOUT_PAGE_MARGIN_LG: 128,
   DATA_CENTERS_PAGE_CARD_MAX_WIDTH_MD_AND_UP: 380,
+  DATA_CENTERS_PAGE_RIGHT_PANEL_WIDTH_MD_AND_UP: 256, // matches DRAWER_WIDTH
+  DATA_CENTERS_PAGE_TOOLTIP_CARD_WIDTH: 150,
+  INFO_TABLE_ROW_HEIGHT_XS: 30,
+  INFO_TABLE_ROW_HEIGHT_SM_AND_UP: 30,
   HOME_PAGE_MARGIN_XS: 8,
   HOME_PAGE_MARGIN_SM_AND_UP: 32,
   ABOUT_PAGE_PROJECT_ICONS_HEIGHT: 55,
   GOOGLE_ANALYTICS_TRACKING_ID: 'UA-138212575-1',
   BLOCKS_CARD_POLL_INTERVAL_MS: 3000,
-  BLOCK_TIME_CARD_POLL_INTERVAL_MS: 3000, // Changed from 10000 for the BlockTimeCard "No Historical Blocks" fix!!!
+  BLOCK_TIME_CARD_POLL_INTERVAL_MS: 3000,
   CYCLES_CARD_POLL_INTERVAL_MS: 3000,
   MESSAGES_TIME_POLL_INTERVAL_MS: 30000,
   PRICE_POLL_INTERVAL_MS: 30000,
   NETWORK_ERROR_THRESHOLD: 10,
   IC_RELEASE: 'sodium',
-  NOMICS_API_KEY: '38f4023ce681a328edc018f7a8a28e06'
+  NOMICS_API_KEY: '38f4023ce681a328edc018f7a8a28e06',
+  DFINITY_EARTH_MAP_CENTER: { lat: 37.1028 - 5, lng: -8.6730, altitude: 1.6 } // Lagos, Portugal (adjusted)
 });
 
 export default Constants;

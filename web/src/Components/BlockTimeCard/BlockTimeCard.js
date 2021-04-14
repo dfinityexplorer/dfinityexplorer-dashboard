@@ -82,7 +82,7 @@ class BlockTimeCard extends Component {
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Avg Blocks'
+        title='Block Rate'
         value={blockTimeText}
         svgIconPath={Constants.ICON_SVG_PATH_BLOCK_TIME}
       />

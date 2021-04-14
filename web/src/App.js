@@ -24,6 +24,7 @@ import DEAppBar from './Components/DEAppBar/DEAppBar';
 import Footer from './Components/Footer/Footer';
 import Constants from './constants';
 import { getBreakpoint, isBreakpointDesktop } from './utils/breakpoint';
+import { Breakpoints } from './utils/breakpoint';
 
 // Initialize the react-ga library. We do not need user consent to be GDPR compliant. According to
 // Google: "When using Google Analytics Advertising Features, you must also comply with the European
@@ -35,12 +36,28 @@ ReactGA.set({ anonymizeIp: true });
 
 const ContentDiv = styled.div`
   && {
-    margin-left: ${props => props.isDesktopDrawerOpen ? Constants.DRAWER_WIDTH + 'px' : '0px'};
+    // Drawer open/close transition applies to all content within the div whenever margin-left
+    // changes.
     transition: ${props =>
       'margin-left ' +
       (props.isDesktopDrawerOpen ? duration.enteringScreen : duration.leavingScreen) +
       'ms ' +
       easing.easeInOut};
+    // For the Data Centers page, we always use the full width (i.e., margin-left: '0px'), except
+    // for the special case of breakpoint SM with the desktop drawer open, in which case we set
+    // margin-left to Constants.DRAWER_WIDTH, so that the globe fills the width to the right of the
+    // desktop drawer.
+    ${({ breakpoint, isDesktopDrawerOpen, isPageDataCenters }) =>
+      ((breakpoint === Breakpoints.XL || breakpoint === Breakpoints.LG || breakpoint === Breakpoints.MD) && `
+        margin-left: ${(isDesktopDrawerOpen && !isPageDataCenters) ? Constants.DRAWER_WIDTH + 'px' : '0px'};
+      `) ||
+      ((breakpoint === Breakpoints.SM) && `
+        margin-left: ${isDesktopDrawerOpen ? Constants.DRAWER_WIDTH + 'px' : '0px'};
+      `) ||
+      ((breakpoint === Breakpoints.XS) && `
+        margin-left: 0px;
+      `)
+    }
   }
 `;
 
@@ -48,6 +65,22 @@ const ContentGrid = styled(Grid)`
   && {
     /* The height of the body + footer is the total viewport height - App Bar height. */
     min-height: calc(100vh - ${props => props.appbarheight + 'px'});
+  }
+`;
+
+const FooterDiv = styled.div`
+  && {
+    // For the Data Centers page, since we always use the full width for breakpoints MD and higher,
+    // we need to set the margin for the footer to Constants.DRAWER_WIDTH when the desktop drawer is
+    // open.
+    // Future enhancement: Implement margin-left transition to exactly match the drawer slide
+    // transition. Attempted to do this, but the transition did not begin until the drawer slide
+    // transition was complete.
+    ${({ breakpoint, isDesktopDrawerOpen, isPageDataCenters }) =>
+      ((breakpoint === Breakpoints.XL || breakpoint === Breakpoints.LG || breakpoint === Breakpoints.MD) && `
+        margin-left: ${(isDesktopDrawerOpen && isPageDataCenters) ? Constants.DRAWER_WIDTH + 'px' : '0px'};
+      `)
+    }
   }
 `;
 
@@ -108,6 +141,27 @@ class App extends Component {
 
     const isDesktopDrawerOpen = isDesktopDrawerEnabled && isBreakpointDesktop();
     const breakpoint = getBreakpoint(isDesktopDrawerOpen);
+    /* Breakpoint debug code
+    let breakpointText = 'undefined';
+    switch (breakpoint) {
+      case Breakpoints.XS:
+        breakpointText = 'XS';
+        break;
+      case Breakpoints.SM:
+        breakpointText = 'SM';
+        break;
+      case Breakpoints.MD:
+        breakpointText = 'MD';
+        break;
+      case Breakpoints.LG:
+        breakpointText = 'LG';
+        break;
+      case Breakpoints.XL:
+        breakpointText = 'XL';
+        break;
+    }
+    console.log(breakpointText);
+    */
 
     return (
       <Fragment>
@@ -120,12 +174,15 @@ class App extends Component {
                 handleDesktopDrawerMenuClick={this.handleDesktopDrawerMenuClick}
                 handleMobileDrawerMenuClick={this.handleMobileDrawerMenuClick}
                 isDesktopDrawerOpen={isDesktopDrawerOpen}
+                isDesktopDrawerTransparent={isPageDataCenters}
                 isMobileDrawerOpen={isMobileDrawerOpen}
                 routerRef={routerRef}
               />
               <ContentDiv
+                breakpoint={breakpoint}
                 isDesktopDrawerOpen={isDesktopDrawerOpen}
                 isMobileDrawerOpen={isMobileDrawerOpen}
+                isPageDataCenters={isPageDataCenters}
                 /* Workaround to force react-parallax to update when drawer opens/closes. Perhaps */
                 /* file an issue with react-parallax that Parallax does not update when */
                 /* margin-left changes. */
@@ -153,6 +210,7 @@ class App extends Component {
                         {...props}
                         breakpoint={breakpoint}
                         handleSetIsPageDataCenters={this.handleSetIsPageDataCenters}
+                        isDesktopDrawerOpen={isDesktopDrawerOpen}
                         isThemeDark={isThemeDark}
                       />
                     }
@@ -168,10 +226,16 @@ class App extends Component {
                       />
                     }
                   />
-                  <Footer                  
-                    handleThemeChange={this.handleThemeChange}
-                    isThemeDark={isThemeDark}
-                  />
+                  <FooterDiv
+                    breakpoint={breakpoint}
+                    isDesktopDrawerOpen={isDesktopDrawerOpen}
+                    isPageDataCenters={isPageDataCenters}
+                  >
+                    <Footer                  
+                      handleThemeChange={this.handleThemeChange}
+                      isThemeDark={isThemeDark}
+                    />
+                  </FooterDiv>
                 </ContentGrid>
               </ContentDiv>
             </div>

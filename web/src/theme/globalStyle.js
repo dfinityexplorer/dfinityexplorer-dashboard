@@ -40,15 +40,20 @@ export const themeLight = {
   colorBodyButtonText: Constants.COLOR_TEXT_LIGHT,
   colorBodyButtonHoverBackground: Constants.COLOR_DFINITY_BLUE_500,
   colorBodyButtonHoverText: Constants.COLOR_TEXT_LIGHT,
+  colorBodySwitchTrackBackground: null, // use default
   colorBodyText: Constants.COLOR_LIGHT_BODY_TEXT_GOOGLE,
   colorBodyTextDim: Constants.COLOR_LIGHT_BODY_TEXT_DIM_GOOGLE,
   colorBodyTextLink: Constants.COLOR_DFINITY_BLUE_700,
   colorDashCardBackground: '#FFFFFF',
   colorDashCardIcon: [Constants.COLOR_DFINITY_BLUE_700, '#9440A6', '#F79308', '#DA005E'], // Ori's purple and orange
   colorDashCardIconOpacity: 1.0,
-  colorDataCentersCardBackground: '#FFFFFF',
+  colorDataCentersCardBackground: 'rgba(255, 255, 255, 0.85)',
+  colorDataCentersGlobeAtmosphere: Constants.COLOR_DFINITY_BLUE_700,
+  colorDataCentersGlobePoint: Constants.COLOR_MATERIAL_PALETTE_LIGHT_GREEN_700_LIGHT,
   colorDataCentersPageBackground: '#F8F9FA', // Wikipedia (verified)
+  colorDataCentersTooltip: Constants.COLOR_MATERIAL_PALETTE_LIGHT_GREEN_700_LIGHT,
   colorDrawerBackground: '#FFFFFF',
+  colorDrawerBackgroundTransparent: 'rgba(255, 255, 255, 0.85)',
   colorDrawerDivider: Constants.COLOR_LIGHT_DRAWER_DIVIDER_GOOGLE,
   colorDrawerIcon: Constants.COLOR_LIGHT_DRAWER_ICON_GOOGLE,
   colorDrawerIconTextSelected: Constants.COLOR_DFINITY_BLUE_700,
@@ -61,16 +66,24 @@ export const themeLight = {
   colorChartLine: Constants.COLOR_DFINITY_BLUE_700,
   colorChartActiveDotStroke: '#FFFFFF',
   colorIconButtonHover: '#000000',
-  colorTableBackgroundPrimary: '#FFFFFF',
   colorTableRowBorder: Constants.COLOR_LIGHT_DRAWER_DIVIDER_GOOGLE,
   colorTableTextDim: '#909090', // YouTube, footer text dim (verified)
   colorFooterBackground: '#F5F5F5',
   colorFooterTextIcon: '#909090', // YouTube (verified)
+  colorPieChart: [
+    Constants.COLOR_DFINITY_BLUE_400,
+    Constants.COLOR_DFINITY_BLUE_500,
+    Constants.COLOR_DFINITY_BLUE_600,
+    Constants.COLOR_DFINITY_BLUE_700,
+    Constants.COLOR_DFINITY_BLUE_800,
+    Constants.COLOR_DFINITY_BLUE_900,
+    Constants.COLOR_DFINITY_BLUE_100,
+    Constants.COLOR_DFINITY_BLUE_200,
+    Constants.COLOR_DFINITY_BLUE_300],
   colorSearchText: Constants.COLOR_LIGHT_BODY_TEXT_GOOGLE,
   colorSearchIcon: '#9E9E9E', //  Material Design icon(verified)
   opacityActionDisabled: 0.26, // Material-UI createPalette.js theme.palette.action.disabled light theme
-  opacityActionHover: 0.08, // Material-UI createPalette.js theme.palette.action.hoverOpacity light theme
-  uriGlobeEarthImage: Constants.URI_GLOBE_EARTH_IMAGE_LIGHT
+  opacityActionHover: 0.08 // Material-UI createPalette.js theme.palette.action.hoverOpacity light theme
 }
 
 /**
@@ -87,19 +100,24 @@ export const themeDark = {
   colorAppBarDfinityText: Constants.COLOR_DARK_TEXT,
   colorAppBarExplorerText: Constants.COLOR_DFINITY_LIGHT_ORANGE,
   colorBodyBackground: Constants.COLOR_DARK_BODY_DARKER_MAC_OS,
-  colorBodyButtonBackground: Constants.COLOR_DFINITY_BLUE_700,
+  colorBodyButtonBackground: Constants.COLOR_DFINITY_BLUE_600,
   colorBodyButtonText: Constants.COLOR_DARK_TEXT_MAC_OS,
   colorBodyButtonHoverBackground: Constants.COLOR_DFINITY_BLUE_500,
   colorBodyButtonHoverText: Constants.COLOR_TEXT_LIGHT,
+  colorBodySwitchTrackBackground: '#535353', // this is darkened t0 #333333 by Switch code
   colorBodyText: Constants.COLOR_DARK_TEXT_MAC_OS,
   colorBodyTextDim: Constants.COLOR_DARK_TEXT_MAC_OS,
   colorBodyTextLink: Constants.COLOR_DFINITY_BLUE_600,
   colorDashCardBackground: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorDashCardIcon: ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF'],
   colorDashCardIconOpacity: 0.5,
-  colorDataCentersCardBackground: Constants.COLOR_DARK_BODY_DARKER_MAC_OS,
+  colorDataCentersCardBackground: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS_ALPHA_85,
+  colorDataCentersGlobeAtmosphere: Constants.COLOR_DFINITY_BLUE_600,
+  colorDataCentersGlobePoint: Constants.COLOR_DFINITY_BLUE_600,
   colorDataCentersPageBackground: '#000000',
+  colorDataCentersTooltip: Constants.COLOR_DFINITY_BLUE_600,
   colorDrawerBackground: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
+  colorDrawerBackgroundTransparent: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS_ALPHA_85,
   colorDrawerDivider: Constants.COLOR_DARK_DRAWER_DIVIDER_YOUTUBE,
   colorDrawerIcon: Constants.COLOR_DARK_TEXT_FADED,
   colorDrawerIconTextSelected: '#FFFFFF',
@@ -112,14 +130,23 @@ export const themeDark = {
   colorChartLine: Constants.COLOR_DFINITY_BLUE_600,
   colorChartActiveDotStroke: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorIconButtonHover: Constants.COLOR_DARK_TEXT,
-  colorTableBackgroundPrimary: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorTableRowBorder: Constants.COLOR_DARK_DRAWER_DIVIDER_YOUTUBE,
   colorTableTextDim: '#717171', // YouTube (Dark), footer text dim (verified)
   colorFooterBackground: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorFooterTextIcon: Constants.COLOR_DARK_FOOTER_TEXT_ICON_NETFLIX,
+  colorPieChart: [
+    Constants.COLOR_DFINITY_BLUE_800,
+    Constants.COLOR_DFINITY_BLUE_700,
+    Constants.COLOR_DFINITY_BLUE_600,
+    Constants.COLOR_DFINITY_BLUE_500,
+    Constants.COLOR_DFINITY_BLUE_400,
+    Constants.COLOR_DFINITY_BLUE_300,
+    Constants.COLOR_DFINITY_BLUE_200,
+    Constants.COLOR_DFINITY_BLUE_100,
+    Constants.COLOR_DFINITY_BLUE_900
+  ],
   colorSearchText: Constants.COLOR_LIGHT_BODY_TEXT_GOOGLE,
   colorSearchIcon: '#9E9E9E', //  Material Design icon (verified)
   opacityActionDisabled: 0.3, // Material-UI createPalette.js theme.palette.action.disabled dark theme
-  opacityActionHover: 0.1, // Material-UI createPalette.js theme.palette.action.hoverOpacity dark theme
-  uriGlobeEarthImage: Constants.URI_GLOBE_EARTH_IMAGE_DARK
+  opacityActionHover: 0.1 // Material-UI createPalette.js theme.palette.action.hoverOpacity dark theme
 }
