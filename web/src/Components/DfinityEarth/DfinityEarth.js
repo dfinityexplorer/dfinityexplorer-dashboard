@@ -400,8 +400,11 @@ class DfinityEarth extends Component {
             // would scale it with zoomFactor as we do for pointRadius, so that the radius would
             // become more precise when zoomed in, allowing for easier hover selection of two cities
             // that are close together (e.g., Fremont and San Jose). As more close-together cities are
-            // added, this will become more of an issue. 
-            labelDotRadius={0.4}
+            // added, this will become more of an issue.
+            // Tried setting labelDotRadius to 0.4 so that Fremont and San Jose could be
+            // distinguished from each other, but this setting was not large enough for touch
+            // devices, so setting this back to 1 for now.
+            labelDotRadius={1}
             onLabelHover={city => {
               if (city !== null) {
                 // Set tooltipCity to turn on the tooltip.
