@@ -83,7 +83,7 @@ import Constants from '../../constants';
    * @private
    */
   getMemoryTotal() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-memory-total`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-memory-total`;
     axios.get(url)
       .then(res => {
         if (res.data.ic_memory_total.length === 2) {

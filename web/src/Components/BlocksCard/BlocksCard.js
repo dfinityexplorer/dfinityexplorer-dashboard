@@ -95,7 +95,7 @@ import Constants from '../../constants';
    */
   pollForBlockHeight() {
     const url =
-      `https://dashboard.internetcomputer.org/api/metrics/block`;
+      `https://ic-api.internetcomputer.org/api/metrics/block`;
     axios.get(url)
       .then(res => {
         if (res.data.block.length === 2) {

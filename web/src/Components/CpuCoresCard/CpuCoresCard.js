@@ -81,7 +81,7 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfCpuCores() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-cpu-cores`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-cpu-cores`;
     axios.get(url)
       .then(res => {
         if (res.data.ic_cpu_cores.length === 2) {

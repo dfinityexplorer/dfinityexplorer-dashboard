@@ -146,7 +146,7 @@ import Constants from '../../constants';
    * @private
    */
   getMemoryTotal() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-memory-total`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-memory-total`;
     axios.get(url)
       .then(res => {
         if (res.data.ic_memory_total.length === 2) {
@@ -174,7 +174,7 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfCpuCores() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-cpu-cores`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-cpu-cores`;
     axios.get(url)
       .then(res => {
         if (res.data.ic_cpu_cores.length === 2) {
@@ -202,7 +202,7 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfDataCenters() {
-    const url = `https://dashboard.internetcomputer.org/api/locations`;
+    const url = `https://ic-api.internetcomputer.org/api/locations`;
     axios.get(url)
       .then(res => {
         // Create an array of data center locations.
@@ -240,7 +240,7 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfNodes() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-nodes-count`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-nodes-count`;
     axios.get(url)
       .then(res => {
         if (res.data.ic_nodes_count.length === 2) {
@@ -268,7 +268,7 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfSubnets() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-subnet-total`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-subnet-total`;
     axios.get(url)
       .then(res => {
         if (res.data.ic_subnet_total.length === 2) {

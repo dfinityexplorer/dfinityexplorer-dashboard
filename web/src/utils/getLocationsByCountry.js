@@ -52,7 +52,7 @@ export default async function getLocationsByCountry() {
   cityToCountryMap.set('Zurich 4', 'Switzerland');
 
   try {
-    const url = `https://dashboard.internetcomputer.org/api/locations`;
+    const url = `https://ic-api.internetcomputer.org/api/locations`;
     const res = await axios.get(url);
 
     // Create an array of data center locations.

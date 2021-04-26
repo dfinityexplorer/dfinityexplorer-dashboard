@@ -81,7 +81,7 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfSubnets() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-subnet-total`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-subnet-total`;
     axios.get(url)
       .then(res => {
         if (res.data.ic_subnet_total.length === 2) {

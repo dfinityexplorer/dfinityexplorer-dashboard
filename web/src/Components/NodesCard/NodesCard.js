@@ -81,7 +81,7 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfNodes() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/ic-nodes-count`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-nodes-count`;
     axios.get(url)
       .then(res => {
         if (res.data.ic_nodes_count.length === 2) {

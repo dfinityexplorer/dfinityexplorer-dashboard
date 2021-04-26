@@ -94,7 +94,7 @@ class BlockTimeCard extends Component {
    * @private
    */
   pollForBlockTime() {
-    const url = `https://dashboard.internetcomputer.org/api/metrics/block-rate`;
+    const url = `https://ic-api.internetcomputer.org/api/metrics/block-rate`;
     axios.get(url)
       .then(res => {
         if (res.data.block_rate.length >= 2) {

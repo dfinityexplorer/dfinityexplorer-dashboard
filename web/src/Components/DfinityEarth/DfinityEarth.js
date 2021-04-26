@@ -159,7 +159,7 @@ class DfinityEarth extends Component {
       });
     }
 
-    const url = `https://dashboard.internetcomputer.org/api/locations`;
+    const url = `https://ic-api.internetcomputer.org/api/locations`;
     axios.get(url)
       .then(res => {
         // Create an array of data center locations.

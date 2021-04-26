@@ -97,7 +97,7 @@ import Constants from '../../constants';
    */
   pollForCyclesBurned() {
     const url =
-      `https://dashboard.internetcomputer.org/api/metrics/cycles-burned`;
+      `https://ic-api.internetcomputer.org/api/metrics/cycles-burned`;
     axios.get(url)
       .then(res => {
         if (res.data.cycles_burned.length === 2) {
@@ -109,6 +109,14 @@ import Constants from '../../constants';
               error: 0
             });
           }
+        }
+        // Special case for "{cycles_burned: 0}", which occurs pre-Genesis as networks are changed
+        // around. This should not be needed post-Genesis.
+        else if (res.data.cycles_burned === 0) {
+          this.setState({
+            cyclesBurned: 0,
+            error: 0
+          });
         }
       })
       .catch(() => {
