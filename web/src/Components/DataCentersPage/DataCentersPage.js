@@ -128,7 +128,11 @@ class DataCentersPage extends TrackablePage {
     /**
      * The current Breakpoint, taking the desktop drawer (large screens) width into account.
      */    
-    breakpoint: PropTypes.number.isRequired
+    breakpoint: PropTypes.number.isRequired,
+    /**
+     * True if the desktop drawer (large screens) is open.
+     */    
+    isDesktopDrawerOpen: PropTypes.bool.isRequired
   };
 
   /**
@@ -206,11 +210,12 @@ class DataCentersPage extends TrackablePage {
    * @private
    */
   getGlobe() {
-    const { breakpoint, isThemeDark } = this.props;
+    const { breakpoint, isDesktopDrawerOpen, isThemeDark } = this.props;
     const { isSimulationOn } = this.state;
     return (
       <DfinityEarth
         breakpoint={breakpoint}
+        isDesktopDrawerOpen={isDesktopDrawerOpen}
         isSimulationOn={isSimulationOn}
         isThemeDark={isThemeDark}
       />);

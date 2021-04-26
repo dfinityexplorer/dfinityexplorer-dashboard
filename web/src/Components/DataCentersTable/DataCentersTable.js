@@ -47,6 +47,7 @@ import Constants from '../../constants';
 
     this.state = {
       memoryTotal: {count: -1, error: 0},
+      numberOfBoundaryNodes: {count: -1, error: 0},
       numberOfCpuCores: {count: -1, error: 0},
       numberOfDataCenters: {count: -1, error: 0},
       numberOfNodes: {count: -1, error: 0},
@@ -62,6 +63,7 @@ import Constants from '../../constants';
     this.getNumberOfDataCenters();
     this.getNumberOfSubnets();
     this.getNumberOfNodes();
+    this.getNumberOfBoundaryNodes();
     this.getNumberOfCpuCores();
     this.getMemoryTotal();
   }
@@ -95,6 +97,7 @@ import Constants from '../../constants';
    */
   getBodyRows() {
     const {
+      numberOfBoundaryNodes,
       numberOfCpuCores,
       numberOfDataCenters,
       numberOfNodes,
@@ -116,26 +119,30 @@ import Constants from '../../constants';
       },
       {
         mapKey: 3,
-        cells: this.getRowCells(numberOfCpuCores, 'CPU Cores')
+        cells: this.getRowCells(numberOfBoundaryNodes, 'Boundary Nodes')
       },
       {
         mapKey: 4,
-        cells: this.getRowCellsMemoryTotal()
+        cells: this.getRowCells(numberOfCpuCores, 'CPU Cores')
       },
       {
         mapKey: 5,
-        cells: this.getRowCellsAvgNodes()
+        cells: this.getRowCellsMemoryTotal()
       },
       {
         mapKey: 6,
-        cells: this.getRowCellsAvgCores()
+        cells: this.getRowCellsAvgNodes()
       },
       {
         mapKey: 7,
-        cells: this.getRowCellsAvgMemory()
+        cells: this.getRowCellsAvgCores()
       },
       {
         mapKey: 8,
+        cells: this.getRowCellsAvgMemory()
+      },
+      {
+        mapKey: 9,
         cells: this.getRowCellsSimulationSwitch()
       }
     ];
@@ -164,6 +171,34 @@ import Constants from '../../constants';
           memoryTotal: {
             ...memoryTotal,
             error: memoryTotal.error + 1
+          }
+        }));
+      });
+  }
+
+  /**
+   * Get the number of nodes.
+   * @private
+   */
+  getNumberOfBoundaryNodes() {
+    const url = `https://ic-api.internetcomputer.org/api/metrics/boundary-nodes-count`;
+    axios.get(url)
+      .then(res => {
+        if (res.data.boundary_nodes_count.length === 2) {
+          const numberOfBoundaryNodes = {
+            count: parseInt(res.data.boundary_nodes_count[1]),
+            error: 0
+          };
+          this.setState({
+            numberOfBoundaryNodes: numberOfBoundaryNodes
+          });
+        }
+      })
+      .catch(() => {
+        this.setState(({ numberOfBoundaryNodes }) => ({
+          numberOfBoundaryNodes: {
+            ...numberOfBoundaryNodes,
+            error: numberOfBoundaryNodes.error + 1
           }
         }));
       });

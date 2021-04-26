@@ -28,6 +28,11 @@ class DfinityEarthWithSize extends Component {
      */    
     breakpoint: PropTypes.number.isRequired,
     /**
+     * True if the desktop drawer (large screens) is open. Optional, applies only to
+     * dfinityexplorer.org.
+     */    
+    isDesktopDrawerOpen: PropTypes.bool,
+    /**
      * True if the simulation is on, otherwise false.
      */    
     isSimulationOn: PropTypes.bool.isRequired,
@@ -47,7 +52,7 @@ class DfinityEarthWithSize extends Component {
    * @public
    */
   render() {
-    const { breakpoint, isSimulationOn, isThemeDark, theme } = this.props;
+    const { breakpoint, isDesktopDrawerOpen, isSimulationOn, isThemeDark, theme } = this.props;
     
     return (
       <SizeMe>{({ size }) => {
@@ -68,6 +73,7 @@ class DfinityEarthWithSize extends Component {
           <DfinityEarth
             breakpoint={breakpoint}
             height={height}
+            isDesktopDrawerOpen={isDesktopDrawerOpen}
             isSimulationOn={isSimulationOn}
             isThemeDark={isThemeDark}
             theme={theme}
@@ -93,6 +99,11 @@ class DfinityEarth extends Component {
      * The height of the component.
      */
     height: PropTypes.number.isRequired,
+    /**
+     * True if the desktop drawer (large screens) is open. Optional, applies only to
+     * dfinityexplorer.org.
+     */    
+    isDesktopDrawerOpen: PropTypes.bool,
     /**
      * True if the simulation is on, otherwise false.
      */    
@@ -296,6 +307,7 @@ class DfinityEarth extends Component {
     const {
       breakpoint,
       height,
+      isDesktopDrawerOpen,
       isSimulationOn,
       isThemeDark,
       theme,
@@ -350,6 +362,7 @@ class DfinityEarth extends Component {
         <EarthTooltip
           breakpoint={breakpoint}
           city={tooltipCity}
+          isDesktopDrawerOpen={isDesktopDrawerOpen}
           width={width}
           height={height}
           x={tooltipX}
@@ -379,9 +392,12 @@ class DfinityEarth extends Component {
             pointerEventsFilter={obj => {
               // Filter out pointer events for arcs and points so that city labels receive all pointer
               // events when within the labelDotRadius. 
-              return (
-                !(typeof obj.parent !== 'undefined' && obj.parent.__globeObjType === 'arc') && // not arc
-                obj.__globeObjType !== 'points'); // not point
+              const isArc =
+                typeof obj.parent !== 'undefined' && obj.parent !== null &&
+                obj.parent.__globeObjType === 'arc';
+              const isPoint =
+                typeof obj !== 'undefined' && obj !== null && obj.__globeObjType === 'points';
+              return !isArc && !isPoint;
             }}
 
             arcsData={isSimulationOn ? subnetArcs : []}

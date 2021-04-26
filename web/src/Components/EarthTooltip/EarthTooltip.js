@@ -28,6 +28,14 @@ const TableDiv = styled.div`
     z-index: 1;
     left: ${props => props.x + 'px'};
     top: ${props => props.y + 'px'};
+    // Add drawer width offset for SM breakpoint with the desktop drawer open, since props.x starts
+    // from 0 at the drawer edge for this case. There are likely more elegant ways of accounting for
+    // this.
+    ${({ breakpoint, isDesktopDrawerOpen, x }) =>
+      ((breakpoint === Breakpoints.SM && isDesktopDrawerOpen) && `
+        left: ${x + Constants.DRAWER_WIDTH + 'px'};
+      `)
+    }
   }
 `;
 
@@ -61,6 +69,11 @@ class EarthTooltip extends Component {
      */
     height: PropTypes.number.isRequired,
     /**
+     * True if the desktop drawer (large screens) is open. Optional, applies only to
+     * dfinityexplorer.org.
+     */    
+    isDesktopDrawerOpen: PropTypes.bool,
+    /**
      * The styled-components theme.
      */
     theme: PropTypes.object.isRequired,
@@ -84,7 +97,7 @@ class EarthTooltip extends Component {
    * @public
    */
   render() {
-    const { breakpoint, city, height, theme, width, x, y } = this.props;
+    const { breakpoint, city, height, isDesktopDrawerOpen, theme, width, x, y } = this.props;
 
     const cityCircleARadius = 12;
     const cityCircleBRadius = cityCircleARadius * 2;
@@ -133,6 +146,8 @@ class EarthTooltip extends Component {
             </Stage>
           </KonvaDiv>
           <TableDiv
+            breakpoint={breakpoint}
+            isDesktopDrawerOpen={isDesktopDrawerOpen}
             x={
               xCoordMult === 1 ?
                 x + lineXYlength :
