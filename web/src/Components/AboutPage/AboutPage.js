@@ -72,11 +72,12 @@ const TypographyParallax = styled(Typography)`
       (breakpoint === Breakpoints.SM && `
         padding-left: ${Constants.ABOUT_PAGE_MARGIN_SM + 'px'};
         padding-right: ${Constants.ABOUT_PAGE_MARGIN_SM + 'px'};
+        font-size: ${Constants.MATERIAL_FONT_SIZE_H5};
       `) ||
       (breakpoint === Breakpoints.XS && `
         padding-left: ${Constants.ABOUT_PAGE_MARGIN_XS + 'px'};
         padding-right: ${Constants.ABOUT_PAGE_MARGIN_XS + 'px'};
-        font-size: ${Constants.MATERIAL_FONT_SIZE_H5};
+        font-size: ${Constants.MATERIAL_FONT_SIZE_H6};
       `)
     }
   }
@@ -318,9 +319,9 @@ class AboutPage extends TrackablePage {
             <GridParallax container direction='column' justify='center' alignItems='flex-start' breakpoint={breakpoint}>
               <Grid item>
                 <TypographyParallax breakpoint={breakpoint}>
-                  An open-source network dashboard
+                  A dashboard for the Internet Computer.
                   <br />
-                  built by the DFINITY community
+                  Open source, community built.
                 </TypographyParallax>
               </Grid>
             </GridParallax>
@@ -357,18 +358,18 @@ class AboutPage extends TrackablePage {
             <br />
             <TypographyBody>
               {'Our mission is to provide a bridge between you and the '}
-              <StyledA href={Constants.URI_ABOUT_DFINITY} target='_blank' rel='noopener noreferrer'>DFINITY</StyledA>
-              {' Internet Computer, allowing you to easily search for and retrieve information '}
+              {'Internet Computer, allowing you to easily search for and retrieve information '}
               {'which is useful in a format that is understandable, with everything you want to '}
               {'know right at your fingertips.'}
             </TypographyBody>
             <br />
             <TypographyBody>
-              {'DFINITY aims to build their organization into a “NASA for decentralization”. '}
+              <StyledA href={Constants.URI_ABOUT_DFINITY} target='_blank' rel='noopener noreferrer'>DFINITY</StyledA>
+              {' once had a goal of building their foundation into a “NASA for decentralization”. '}
               {'There have in fact been '}
               <StyledA href={Constants.URI_NASA_EXPLORER} target='_blank' rel='noopener noreferrer'>89 NASA “Explorer” missions</StyledA>
               {' since 1958, carrying a wide variety of scientific investigations. We want DFINITY '}
-              {'Explorer to be the perfect vehicle to explore the DFINITY universe.'}
+              {'Explorer to be the perfect vehicle to explore the Internet Computer universe.'}
               &nbsp;&nbsp;🚀
             </TypographyBody>
           </Fade>
@@ -463,7 +464,7 @@ class AboutPage extends TrackablePage {
             <TypographyBody>
               {'Follow '}
               <StyledA href={Constants.URI_TWITTER_DFINITY_EXPLORER} target='_blank' rel='noopener noreferrer'>@dfinityexplorer</StyledA>
-              {' on Twitter to learn about the latest DFINITY-related news, videos, and events.'}
+              {' on Twitter to learn about the latest Internet Computer-related news, videos, and events.'}
             </TypographyBody>
             <br />
             <TypographyBody>
@@ -506,7 +507,7 @@ class AboutPage extends TrackablePage {
               <StyledA href={Constants.URI_GITHUB_DYLAN} target='_blank' rel='noopener noreferrer'>@dylancm4</StyledA>
               {' and a friendly bunch of '}
               <StyledA href={Constants.URI_GITHUB_CONTRIBUTORS} target='_blank' rel='noopener noreferrer'>contributors</StyledA>
-              {' from the DFINITY community. We are passionate about the Internet Computer and we '}
+              {' from the IC community. We are passionate about the Internet Computer and we '}
               {'want to build things to help it to succeed.'}
             </TypographyBody>
           </Fade>
