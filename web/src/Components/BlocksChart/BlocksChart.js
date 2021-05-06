@@ -58,11 +58,12 @@ class BlocksChart extends BarChart {
     const secondsInDay = 24 * 60 * 60;
     const url =
       // Use ic-api.internetcomputer.org!!!
+      //New API!!!`https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}&ic=${Constants.IC_RELEASE}`;
       `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
       //NO IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
     axios.get(url)
       .then(res => {
-        let values = res.data.data.result[0].values;
+        let values = res.data.data.result[0].values; // new API: res.data.block!!!
         // Use values[0] to get the starting block height.
         let prevHeight = Math.floor(values[0][1]);
         const blocksData = values.slice(1).map((value) => {

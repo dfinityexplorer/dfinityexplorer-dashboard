@@ -51,6 +51,7 @@ import Constants from '../../constants';
       numberOfCpuCores: {count: -1, error: 0},
       numberOfDataCenters: {count: -1, error: 0},
       numberOfNodes: {count: -1, error: 0},
+      numberOfNodeProviders: {count: -1, error: 0},
       numberOfSubnets: {count: -1, error: 0}
     };
   }
@@ -61,6 +62,7 @@ import Constants from '../../constants';
    */
   componentDidMount() {    
     this.getNumberOfDataCenters();
+    this.getNumberOfNodeProviders();
     this.getNumberOfSubnets();
     this.getNumberOfNodes();
     this.getNumberOfBoundaryNodes();
@@ -101,6 +103,7 @@ import Constants from '../../constants';
       numberOfCpuCores,
       numberOfDataCenters,
       numberOfNodes,
+      numberOfNodeProviders,
       numberOfSubnets
     } = this.state;
 
@@ -111,38 +114,42 @@ import Constants from '../../constants';
       },
       {
         mapKey: 1,
-        cells: this.getRowCells(numberOfSubnets, 'Subnets')
+        cells: this.getRowCells(numberOfNodeProviders, 'Node Providers')
       },
       {
         mapKey: 2,
-        cells: this.getRowCells(numberOfNodes, 'Nodes')
+        cells: this.getRowCells(numberOfSubnets, 'Subnets')
       },
       {
         mapKey: 3,
-        cells: this.getRowCells(numberOfBoundaryNodes, 'Boundary Nodes')
+        cells: this.getRowCells(numberOfNodes, 'Active Nodes')
       },
       {
         mapKey: 4,
-        cells: this.getRowCells(numberOfCpuCores, 'CPU Cores')
+        cells: this.getRowCells(numberOfBoundaryNodes, 'Boundary Nodes')
       },
       {
         mapKey: 5,
-        cells: this.getRowCellsMemoryTotal()
+        cells: this.getRowCells(numberOfCpuCores, 'CPU Cores')
       },
       {
         mapKey: 6,
-        cells: this.getRowCellsAvgNodes()
+        cells: this.getRowCellsMemoryTotal()
       },
       {
         mapKey: 7,
-        cells: this.getRowCellsAvgCores()
+        cells: this.getRowCellsAvgNodes()
       },
       {
         mapKey: 8,
-        cells: this.getRowCellsAvgMemory()
+        cells: this.getRowCellsAvgCores()
       },
       {
         mapKey: 9,
+        cells: this.getRowCellsAvgMemory()
+      },
+      {
+        mapKey: 10,
         cells: this.getRowCellsSimulationSwitch()
       }
     ];
@@ -156,9 +163,9 @@ import Constants from '../../constants';
     const url = `https://ic-api.internetcomputer.org/api/metrics/ic-memory-total`;
     axios.get(url)
       .then(res => {
-        if (res.data.ic_memory_total.length === 2) {
+        if (res.data.ic_memory_total.length === 1 && res.data.ic_memory_total[0].length === 2) {
           const memoryTotal = {
-            count: parseInt(res.data.ic_memory_total[1]),
+            count: parseInt(res.data.ic_memory_total[0][1]),
             error: 0
           };
           this.setState({
@@ -212,9 +219,9 @@ import Constants from '../../constants';
     const url = `https://ic-api.internetcomputer.org/api/metrics/ic-cpu-cores`;
     axios.get(url)
       .then(res => {
-        if (res.data.ic_cpu_cores.length === 2) {
+        if (res.data.ic_cpu_cores.length === 1 && res.data.ic_cpu_cores[0].length === 2) {
           const numberOfCpuCores = {
-            count: parseInt(res.data.ic_cpu_cores[1]),
+            count: parseInt(res.data.ic_cpu_cores[0][1]),
             error: 0
           };
           this.setState({
@@ -278,9 +285,9 @@ import Constants from '../../constants';
     const url = `https://ic-api.internetcomputer.org/api/metrics/ic-nodes-count`;
     axios.get(url)
       .then(res => {
-        if (res.data.ic_nodes_count.length === 2) {
+        if (res.data.ic_nodes_count.length === 1 && res.data.ic_nodes_count[0].length === 2) {
           const numberOfNodes = {
-            count: parseInt(res.data.ic_nodes_count[1]),
+            count: parseInt(res.data.ic_nodes_count[0][1]),
             error: 0
           };
           this.setState({
@@ -293,6 +300,34 @@ import Constants from '../../constants';
           numberOfNodes: {
             ...numberOfNodes,
             error: numberOfNodes.error + 1
+          }
+        }));
+      });
+  }
+
+  /**
+   * Get the number of node providers.
+   * @private
+   */
+   getNumberOfNodeProviders() {
+    const url = `https://ic-api.internetcomputer.org/api/node-providers/count`;
+    axios.get(url)
+      .then(res => {
+        if (res.data.node_providers.length === 1) {
+          const numberOfNodeProviders = {
+            count: parseInt(res.data.node_providers[0].node_providers),
+            error: 0
+          };
+          this.setState({
+            numberOfNodeProviders: numberOfNodeProviders
+          });
+        }
+      })
+      .catch(() => {
+        this.setState(({ numberOfNodeProviders }) => ({
+          numberOfNodeProviders: {
+            ...numberOfNodeProviders,
+            error: numberOfNodeProviders.error + 1
           }
         }));
       });

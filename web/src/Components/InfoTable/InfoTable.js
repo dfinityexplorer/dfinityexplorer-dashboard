@@ -58,6 +58,11 @@ const StyledTableCell = styled(TableCell)`
     font-family: ${Constants.FONT_PRIMARY};
     font-size: ${Constants.MATERIAL_FONT_SIZE_BODY_2};
     white-space: nowrap;
+    ${({ breakpoint, usesmallfontforxs }) =>
+      ((breakpoint === Breakpoints.XS && usesmallfontforxs) && `
+        font-size: ${Constants.MATERIAL_FONT_SIZE_CAPTION};
+      `)
+    }
   }
 `;
 
@@ -137,6 +142,10 @@ class InfoTable extends Component {
      */
     headerRow: PropTypes.array,
     /**
+     * Optionally specifies to use a small for for the XS breakpoint.
+     */
+    useSmallFontForXS: PropTypes.bool,
+    /**
      * The optional title of the table.
      */
     title: PropTypes.string
@@ -173,7 +182,7 @@ class InfoTable extends Component {
    * @private
    */
   getHeaderRowElement() {
-    const { breakpoint, headerRow } = this.props;
+    const { breakpoint, headerRow, useSmallFontForXS } = this.props;
     if (typeof headerRow !== 'undefined') {
       return (
         <StyledTableRow breakpoint={breakpoint}>
@@ -183,6 +192,7 @@ class InfoTable extends Component {
               // remove, reorder, or filter items in the cell arrays.
               <TableCellHeader
                 isaltcolor={cell.isAltColor ? 'true' : 'false'}
+                usesmallfontforxs={useSmallFontForXS}
                 breakpoint={breakpoint}
                 key={index}
                 align={cell.isRightAligned ? 'right' : 'inherit'}
@@ -220,13 +230,14 @@ class InfoTable extends Component {
    * @private
    */
   getBodyRowElement(bodyRow) {
-    const { breakpoint } = this.props;
+    const { breakpoint, useSmallFontForXS } = this.props;
     return (
       <StyledTableRow breakpoint={breakpoint} key={bodyRow.mapKey}>
         {bodyRow.cells.map((cell, index) => {
           return (
             <StyledTableCell
               isaltcolor={cell.isAltColor ? 'true' : 'false'}
+              usesmallfontforxs={useSmallFontForXS}
               breakpoint={breakpoint}
               key={index}
               align={cell.isRightAligned ? 'right' : 'inherit'}

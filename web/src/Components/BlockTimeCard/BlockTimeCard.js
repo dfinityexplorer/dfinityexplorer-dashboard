@@ -97,8 +97,8 @@ class BlockTimeCard extends Component {
     const url = `https://ic-api.internetcomputer.org/api/metrics/block-rate`;
     axios.get(url)
       .then(res => {
-        if (res.data.block_rate.length >= 2) {
-          const blocksPerSecond = parseFloat(res.data.block_rate[1]);
+        if (res.data.block_rate.length === 1 && res.data.block_rate[0].length === 2) {
+          const blocksPerSecond = parseFloat(res.data.block_rate[0][1]);
           this.setState({
             blocksPerSecond: blocksPerSecond,
             error: 0

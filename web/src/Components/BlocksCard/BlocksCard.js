@@ -98,9 +98,9 @@ import Constants from '../../constants';
       `https://ic-api.internetcomputer.org/api/metrics/block`;
     axios.get(url)
       .then(res => {
-        if (res.data.block.length === 2) {
+        if (res.data.block.length === 1 && res.data.block[0].length === 2) {
           let { blockHeight } = this.state;
-          const newBlockHeight = parseInt(res.data.block[1]);
+          const newBlockHeight = parseInt(res.data.block[0][1]);
           if (newBlockHeight > blockHeight) {
             this.setState({
               blockHeight: newBlockHeight,

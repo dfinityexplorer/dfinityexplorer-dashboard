@@ -177,11 +177,15 @@ class DfinityEarth extends Component {
         let locations = res.data.map((value) => {
           // Remove any number from end of location name (e.g., "Chicago 2" -> "Chicago").
           const city = value.name.replace(/[\d\' ']+$/, '');
+          // Temporary workaround for tooltip width limit for XS.
+          if (value.node_operator === 'Hurricane Electric')
+            value.node_operator = 'Hurricane Elec.';
           return {
-            key: value.key,
+            key: value.key, // not currently used
             lat: value.latitude,
             lng: value.longitude,
             city: city,
+            dc: value.node_operator,
             numNodes: parseInt(value.total_nodes)
           };
         });
@@ -226,7 +230,7 @@ class DfinityEarth extends Component {
             }
 
             // Add the data center to the city.
-            city.dataCenters.push({key: location.key, numNodes: location.numNodes});
+            city.dataCenters.push({name: location.dc, numNodes: location.numNodes});
           });
 
           // Append citiesWithSameName[] to cities.

@@ -24,7 +24,7 @@ import InfoTable from '../InfoTable/InfoTable';
      *  lat (Number): The latitude of the city.
      *  lng (Number): The longitude of the city.
      *  dataCenters: Array of data centers objects, with object members:
-     *    key (String): The unique key ID of the data center.
+     *    name (String): The name of the data center (a.k.a., node operator).
      *    numNodes (Number): The number of nodes in the data center.
     */
     city: PropTypes.object.isRequired,
@@ -59,10 +59,11 @@ import InfoTable from '../InfoTable/InfoTable';
         breakpoint={breakpoint}
         className={className}
         headerRow={[
-          {value: 'ID', isAltColor: true, isRightAligned: false},
+          {value: 'Data Center', isAltColor: true, isRightAligned: false},
           {value: 'Nodes', isAltColor: false, isRightAligned: true}
         ]}
         getBodyRows={this.getBodyRows}
+        useSmallFontForXS={true}
         title={city.name}
       />
     );
@@ -80,11 +81,11 @@ import InfoTable from '../InfoTable/InfoTable';
    */
   getBodyRows() {
     const { city } = this.props;
-    let bodyRows = city.dataCenters.map((dataCenter) => {
+    let bodyRows = city.dataCenters.map((dataCenter, index) => {
       return {
-        mapKey: dataCenter.key,
+        mapKey: index,
         cells: [
-          {value: dataCenter.key, isAltColor: true, isRightAligned: false},
+          {value: dataCenter.name, isAltColor: true, isRightAligned: false},
           {value: dataCenter.numNodes.toLocaleString(), isAltColor: false, isRightAligned: true}
         ]
       };

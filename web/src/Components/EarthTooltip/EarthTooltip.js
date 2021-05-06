@@ -22,7 +22,7 @@ const KonvaDiv = styled.div`
 
 const TableDiv = styled.div`
   && {
-    width: ${Constants.DATA_CENTERS_PAGE_TOOLTIP_CARD_WIDTH + 'px'};
+    width: ${Constants.DATA_CENTERS_PAGE_TOOLTIP_CARD_WIDTH_SM_AND_UP + 'px'};
     position: absolute;
     pointer-events: none;
     z-index: 1;
@@ -34,6 +34,9 @@ const TableDiv = styled.div`
     ${({ breakpoint, isDesktopDrawerOpen, x }) =>
       ((breakpoint === Breakpoints.SM && isDesktopDrawerOpen) && `
         left: ${x + Constants.DRAWER_WIDTH + 'px'};
+      `) ||
+      (breakpoint === Breakpoints.XS && `
+        width: ${Constants.DATA_CENTERS_PAGE_TOOLTIP_CARD_WIDTH_XS + 'px'};
       `)
     }
   }
@@ -60,7 +63,7 @@ class EarthTooltip extends Component {
      *  lat (Number): The latitude of the city.
      *  lng (Number): The longitude of the city.
      *  dataCenters: Array of data centers objects, with object members:
-     *    key (String): The unique key ID of the data center.
+     *    name (String): The name of the data center (a.k.a., node operator).
      *    numNodes (Number): The number of nodes in the data center.
     */
     city: PropTypes.object,
@@ -99,6 +102,9 @@ class EarthTooltip extends Component {
   render() {
     const { breakpoint, city, height, isDesktopDrawerOpen, theme, width, x, y } = this.props;
 
+    const tooltipCardWidth = breakpoint === Breakpoints.XS ?
+      Constants.DATA_CENTERS_PAGE_TOOLTIP_CARD_WIDTH_XS :
+      Constants.DATA_CENTERS_PAGE_TOOLTIP_CARD_WIDTH_SM_AND_UP;
     const cityCircleARadius = 12;
     const cityCircleBRadius = cityCircleARadius * 2;
     const lineXYlength = 35;
@@ -137,7 +143,7 @@ class EarthTooltip extends Component {
                     0,
                     xCoordMult * lineXYlength,
                     -lineXYlength,
-                    xCoordMult * (Constants.DATA_CENTERS_PAGE_TOOLTIP_CARD_WIDTH + lineXYlength - 1),
+                    xCoordMult * (tooltipCardWidth + lineXYlength - 1),
                     -lineXYlength
                   ]}
                   stroke={theme.colorDataCentersTooltip}
@@ -151,7 +157,7 @@ class EarthTooltip extends Component {
             x={
               xCoordMult === 1 ?
                 x + lineXYlength :
-                x + xCoordMult * lineXYlength - Constants.DATA_CENTERS_PAGE_TOOLTIP_CARD_WIDTH
+                x + xCoordMult * lineXYlength - tooltipCardWidth
             }
             // Not sure why XS adjustment is necessary.
             y={y + 30 - (breakpoint === Breakpoints.XS ? 8 : 0)}
