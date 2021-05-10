@@ -13,7 +13,7 @@ import roundDownDateToHour from '../../utils/roundDownDateToHour';
 
 /**
  * This component displays a number of messages chart with data retrieved from
- * dashboard.dfinity.network.
+ * ic-api.internetcomputer.org.
  */
 class MessagesChart extends BarChart { 
   static propTypes = {
@@ -40,9 +40,31 @@ class MessagesChart extends BarChart {
 
     this.state = {
       messagesData: [],
+      prevDate: null,
       error: false
     };
   }
+  
+  /**
+   * Invoked by React immediately after a component is mounted (inserted into the tree). 
+   * @public
+   */
+  /*fastchart!!!componentDidMount() {    
+    // Update the messages data using intervals.
+    this.pollForInitialMessages();
+    this.interval = setInterval(
+      () => { this.pollForMoreMessages() },
+      Constants.MESSAGES_CHART_POLL_INTERVAL_MS);
+  }*/
+
+  /**
+   * Invoked by React immediately before a component is unmounted and destroyed.
+   * @public
+   */
+  /*fastchart!!!componentWillUnmount() {
+    clearInterval(this.interval);
+    this.interval = null;
+  }*/
   
   /**
    * Invoked by React immediately after a component is mounted (inserted into the tree). 
@@ -55,11 +77,13 @@ class MessagesChart extends BarChart {
     const startDate = new Date(endDate.getTime());
     startDate.setDate(endDate.getDate() - 1);
     const secondsInHour = 60 * 60;
+    // Leaving IC_RELEASE in for now, because default (mercury) is glitchy!!!
     const url =
       `https://ic-api.internetcomputer.org/api/metrics/messages-count?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInHour}&ic=${Constants.IC_RELEASE}`;
     axios.get(url)
       .then(res => {
         let values = res.data.messages_count;
+
         // Use values[0] to get the starting number of messages.
         let prevTotal = Math.floor(values[0][1]);
         const messagesData = values.slice(1).map((value) => {
@@ -129,6 +153,7 @@ class MessagesChart extends BarChart {
    */
   getGetTickX(value) {
     return new Date(value).toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' });
+    //fastchart!!!return new Date(value).toLocaleTimeString();
   }
 
   /**
@@ -154,6 +179,7 @@ class MessagesChart extends BarChart {
    */
   getGetTooltipX(value) {
     return new Date(value).toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' });
+    //fastchart!!!return new Date(value).toLocaleTimeString();
   }
 
   /**
@@ -165,6 +191,83 @@ class MessagesChart extends BarChart {
   getGetTooltipY(value) {
     return `Messages: ${value.toLocaleString()}`;
   }
+  /**
+   * Return The duration of the chart animation.
+   * @param {Any} value The value of the data.
+   * @protected
+   */
+  /*fastchart!!!getAnimationDuration() {
+    return 0;
+  }*/
+
+  /**
+   * Poll for the initial messages.
+   * @private
+   */
+  /*fastchart!!!pollForInitialMessages() {
+    let endDate = new Date();
+    endDate = new Date(endDate.getTime() - 1 * 60000); // 1 minute ago to avoid API time discrepancy
+    const startDate = new Date(endDate.getTime() - 2 * 60000); // 2 minutes ago
+    const seconds = Constants.MESSAGES_CHART_POLL_INTERVAL_MS / 1000;
+    const url =
+      `https://ic-api.internetcomputer.org/api/metrics/messages-count?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+    axios.get(url)
+      .then(res => {
+        let values = res.data.messages_count;
+        // Use values[0] to get the starting number of messages.
+        let prevHeight = Math.floor(values[0][1]);
+        const messagesData = values.slice(1).map((value) => {
+          const date = new Date(value[0] * 1000);
+          const height = Math.floor(value[1]);
+          const numMessages = Math.max(height - prevHeight, 0);
+          prevHeight = height;
+          return {date: date.getTime(), numMessages: numMessages};
+        });
+        this.setState({
+          messagesData: messagesData,
+          prevDate: endDate
+        });
+      })
+      .catch(() => {
+        this.setState({
+          error: true
+        });
+      });
+  }*/
+
+  /**
+   * Poll for more messages.
+   * @private
+   */
+  /*fastchart!!!pollForMoreMessages() {
+    const { prevDate } = this.state;
+    let endDate = new Date();
+    endDate = new Date(endDate.getTime() - 1 * 60000); // 1 minute ago to avoid API time discrepancy
+    const startDate = prevDate;
+    const seconds = 1;
+    const url =
+      `https://ic-api.internetcomputer.org/api/metrics/messages-count?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+    axios.get(url)
+      .then(res => {
+        const values = res.data.messages_count;
+        if (values.length >= 0) {
+          const prevHeight = Math.floor(values[0][1]);
+          const curHeight = Math.floor(values[values.length - 1][1]);
+          const date = new Date(values[values.length - 1][0] * 1000);
+          const numMessages = Math.max(curHeight - prevHeight, 0);
+          const messages = {date: date.getTime(), numMessages: numMessages};
+          this.setState(prevState => ({
+            messagesData: prevState.messagesData.slice(1).concat(messages),
+            prevDate: endDate
+          }));  
+        }
+      })
+      .catch(() => {
+        this.setState({
+          error: true
+        });
+      });
+  }*/
 }
 
 // Use the withTheme HOC so that we can use the current theme outside styled components.

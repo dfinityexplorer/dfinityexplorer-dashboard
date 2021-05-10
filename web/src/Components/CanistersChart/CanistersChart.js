@@ -13,7 +13,7 @@ import roundDownDateToDay from '../../utils/roundDownDateToDay';
 
 /**
  * This component displays a number of canisters chart with data retrieved from
- * dashboard.dfinity.network.
+ * ic-api.internetcomputer.org.
  */
 class CanistersChart extends BarChart { 
   static propTypes = {
@@ -52,10 +52,10 @@ class CanistersChart extends BarChart {
     // Get a two weeks of daily data.
     const endDate = roundDownDateToDay(new Date());
     const startDate = new Date(endDate.getTime());
-    startDate.setDate(endDate.getDate() - 15);
+    startDate.setDate(endDate.getDate() - 7);
     const secondsInDay = 24 * 60 * 60;
     const url =
-      `https://ic-api.internetcomputer.org/api/metrics/registered-canisters?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}&ic=${Constants.IC_RELEASE}`;
+      `https://ic-api.internetcomputer.org/api/metrics/registered-canisters?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
     axios.get(url)
       .then(res => {
         //let values = res.data.data.result[0].values;

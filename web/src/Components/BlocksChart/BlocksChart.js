@@ -9,11 +9,11 @@ import { withTheme } from 'styled-components';
 import axios from 'axios';
 import BarChart from '../BarChart/BarChart';
 import Constants from '../../constants';
-import roundDownDateToDay from '../../utils/roundDownDateToDay';
+// 2weeks!!!import roundDownDateToDay from '../../utils/roundDownDateToDay';
 
 /**
  * This component displays a number of blocks chart with data retrieved from
- * dashboard.dfinity.network.
+ * ic-api.internetcomputer.org.
  */
 class BlocksChart extends BarChart { 
   static propTypes = {
@@ -40,15 +40,37 @@ class BlocksChart extends BarChart {
 
     this.state = {
       blocksData: [],
+      prevDate: null,
       error: false
     };
+  }
+
+  /**
+   * Invoked by React immediately after a component is mounted (inserted into the tree). 
+   * @public
+   */
+  componentDidMount() {    
+    // Update the blocks data using intervals.
+    this.pollForInitialBlocks();
+    this.interval = setInterval(
+      () => { this.pollForMoreBlocks() },
+      Constants.BLOCKS_CHART_POLL_INTERVAL_MS);
+  }
+
+  /**
+   * Invoked by React immediately before a component is unmounted and destroyed.
+   * @public
+   */
+  componentWillUnmount() {
+    clearInterval(this.interval);
+    this.interval = null;
   }
   
   /**
    * Invoked by React immediately after a component is mounted (inserted into the tree). 
    * @public
    */
-  componentDidMount() {
+  /*2weeks!!!componentDidMount() {
     // Get a two weeks of daily data. Note that there is currently a bug in
     // dashboard.dfinity.network where the last entry returned for this query is one day ago, not
     // now.
@@ -57,7 +79,6 @@ class BlocksChart extends BarChart {
     startDate.setDate(endDate.getDate() - 15);
     const secondsInDay = 24 * 60 * 60;
     const url =
-      // Use ic-api.internetcomputer.org!!!
       //New API!!!`https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}&ic=${Constants.IC_RELEASE}`;
       `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
       //NO IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
@@ -82,7 +103,7 @@ class BlocksChart extends BarChart {
           error: true
         });
       });
-  }
+  }*/
 
   /**
    * Return the title of the chart.
@@ -132,7 +153,8 @@ class BlocksChart extends BarChart {
    * @protected
    */
   getGetTickX(value) {
-    return new Date(value).toLocaleDateString('default', { timeZone: 'UTC' });
+    //2weeks!!!return new Date(value).toLocaleDateString('default', { timeZone: 'UTC' });
+    return new Date(value).toLocaleTimeString();
   }
 
   /**
@@ -157,7 +179,8 @@ class BlocksChart extends BarChart {
    * @protected
    */
   getGetTooltipX(value) {
-    return new Date(value).toLocaleDateString('default', { timeZone: 'UTC' });
+    //2weeks!!!return new Date(value).toLocaleString('default', { timeZone: 'UTC' });
+    return new Date(value).toLocaleTimeString();
   }
 
   /**
@@ -168,6 +191,84 @@ class BlocksChart extends BarChart {
    */
   getGetTooltipY(value) {
     return `Blocks: ${value.toLocaleString()}`;
+  }
+
+  /**
+   * Return The duration of the chart animation.
+   * @param {Any} value The value of the data.
+   * @protected
+   */
+  getAnimationDuration() {
+    return 0;
+  }
+
+  /**
+   * Poll for the initial blocks.
+   * @private
+   */
+  pollForInitialBlocks() {
+    let endDate = new Date();
+    endDate = new Date(endDate.getTime() - 1 * 60000); // 1 minute ago to avoid API time discrepancy
+    const startDate = new Date(endDate.getTime() - 2 * 60000); // 2 minutes ago
+    const seconds = Constants.BLOCKS_CHART_POLL_INTERVAL_MS / 1000;
+    const url =
+      `https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+    axios.get(url)
+      .then(res => {
+        let values = res.data.block;
+        // Use values[0] to get the starting block height.
+        let prevHeight = Math.floor(values[0][1]);
+        const blocksData = values.slice(1).map((value) => {
+          const date = new Date(value[0] * 1000);
+          const height = Math.floor(value[1]);
+          const numBlocks = Math.max(height - prevHeight, 0);
+          prevHeight = height;
+          return {date: date.getTime(), numBlocks: numBlocks};
+        });
+        this.setState({
+          blocksData: blocksData,
+          prevDate: endDate
+        });
+      })
+      .catch(() => {
+        this.setState({
+          error: true
+        });
+      });
+  }
+
+  /**
+   * Poll for more blocks.
+   * @private
+   */
+  pollForMoreBlocks() {
+    const { prevDate } = this.state;
+    let endDate = new Date();
+    endDate = new Date(endDate.getTime() - 1 * 60000); // 1 minute ago to avoid API time discrepancy
+    const startDate = prevDate;
+    const seconds = 1;
+    const url =
+      `https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+    axios.get(url)
+      .then(res => {
+        const values = res.data.block;
+        if (values.length >= 0) {
+          const prevHeight = Math.floor(values[0][1]);
+          const curHeight = Math.floor(values[values.length - 1][1]);
+          const date = new Date(values[values.length - 1][0] * 1000);
+          const numBlocks = Math.max(curHeight - prevHeight, 0);
+          const blocks = {date: date.getTime(), numBlocks: numBlocks};
+          this.setState(prevState => ({
+            blocksData: prevState.blocksData.slice(1).concat(blocks),
+            prevDate: endDate
+          }));  
+        }
+      })
+      .catch(() => {
+        this.setState({
+          error: true
+        });
+      });
   }
 }
 

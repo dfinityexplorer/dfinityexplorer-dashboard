@@ -148,7 +148,7 @@ class BarChart extends Component {
                 strokeWidth={2}
                 fillOpacity={1}
                 fill='url(#colorY)'
-                animationDuration={1000}
+                animationDuration={this.getAnimationDuration()}
               />
             </StyledBarChart>
           </ResponsiveContainer>
@@ -231,6 +231,15 @@ class BarChart extends Component {
    */
   getGetTooltipY(value) {
     throw new Error('BarChart.getGetTooltipY() not implemented.');
+  }
+
+  /**
+   * Return The duration of the chart animation.
+   * @param {Any} value The value of the data.
+   * @protected
+   */
+   getAnimationDuration() {
+    return 1000;
   }
 }
 

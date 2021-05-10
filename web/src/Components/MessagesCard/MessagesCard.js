@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with messages per second retrieved from
- * dashboard.dfinity.network.
+ * ic-api.internetcomputer.org.
  */
 class MessagesCard extends Component {
   static propTypes = {
