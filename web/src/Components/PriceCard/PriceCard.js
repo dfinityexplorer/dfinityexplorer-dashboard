@@ -81,7 +81,7 @@ class PriceCard extends Component {
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Price - ICP (IOU)'
+        title='Price - ICP'
         value={priceText}
         svgIconPath={Constants.ICON_SVG_PATH_PRICE}
       />
@@ -93,11 +93,15 @@ class PriceCard extends Component {
    * @private
    */
   pollForPrice() {
+    //currencies!!!const url =
+      //currencies!!!`https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
+    let startDate = new Date();
+    startDate = new Date(startDate.getTime() - 5 * 60000); // 5 minutes ago
     const url =
-      `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
+      `https://api.nomics.com/v1/exchange_candles?key=${Constants.NOMICS_API_KEY}&interval=1m&exchange=gdax&market=ICP-USD&start=${this.dateToRfc3339(startDate)}`;
     axios.get(url)
       .then(res => {
-        const price = parseFloat(res.data[0].price);
+        const price = parseFloat(res.data[res.data.length-1].close);//currencies!!!parseFloat(res.data[0].price);
         this.setState({
           price: price,
           error: 0
@@ -108,6 +112,20 @@ class PriceCard extends Component {
           error: prevState.error + 1
         }));
       });
+  }
+
+  /**
+   * Return a string for the date in RFC 3339 (URI escaped) format.
+   * @param {Object} date The date to create the string for.
+   * @return {String} A string for the date in RFC 3339 (URI escaped) format.
+   * @private
+   */
+  dateToRfc3339(date) { // Duplicated function, move to utils!!!
+    // Use toISOString(), removing the fraction of seconds (i.e, after decimal point).
+    const isoNoFraction = date.toISOString().split('.')[0] + 'Z'
+
+    // Escape all ':' characters.
+    return isoNoFraction.replace(/:/g, '%3A');
   }
 }
 

@@ -49,10 +49,16 @@ class PriceChart extends AreaChart {
   */
   componentDidMount() {
     // Get a two weeks of daily data.
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 14);
+    //2weeks!!!const startDate = new Date();
+    //2weeks!!!startDate.setDate(startDate.getDate() - 14);
+    let startDate = new Date();
+    startDate.setDate(startDate.getDate() - 1);
+    const genesisDate = new Date(1620667200000);
+    if (genesisDate.getTime() > startDate.getTime())
+      startDate = genesisDate;
     const url =
-      `https://api.nomics.com/v1/candles?key=${Constants.NOMICS_API_KEY}&interval=1h&currency=ICP&start=${this.dateToRfc3339(startDate)}`;
+      //2weeks!!!`https://api.nomics.com/v1/candles?key=${Constants.NOMICS_API_KEY}&interval=1h&currency=ICP&start=${this.dateToRfc3339(startDate)}`;
+      `https://api.nomics.com/v1/exchange_candles?key=${Constants.NOMICS_API_KEY}&interval=1m&exchange=gdax&market=ICP-USD&start=${this.dateToRfc3339(startDate)}`;
     axios.get(url)
       .then(res => {
         if (res.data.length > 0) {
@@ -82,7 +88,7 @@ class PriceChart extends AreaChart {
   */
   getTitle() {
     const { error } = this.state;
-    let title = 'Price - ICP (IOU)';
+    let title = 'Price - ICP';
     if (error)
       title += ' - Network Error'
     return title;
@@ -176,7 +182,7 @@ class PriceChart extends AreaChart {
   * @protected
   */
   getGetTooltipY(value) {
-    return `ICP (IOU): $${value.toFixed(2)}`;
+    return `ICP: $${value.toFixed(2)}`;
   }
 
   /**

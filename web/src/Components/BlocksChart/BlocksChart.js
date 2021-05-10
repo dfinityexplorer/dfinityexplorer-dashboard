@@ -227,7 +227,8 @@ class BlocksChart extends BarChart {
         });
         this.setState({
           blocksData: blocksData,
-          prevDate: endDate
+          prevDate: endDate,
+          error: false
         });
       })
       .catch(() => {
@@ -260,7 +261,8 @@ class BlocksChart extends BarChart {
           const blocks = {date: date.getTime(), numBlocks: numBlocks};
           this.setState(prevState => ({
             blocksData: prevState.blocksData.slice(1).concat(blocks),
-            prevDate: endDate
+            prevDate: endDate,
+            error: false
           }));  
         }
       })
