@@ -127,7 +127,7 @@ const Constants = Object.freeze({
   MESSAGES_TIME_POLL_INTERVAL_MS: 3000,
   PRICE_POLL_INTERVAL_MS: 30000,
   NETWORK_ERROR_THRESHOLD: 10,
-  IC_RELEASE: 'sodium',
+  //!!!IC_RELEASE: 'sodium',
   NOMICS_API_KEY: '38f4023ce681a328edc018f7a8a28e06',
   DFINITY_EARTH_MAP_CENTER: { lat: 37.1028 - 5, lng: -8.6730, altitude: 1.6 } // Lagos, Portugal (adjusted)
 });

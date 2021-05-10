@@ -77,9 +77,8 @@ class MessagesChart extends BarChart {
     const startDate = new Date(endDate.getTime());
     startDate.setDate(endDate.getDate() - 1);
     const secondsInHour = 60 * 60;
-    // Leaving IC_RELEASE in for now, because default (mercury) is glitchy!!!
     const url =
-      `https://ic-api.internetcomputer.org/api/metrics/messages-count?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInHour}&ic=${Constants.IC_RELEASE}`;
+      `https://ic-api.internetcomputer.org/api/metrics/messages-count?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInHour}`;
     axios.get(url)
       .then(res => {
         let values = res.data.messages_count;
