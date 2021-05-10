@@ -69,3 +69,5 @@
  * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
  * @license MIT License
  */
+
+//!!!IC_RELEASE: 'sodium',
