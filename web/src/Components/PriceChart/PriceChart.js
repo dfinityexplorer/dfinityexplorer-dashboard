@@ -149,7 +149,8 @@ class PriceChart extends AreaChart {
   * @protected
   */
   getGetTickX(value) {
-    return new Date(value).toLocaleDateString('default');
+    //2weeks!!!return new Date(value).toLocaleDateString('default');
+    return new Date(value).toLocaleTimeString('default', {hour: 'numeric', minute:'2-digit'});
   }
 
   /**

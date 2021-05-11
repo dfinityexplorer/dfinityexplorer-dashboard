@@ -151,7 +151,7 @@ class MessagesChart extends BarChart {
    * @protected
    */
   getGetTickX(value) {
-    return new Date(value).toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' });
+    return new Date(value).toLocaleTimeString('default', { hour: 'numeric', minute: '2-digit' });
     //fastchart!!!return new Date(value).toLocaleTimeString();
   }
 
