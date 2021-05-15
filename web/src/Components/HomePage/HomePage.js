@@ -163,7 +163,7 @@ class HomePage extends TrackablePage {
   render() {
     return (
       <div>
-        {this.getSectionDisclaimer()}
+        {/*!!!{this.getSectionDisclaimer()}*/}
         {this.getSectionCards()}
         {this.getSectionCharts()}
       </div>

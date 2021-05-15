@@ -22,6 +22,27 @@ const GridNoWrap = styled(Grid)`
   }
 `;
 
+const ImgDiv = styled.div`
+  && {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 34px;
+    margin-left: 30px;
+    margin-right: 30px;
+    width: 42px;
+    height: 42px;
+  }
+`;
+
+const ImgCard = styled.img`
+  && {
+    max-width: 42px;
+    max-height: 42px;
+  }
+`;
+
 const SvgIconCard = styled(SvgIcon)`
   && {
     /* The combination of margin, padding, and font-size explicitly set the height of the card. */
@@ -63,9 +84,13 @@ class DashCard extends Component {
      */
     className: PropTypes.string,
     /**
-     * The d attribute of the SvgIcon path.
+     * The d attribute of an SvgIcon path.
      */
-    svgIconPath: PropTypes.string.isRequired,
+    svgIconPath: DashCard.imageIsRequired,
+    /**
+     * The src attribute of an img element.
+     */
+    iconImageSrc: DashCard.imageIsRequired,
     /**
      * The title string of the card.
      */
@@ -77,6 +102,22 @@ class DashCard extends Component {
   };
 
   /**
+   * Validate that either svgIconPath or iconImageSrc is defined.
+   * @param {Object} props The props of the component.
+   * @returns {Error} Error if neither svgIconPath nor iconImageSrc is defined.
+   */
+  static imageIsRequired(props) {
+    if (!props.svgIconPath && !props.iconImageSrc)
+      return new Error('Either svgIconPath or iconImageSrc is required.');
+
+    if (props.svgIconPath && typeof props.svgIconPath !== 'string')
+      return new Error('Invalid prop svgIconPath. Expected string.');
+
+    if (props.iconImageSrc && typeof props.iconImageSrc !== 'string')
+      return new Error('Invalid prop iconImageSrc. Expected string.');
+  }
+
+  /**
    * Return a reference to a React element to render into the DOM.
    * @return {Object} A reference to a React element to render into the DOM.
    * @public
@@ -86,6 +127,7 @@ class DashCard extends Component {
       cardIndex,
       className,
       svgIconPath,
+      iconImageSrc,
       title,
       value
     } = this.props;
@@ -94,9 +136,17 @@ class DashCard extends Component {
       <Paper className={className} elevation={1}>
         <Grid container direction='row' justify='flex-start' alignItems='center' wrap='nowrap'>
           <Grid item>
-            <SvgIconCard cardindex={cardIndex}>
-              <path d={svgIconPath} />
-            </SvgIconCard>
+            {(typeof svgIconPath === 'string') ?
+              <SvgIconCard cardindex={cardIndex}>
+                <path d={svgIconPath} />
+              </SvgIconCard> :
+              <ImgDiv>
+                <ImgCard
+                  src={iconImageSrc}
+                  alt='ICP logo'
+                />
+              </ImgDiv>
+            }
           </Grid>
           <GridNoWrap container direction='column' justify='center' alignItems='flex-start'>
             {/* The usage of Grid elements here is required to get Typography noWrap to work. */}

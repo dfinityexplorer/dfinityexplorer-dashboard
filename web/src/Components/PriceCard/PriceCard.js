@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import DashCard from '../DashCard/DashCard';
 import Constants from '../../constants';
+import icpLogo from '../../media/images/icpLogo.svg';
 
 /**
  * This component displays a dashboard card with price data retrieved from api.nomics.com.
@@ -83,7 +84,7 @@ class PriceCard extends Component {
         cardIndex={cardIndex}
         title='Price - ICP'
         value={priceText}
-        svgIconPath={Constants.ICON_SVG_PATH_PRICE}
+        iconImageSrc={icpLogo}
       />
     );
   }

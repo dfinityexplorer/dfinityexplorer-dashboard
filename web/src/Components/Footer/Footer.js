@@ -191,6 +191,7 @@ class Footer extends ResponsiveComponent {
         <OneThirdGrid container direction='column' justify='center' alignItems='center'>
           { this.props.location.pathname === '/' &&
             <Grid item>
+              <FooterTypography color='inherit'>Site Under Development</FooterTypography>
               <FooterTypography color='inherit'>
                 {'('}
                 <FooterA href={Constants.URI_ABOUT_NOMICS} target='_blank' rel='noopener noreferrer'>
