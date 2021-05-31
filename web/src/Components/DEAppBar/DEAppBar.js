@@ -138,6 +138,69 @@ const TypographyExplorer = styled(TypographyAppName)`
   }
 `;
 
+/* Rebranding Experimental - KEEP
+// Internet Computer | Explorer
+const TypographyDfinity = styled(TypographyAppName)`
+  && {
+    margin-left: 20px;
+    margin-right: 7px;
+    letter-spacing: 3px;
+    color: ${props => props.theme.colorAppBarDfinityText};
+    ${({ breakpoint }) =>
+      breakpoint === Breakpoints.XS && `
+        margin-left: 8.4px;
+        letter-spacing: 3px;
+      `
+    }
+  }
+`;
+
+const TypographyExplorer = styled(TypographyAppName)`
+ && {
+   margin-left: 10px;
+   letter-spacing: 3px;
+   color: ${props => props.theme.colorAppBarExplorerText};
+   ${({ breakpoint }) =>
+     breakpoint === Breakpoints.XS && `
+       margin-left: 9.8px;
+       letter-spacing: 3px;
+     `
+   }
+ }
+`;
+
+// INTERNET COMPUTER | EXPLORER
+const TypographyDfinity = styled(TypographyAppName)`
+  && {
+    margin-left: 12px;
+    margin-right: 8px;
+    //letter-spacing: 1px;
+    color: ${props => props.theme.colorAppBarDfinityText};
+    ${({ breakpoint }) =>
+      breakpoint === Breakpoints.XS && `
+        margin-left: 8.4px;
+        letter-spacing: 8.4px;
+      `
+    }
+  }
+`;
+
+const TypographyExplorer = styled(TypographyAppName)`
+ && {
+   margin-left: 10px;
+   //letter-spacing: 1px;
+   color: ${props => props.theme.colorAppBarExplorerText};
+   ${({ breakpoint }) =>
+     breakpoint === Breakpoints.XS && `
+       margin-left: 9.8px;
+       letter-spacing: 5.25px;
+     `
+   }
+ }
+`;
+
+*/
+
 const StyledIconButton = styled(IconButton)`
   && {
     color: ${props => props.theme.colorAppBarTextButton};
@@ -521,7 +584,15 @@ class DEAppBar extends ResponsiveComponent {
               </DrawerSvgIcon>
             </DrawerListItemIcon>
             <DrawerListItemText primary='Data Centers' />
-          </DrawerListItem>            
+          </DrawerListItem>
+          <DrawerListItem button component={Link} to='/txs' selected={this.isActiveRoute('/txs')}>
+            <DrawerListItemIcon>
+              <SvgIcon>
+                <path d={Constants.ICON_SVG_PATH_MPS} />
+              </SvgIcon>
+            </DrawerListItemIcon>
+            <DrawerListItemText primary='Transactions' />
+          </DrawerListItem>
           <StyledDivider />
           <DrawerListItem button component={Link} to='/about' selected={this.isActiveRoute('/about')}>
             <DrawerListItemIcon>

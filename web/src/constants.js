@@ -117,6 +117,11 @@ const Constants = Object.freeze({
   INFO_TABLE_ROW_HEIGHT_SM_AND_UP: 30,
   HOME_PAGE_MARGIN_XS: 8,
   HOME_PAGE_MARGIN_SM_AND_UP: 32,
+  // Care must be taken if these table heights are changed, to avoid a glitch that occurs with
+  // certain heights where the row slide in has a 1px stutter following the animation.
+  TABLE_ROW_HEIGHT_XS: 38,
+  TABLE_ROW_HEIGHT_SM_AND_UP: 48,
+  MINTING_ACCOUNT_NAME: 'Minting Account',
   ABOUT_PAGE_PROJECT_ICONS_HEIGHT: 55,
   GOOGLE_ANALYTICS_TRACKING_ID: 'UA-138212575-1',
   BLOCKS_CARD_POLL_INTERVAL_MS: 3000,
@@ -127,7 +132,6 @@ const Constants = Object.freeze({
   MESSAGES_TIME_POLL_INTERVAL_MS: 3000,
   PRICE_POLL_INTERVAL_MS: 30000,
   NETWORK_ERROR_THRESHOLD: 10,
-  //!!!IC_RELEASE: 'sodium',
   NOMICS_API_KEY: '38f4023ce681a328edc018f7a8a28e06',
   DFINITY_EARTH_MAP_CENTER: { lat: 37.1028 - 5, lng: -8.6730, altitude: 1.6 } // Lagos, Portugal (adjusted)
 });

@@ -66,6 +66,7 @@ export const themeLight = {
   colorChartLine: Constants.COLOR_DFINITY_BLUE_700,
   colorChartActiveDotStroke: '#FFFFFF',
   colorIconButtonHover: '#000000',
+  colorTableBackgroundPrimary: '#FFFFFF',
   colorTableRowBorder: Constants.COLOR_LIGHT_DRAWER_DIVIDER_GOOGLE,
   colorTableTextDim: '#909090', // YouTube, footer text dim (verified)
   colorFooterBackground: '#F5F5F5',
@@ -130,6 +131,7 @@ export const themeDark = {
   colorChartLine: Constants.COLOR_DFINITY_BLUE_600,
   colorChartActiveDotStroke: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorIconButtonHover: Constants.COLOR_DARK_TEXT,
+  colorTableBackgroundPrimary: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorTableRowBorder: Constants.COLOR_DARK_DRAWER_DIVIDER_YOUTUBE,
   colorTableTextDim: '#717171', // YouTube (Dark), footer text dim (verified)
   colorFooterBackground: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,

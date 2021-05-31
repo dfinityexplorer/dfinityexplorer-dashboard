@@ -19,6 +19,8 @@ import { duration, easing } from '@material-ui/core/styles/transitions';
 import { GlobalStyle, themeLight, themeDark } from './theme/globalStyle';
 import HomePage from './Components/HomePage/HomePage';
 import DataCentersPage from './Components/DataCentersPage/DataCentersPage';
+import TransactionPage from './Components/TransactionPage/TransactionPage';
+import TransactionsPage from './Components/TransactionsPage/TransactionsPage';
 import AboutPage from './Components/AboutPage/AboutPage';
 import DEAppBar from './Components/DEAppBar/DEAppBar';
 import Footer from './Components/Footer/Footer';
@@ -216,6 +218,15 @@ class App extends Component {
                     }
                   />
                   <Route
+                    exact path='/txs'
+                    render={(props) => 
+                      <TransactionsPage
+                        {...props}
+                        breakpoint={breakpoint}
+                      />
+                    }
+                  />
+                  <Route
                     exact path='/about'
                     render={(props) => 
                       <AboutPage
@@ -223,6 +234,15 @@ class App extends Component {
                         breakpoint={breakpoint}
                         isDesktopDrawerOpen={isDesktopDrawerOpen}
                         isThemeDark={isThemeDark}
+                      />
+                    }
+                  />
+                  <Route
+                    exact path="/tx/:hash"
+                    render={(props) => 
+                      <TransactionPage
+                        {...props}
+                        breakpoint={breakpoint}
                       />
                     }
                   />

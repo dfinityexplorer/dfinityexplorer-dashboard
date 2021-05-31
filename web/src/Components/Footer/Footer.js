@@ -260,11 +260,11 @@ class Footer extends ResponsiveComponent {
     const breakpoint = getBreakpoint();
     switch (breakpoint) {
       case Breakpoints.XS:
-        return '© 2021 dfinityexplorer';
+        return '© 2021 IC Explorer';
       case Breakpoints.SM:
-        return '© 2021 dfinityexplorer contributors';
+        return '© 2021 Internet Computer Explorer';
       default:
-        return '© 2021 dfinityexplorer contributors | All rights reserved';
+        return '© 2021 Internet Computer Explorer | All rights reserved';
     }
   }
 
