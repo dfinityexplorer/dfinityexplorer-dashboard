@@ -96,9 +96,12 @@ class DashCard extends Component {
      */
     title: PropTypes.string.isRequired,
     /**
-     * The value string of the card.
+     * The value string or element of the card.
      */
-    value: PropTypes.string.isRequired
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element
+    ]).isRequired
   };
 
   /**

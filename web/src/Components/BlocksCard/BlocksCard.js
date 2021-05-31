@@ -5,6 +5,7 @@
  */
 
 import React, { Component } from 'react';
+import CountUp from 'react-countup';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import DashCard from '../DashCard/DashCard';
@@ -36,6 +37,7 @@ import Constants from '../../constants';
 
     this.state = {
       blockHeight: -1,
+      prevBlockHeight: -1,
       error: 0
     };
   }
@@ -68,22 +70,29 @@ import Constants from '../../constants';
    */
   render() {
     let { cardIndex, className } = this.props;
-    let { blockHeight, error } = this.state;
+    let { blockHeight, error, prevBlockHeight } = this.state;
     
     let blockHeightText;
     if (error >= Constants.NETWORK_ERROR_THRESHOLD)
       blockHeightText = 'Network error';
     else if (blockHeight === -1)
       blockHeightText = 'Loading...';
-    else
-      blockHeightText = blockHeight.toLocaleString();
 
     return (
       <DashCard
         className={className}
         cardIndex={cardIndex}
         title='Blocks'
-        value={blockHeightText}
+        value={blockHeightText ?
+          blockHeightText :
+          <CountUp
+            duration={(Constants.BLOCKS_CARD_POLL_INTERVAL_MS + 100) / 1000}
+            start={prevBlockHeight}
+            end={blockHeight}
+            useEasing={false}
+            formattingFn={value => value.toLocaleString()}
+          />
+        }
         svgIconPath={Constants.ICON_SVG_PATH_BLOCK}
       />
     );
@@ -102,10 +111,12 @@ import Constants from '../../constants';
           let { blockHeight } = this.state;
           const newBlockHeight = parseInt(res.data.block[0][1]);
           if (newBlockHeight > blockHeight) {
-            this.setState({
+            this.setState(prevState => ({
+              prevBlockHeight:
+                prevState.prevBlockHeight !== -1 ? prevState.blockHeight : newBlockHeight,
               blockHeight: newBlockHeight,
               error: 0
-            });
+            }));  
           }
         }
       })
