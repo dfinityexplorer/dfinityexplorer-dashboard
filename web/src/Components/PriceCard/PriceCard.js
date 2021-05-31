@@ -94,15 +94,11 @@ class PriceCard extends Component {
    * @private
    */
   pollForPrice() {
-    //currencies!!!const url =
-      //currencies!!!`https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
-    let startDate = new Date();
-    startDate = new Date(startDate.getTime() - 5 * 60000); // 5 minutes ago
     const url =
-      `https://api.nomics.com/v1/exchange_candles?key=${Constants.NOMICS_API_KEY}&interval=1m&exchange=gdax&market=ICP-USD&start=${this.dateToRfc3339(startDate)}`;
+      `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
     axios.get(url)
       .then(res => {
-        const price = parseFloat(res.data[res.data.length-1].close);//currencies!!!parseFloat(res.data[0].price);
+        const price = parseFloat(res.data[0].price);
         this.setState({
           price: price,
           error: 0

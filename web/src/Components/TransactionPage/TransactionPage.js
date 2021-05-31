@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { CircularProgress, Fade, Grid, Typography } from '@material-ui/core';
 import { duration, easing } from '@material-ui/core/styles/transitions';
 import zIndex from '@material-ui/core/styles/zIndex';
+import axios from 'axios';
 import InfoTable from '../InfoTable/InfoTable';
 import TrackablePage from '../TrackablePage/TrackablePage';
 import RosettaApi, { RosettaError } from '../../rosetta/RosettaApi';
@@ -113,6 +114,7 @@ class TransactionPage extends TrackablePage {
     super(props);
 
     this.state = {
+      icpToUsd: null,
       isLoading: false,
       rosettaError: null,
       transaction: null
@@ -143,7 +145,13 @@ class TransactionPage extends TrackablePage {
         });
       }
       else {
+        const url =
+          `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
+        const result = await axios.get(url);
+        const icpToUsd = parseFloat(result?.data[0]?.price);
+
         this.setState({
+          icpToUsd, icpToUsd,
           isLoading: false,
           rosettaError: null,
           transaction: transaction
@@ -224,7 +232,7 @@ class TransactionPage extends TrackablePage {
    */
   getBodyRows() {
     const { breakpoint } = this.props;
-    const { transaction } = this.state;
+    const { transaction, icpToUsd } = this.state;
 
     let hashMaxLength;
     if (breakpoint === Breakpoints.XS)
@@ -266,6 +274,22 @@ class TransactionPage extends TrackablePage {
       //toLink = `/acct/${transaction.account2Address}`;
     }
 
+    let amount = getIcpStringFromE8s(transaction.amount) + ' ICP';
+    if (icpToUsd) {
+      const amountUsd = icpToUsd * transaction.amount.div(100000000).toNumber();
+      amount += ' ($' +
+        amountUsd.toLocaleString(
+          undefined, {'minimumFractionDigits': 2, 'maximumFractionDigits': 2}) + ')';
+    }
+
+    let fee = getIcpStringFromE8s(transaction.fee) + ' ICP';
+    if (icpToUsd) {
+      const feeUsd = icpToUsd * transaction.fee.div(100000000).toNumber();
+      fee += ' ($' +
+        feeUsd.toLocaleString(
+          undefined, {'minimumFractionDigits': 2, 'maximumFractionDigits': 2}) + ')';
+    }
+
     return [
       {
         mapKey: 0,
@@ -300,11 +324,11 @@ class TransactionPage extends TrackablePage {
       },
       {
         mapKey: 7,
-        cells: [ { value: 'Amount' }, { value: getIcpStringFromE8s(transaction.amount) + ' ICP' } ]
+        cells: [ { value: 'Amount' }, { value: amount } ]
       },
       {
         mapKey: 8,
-        cells: [ { value: 'Fee' }, { value: getIcpStringFromE8s(transaction.fee) + ' ICP' } ]
+        cells: [ { value: 'Fee' }, { value: fee } ]
       },
       {
         mapKey: 9,
