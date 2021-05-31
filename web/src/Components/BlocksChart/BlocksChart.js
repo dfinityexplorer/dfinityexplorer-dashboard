@@ -250,6 +250,9 @@ class BlocksChart extends BarChart {
     const seconds = 1;
     const url =
       `https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+    // The startDate/endDate interval and resulting bar can be a minute or longer when window is out of focus!!!
+    // Chart time labels are correct, but this is still a problem!!! 
+    // Could we possibly chop the long interval bar into interval-second chunks?!!!
     axios.get(url)
       .then(res => {
         const values = res.data.block;

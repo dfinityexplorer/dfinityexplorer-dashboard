@@ -49,16 +49,10 @@ class PriceChart extends AreaChart {
   */
   componentDidMount() {
     // Get a two weeks of daily data.
-    //2weeks!!!const startDate = new Date();
-    //2weeks!!!startDate.setDate(startDate.getDate() - 14);
-    let startDate = new Date();
-    startDate.setDate(startDate.getDate() - 1);
-    const genesisDate = new Date(1620667200000);
-    if (genesisDate.getTime() > startDate.getTime())
-      startDate = genesisDate;
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 14);
     const url =
-      //2weeks!!!`https://api.nomics.com/v1/candles?key=${Constants.NOMICS_API_KEY}&interval=1h&currency=ICP&start=${this.dateToRfc3339(startDate)}`;
-      `https://api.nomics.com/v1/exchange_candles?key=${Constants.NOMICS_API_KEY}&interval=1m&exchange=gdax&market=ICP-USD&start=${this.dateToRfc3339(startDate)}`;
+      `https://api.nomics.com/v1/candles?key=${Constants.NOMICS_API_KEY}&interval=1h&currency=ICP&start=${this.dateToRfc3339(startDate)}`;
     axios.get(url)
       .then(res => {
         if (res.data.length > 0) {
@@ -149,8 +143,7 @@ class PriceChart extends AreaChart {
   * @protected
   */
   getGetTickX(value) {
-    //2weeks!!!return new Date(value).toLocaleDateString('default');
-    return new Date(value).toLocaleTimeString('default', {hour: 'numeric', minute:'2-digit'});
+    return new Date(value).toLocaleDateString('default');
   }
 
   /**

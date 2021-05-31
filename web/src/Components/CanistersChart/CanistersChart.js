@@ -49,7 +49,7 @@ class CanistersChart extends BarChart {
    * @public
    */
   componentDidMount() {
-    // Get a two weeks of daily data.
+    // Get a one week of daily data.
     const endDate = roundDownDateToDay(new Date());
     const startDate = new Date(endDate.getTime());
     startDate.setDate(endDate.getDate() - 7);
