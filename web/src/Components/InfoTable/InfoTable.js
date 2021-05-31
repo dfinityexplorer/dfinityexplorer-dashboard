@@ -13,6 +13,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableRow,
   Typography
@@ -52,7 +53,9 @@ const StyledTable = styled(Table)`
 
 const StyledTableCell = styled(TableCell)`
   && {
-    border-color: transparent;
+    border-top-style: ${props => props.showborders ? 'solid' : null};
+    border-top-width: ${props => props.showborders ? props.showborders + 'px' : null};
+    border-color: ${props => props.showborders ? props.theme.colorTableRowBorder : 'transparent'};
     color: ${props => props.isaltcolor === 'true' ?
       props.theme.colorBodyTextLink : props.theme.colorBodyText};
     font-family: ${Constants.FONT_PRIMARY};
@@ -72,6 +75,20 @@ const StyledTableRow = styled(TableRow)`
     ${({ breakpoint }) =>
       breakpoint === Breakpoints.XS && `
         height: ${Constants.INFO_TABLE_ROW_HEIGHT_XS + 'px'};
+      `
+    }
+  }
+`;
+
+const TableRowFooter = styled(StyledTableRow)`
+  && {
+    border-top-color: ${props => props.theme.colorTableRowBorder};
+    border-top-style: solid;
+    border-top-width: 2px;
+    height: ${Constants.INFO_TABLE_ROW_HEIGHT_SM_AND_UP / 2 + 'px'};
+    ${({ breakpoint }) =>
+      breakpoint === Breakpoints.XS && `
+        height: ${Constants.INFO_TABLE_ROW_HEIGHT_XS / 2 + 'px'};
       `
     }
   }
@@ -142,6 +159,14 @@ class InfoTable extends Component {
      */
     headerRow: PropTypes.array,
     /**
+     * Optionally specifies to show table footer.
+     */
+    showFooter: PropTypes.bool,
+    /**
+     * Optionally specifies to show row borders.
+     */
+    showRowBorders: PropTypes.bool,
+    /**
      * Optionally specifies to use a small for for the XS breakpoint.
      */
     useSmallFontForXS: PropTypes.bool,
@@ -171,6 +196,9 @@ class InfoTable extends Component {
           <TableBody>
             {this.getBodyRowElements()}
           </TableBody>
+          <TableFooter>
+            {this.getFooterRowElement()}
+          </TableFooter>
         </StyledTable>
       </Paper>
     );
@@ -218,19 +246,20 @@ class InfoTable extends Component {
   getBodyRowElements() {
     const { getBodyRows } = this.props;
     let rows = getBodyRows();
-    return rows.map(bodyRow => {
-      return this.getBodyRowElement(bodyRow);
+    return rows.map((bodyRow, index) => {
+      return this.getBodyRowElement(bodyRow, index);
     });
   }
 
   /**
    * Return the element for the specified body row.
    * @param {Object} bodyRow Object that describes the body row.
+   * @param {Number} rowIndex The index of the body row.
    * @return {Object} The element for the specified body row.
    * @private
    */
-  getBodyRowElement(bodyRow) {
-    const { breakpoint, useSmallFontForXS } = this.props;
+  getBodyRowElement(bodyRow, rowIndex) {
+    const { breakpoint, showRowBorders, useSmallFontForXS } = this.props;
     return (
       <StyledTableRow breakpoint={breakpoint} key={bodyRow.mapKey}>
         {bodyRow.cells.map((cell, index) => {
@@ -243,6 +272,7 @@ class InfoTable extends Component {
               align={cell.isRightAligned ? 'right' : 'inherit'}
               padding='checkbox'
               size='small'
+              showborders={showRowBorders ? (rowIndex ? 1 : 2) : 0}
             >
               {
                 typeof cell.switch !== 'undefined' ?                               
@@ -261,6 +291,18 @@ class InfoTable extends Component {
           );
         })}
       </StyledTableRow>
+    );
+  }
+
+  /**
+   * Return the element for the footer row.
+   * @return {Object} The element for the footer row.
+   * @private
+   */
+  getFooterRowElement() {
+    const { breakpoint, showFooter } = this.props;
+    return (
+      showFooter === true && <TableRowFooter breakpoint={breakpoint} />
     );
   }
 }

@@ -209,6 +209,8 @@ class TransactionPage extends TrackablePage {
                   <TableInfo
                     breakpoint={breakpoint}
                     getBodyRows={this.getBodyRows}
+                    showFooter={true}
+                    showRowBorders={true}
                     title='Transaction'
                   />
                 </Fade>
