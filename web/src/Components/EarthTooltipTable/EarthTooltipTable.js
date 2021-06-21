@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import InfoTable from '../InfoTable/InfoTable';
+import InfoTable, { InfoTableTextColor } from '../InfoTable/InfoTable';
 
 /**
  * This component displays a table of data centers for a city, intended for use with the
@@ -59,8 +59,8 @@ import InfoTable from '../InfoTable/InfoTable';
         breakpoint={breakpoint}
         className={className}
         headerRow={[
-          {value: 'Data Center', isAltColor: true, isRightAligned: false},
-          {value: 'Nodes', isAltColor: false, isRightAligned: true}
+          {value: 'Data Center', color: InfoTableTextColor.LINK, isRightAligned: false},
+          {value: 'Nodes', isRightAligned: true}
         ]}
         getBodyRows={this.getBodyRows}
         useSmallFontForXS={true}
@@ -74,7 +74,8 @@ import InfoTable from '../InfoTable/InfoTable';
    *  mapKey: A unique key that identifies the row.
    *  cells: An array of objects that describe the cells of the row, where each object contains:
    *    value: String containing the value of the cell.
-   *    isAltColor: Use the alternate color for the text of the cell.
+   *    color: Use the specified InfoTableTextColor for the text of the cell, or undefined to use
+   *      the default color.
    *    isRightAligned: True to right align the table cell content.
    * @return {Array} An array of objects that describe the body rows.
    * @protected
@@ -85,8 +86,8 @@ import InfoTable from '../InfoTable/InfoTable';
       return {
         mapKey: index,
         cells: [
-          {value: dataCenter.name, isAltColor: true, isRightAligned: false},
-          {value: dataCenter.numNodes.toLocaleString(), isAltColor: false, isRightAligned: true}
+          {value: dataCenter.name, color: InfoTableTextColor.LINK, isRightAligned: false},
+          {value: dataCenter.numNodes.toLocaleString(), isRightAligned: true}
         ]
       };
     });

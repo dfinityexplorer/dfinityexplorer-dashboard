@@ -66,6 +66,7 @@ export const themeLight = {
   colorChartLine: Constants.COLOR_DFINITY_BLUE_700,
   colorChartActiveDotStroke: '#FFFFFF',
   colorIconButtonHover: '#000000',
+  colorInfoTableTextGray: Constants.COLOR_LIGHT_DRAWER_TEXT_GOOGLE,
   colorTableBackgroundPrimary: '#FFFFFF',
   colorTableRowBorder: Constants.COLOR_LIGHT_DRAWER_DIVIDER_GOOGLE,
   colorTableTextDim: '#909090', // YouTube, footer text dim (verified)
@@ -81,6 +82,8 @@ export const themeLight = {
     Constants.COLOR_DFINITY_BLUE_100,
     Constants.COLOR_DFINITY_BLUE_200,
     Constants.COLOR_DFINITY_BLUE_300],
+  colorPriceTextNegative: Constants.COLOR_PRICE_TEXT_NEGATIVE_CMC,
+  colorPriceTextPositive: Constants.COLOR_PRICE_TEXT_POSITIVE_CMC,
   colorSearchText: Constants.COLOR_LIGHT_BODY_TEXT_GOOGLE,
   colorSearchIcon: '#9E9E9E', //  Material Design icon(verified)
   opacityActionDisabled: 0.26, // Material-UI createPalette.js theme.palette.action.disabled light theme
@@ -131,6 +134,7 @@ export const themeDark = {
   colorChartLine: Constants.COLOR_DFINITY_BLUE_600,
   colorChartActiveDotStroke: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorIconButtonHover: Constants.COLOR_DARK_TEXT,
+  colorInfoTableTextGray: Constants.COLOR_DARK_TEXT_FADED,
   colorTableBackgroundPrimary: Constants.COLOR_DARK_BODY_LIGHTER_MAC_OS,
   colorTableRowBorder: Constants.COLOR_DARK_DRAWER_DIVIDER_YOUTUBE,
   colorTableTextDim: '#717171', // YouTube (Dark), footer text dim (verified)
@@ -147,6 +151,8 @@ export const themeDark = {
     Constants.COLOR_DFINITY_BLUE_100,
     Constants.COLOR_DFINITY_BLUE_900
   ],
+  colorPriceTextNegative: Constants.COLOR_PRICE_TEXT_NEGATIVE_CMC,
+  colorPriceTextPositive: Constants.COLOR_PRICE_TEXT_POSITIVE_CMC,
   colorSearchText: Constants.COLOR_LIGHT_BODY_TEXT_GOOGLE,
   colorSearchIcon: '#9E9E9E', //  Material Design icon (verified)
   opacityActionDisabled: 0.3, // Material-UI createPalette.js theme.palette.action.disabled dark theme

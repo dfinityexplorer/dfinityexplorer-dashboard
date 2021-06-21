@@ -6,7 +6,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import InfoTable from '../InfoTable/InfoTable';
+import InfoTable, { InfoTableTextColor } from '../InfoTable/InfoTable';
 import Constants from '../../constants';
 import getLocationsByCountry from '../../utils/getLocationsByCountry';
 
@@ -64,9 +64,9 @@ import getLocationsByCountry from '../../utils/getLocationsByCountry';
         breakpoint={breakpoint}
         className={className}
         headerRow={[
-          {value: 'Country', isAltColor: true, isRightAligned: false},
-          {value: 'DCs', isAltColor: false, isRightAligned: true},
-          {value: 'Nodes', isAltColor: false, isRightAligned: true}
+          {value: 'Country', color: InfoTableTextColor.LINK, isRightAligned: false},
+          {value: 'DCs', isRightAligned: true},
+          {value: 'Nodes', isRightAligned: true}
         ]}
         getBodyRows={this.getBodyRows}
       />
@@ -78,7 +78,8 @@ import getLocationsByCountry from '../../utils/getLocationsByCountry';
    *  mapKey: A unique key that identifies the row.
    *  cells: An array of objects that describe the cells of the row, where each object contains:
    *    value: String containing the value of the cell.
-   *    isAltColor: Use the alternate color for the text of the cell.
+   *    color: Use the specified InfoTableTextColor for the text of the cell, or undefined to use
+   *      the default color.
    *    isRightAligned: True to right align the table cell content.
    * @return {Array} An array of objects that describe the body rows.
    * @protected
@@ -89,13 +90,13 @@ import getLocationsByCountry from '../../utils/getLocationsByCountry';
     if (error >= Constants.NETWORK_ERROR_THRESHOLD) {
       return [{
         mapKey: 0,
-        cells: [{value: 'Network error', isAltColor: false, isRightAligned: false}]
+        cells: [{value: 'Network error', isRightAligned: false}]
       }];
     }
     else if (locationsByCountryMap === null || locationsByCountryMap.size === 0) {
       return [{
         mapKey: 0,
-        cells: [{value: 'Loading...', isAltColor: false, isRightAligned: false}]
+        cells: [{value: 'Loading...', isRightAligned: false}]
       }];
     }
     else {
@@ -105,9 +106,9 @@ import getLocationsByCountry from '../../utils/getLocationsByCountry';
         return {
           mapKey: country,
           cells: [
-            {value: country, isAltColor: true, isRightAligned: false},
-            {value: numDataCenters.toLocaleString(), isAltColor: false, isRightAligned: true},
-            {value: numNodes.toLocaleString(), isAltColor: false, isRightAligned: true}
+            {value: country, color: InfoTableTextColor.LINK, isRightAligned: false},
+            {value: numDataCenters.toLocaleString(), isRightAligned: true},
+            {value: numNodes.toLocaleString(), isRightAligned: true}
           ]
         };
       });

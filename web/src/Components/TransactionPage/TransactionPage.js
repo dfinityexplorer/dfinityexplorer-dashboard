@@ -227,7 +227,8 @@ class TransactionPage extends TrackablePage {
    *  mapKey: A unique key that identifies the row.
    *  cells: An array of objects that describe the cells of the row, where each object contains:
    *    value: String containing the value of the cell.
-   *    isAltColor: Use the alternate color for the text of the cell.
+   *    color: Use the specified InfoTableTextColor for the text of the cell, or undefined to use
+   *      the default color.
    *    isRightAligned: True to right align the table cell content.
    * @return {Array} An array of objects that describe the body rows.
    * @protected

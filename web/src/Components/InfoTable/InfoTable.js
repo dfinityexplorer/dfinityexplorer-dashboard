@@ -56,8 +56,11 @@ const StyledTableCell = styled(TableCell)`
     border-top-style: ${props => props.showborders ? 'solid' : null};
     border-top-width: ${props => props.showborders ? props.showborders + 'px' : null};
     border-color: ${props => props.showborders ? props.theme.colorTableRowBorder : 'transparent'};
-    color: ${props => props.isaltcolor === 'true' ?
-      props.theme.colorBodyTextLink : props.theme.colorBodyText};
+    color: ${props => typeof props.color === 'undefined' || props.color === 'body' ?
+      props.theme.colorBodyText :
+      (props.color === 'gray' ?
+        props.theme.colorInfoTableTextGray :
+        props.theme.colorBodyTextLink)};
     font-family: ${Constants.FONT_PRIMARY};
     font-size: ${Constants.MATERIAL_FONT_SIZE_BODY_2};
     white-space: nowrap;
@@ -99,8 +102,11 @@ const TableCellHeader = styled(StyledTableCell)`
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-color: ${props => props.theme.colorTableRowBorder};
-    color: ${props => props.isaltcolor === 'true' ?
-      props.theme.colorBodyTextLink : props.theme.colorBodyTextDim};
+    color: ${props => typeof props.color === 'undefined' || props.color === 'body' ?
+      props.theme.colorBodyText :
+      (props.color === 'gray' ?
+        props.theme.colorInfoTableTextGray :
+        props.theme.colorBodyTextLink)};
     font-weight: 500;
   }
 `;
@@ -117,6 +123,12 @@ const TypographyTitle = styled(Typography)`
     font-weight: 300;
   }
 `;
+
+export const InfoTableTextColor = Object.freeze({
+  BODY: 'body',
+  GRAY: 'gray',
+  LINK: 'link'
+});
 
 /**
  * This component displays a static table of information.
@@ -137,7 +149,8 @@ class InfoTable extends Component {
      *  mapKey: A unique key that identifies the row.
      *  cells: An array of objects that describe the cells of the row, where each object contains:
      *    value: String containing the value of the cell, or undefined if switch is defined.
-     *    isAltColor: Use the alternate color for the text of the cell.
+     *    color: Use the specified InfoTableTextColor for the text of the cell, or undefined to use
+     *      the default color.
      *    isRightAligned: True to right align the table cell content.
      *    switch: Optional object that describes a switch to place in the cell, where each object
      *    contains:
@@ -154,7 +167,8 @@ class InfoTable extends Component {
      * Optional array of objects that describe the cells of a header row, where each object
      * contains:
      *  value: String containing the value of the cell.
-     *  isAltColor: Use the alternate color for the text of the cell.
+     *  color: Use the specified InfoTableTextColor for the text of the cell, or undefined to use
+     *    the default color.
      *  isRightAligned: True to right align the table cell content.
      */
     headerRow: PropTypes.array,
@@ -219,7 +233,7 @@ class InfoTable extends Component {
               // Using index as the key is fine here and for cells in other rows, since we never add,
               // remove, reorder, or filter items in the cell arrays.
               <TableCellHeader
-                isaltcolor={cell.isAltColor ? 'true' : 'false'}
+                color={cell.color}
                 usesmallfontforxs={useSmallFontForXS}
                 breakpoint={breakpoint}
                 key={index}
@@ -265,7 +279,7 @@ class InfoTable extends Component {
         {bodyRow.cells.map((cell, index) => {
           return (
             <StyledTableCell
-              isaltcolor={cell.isAltColor ? 'true' : 'false'}
+              color={cell.color}
               usesmallfontforxs={useSmallFontForXS}
               breakpoint={breakpoint}
               key={index}

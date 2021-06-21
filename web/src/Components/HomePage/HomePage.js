@@ -20,6 +20,8 @@ import BlockTimeCard from '../BlockTimeCard/BlockTimeCard';
 //import CyclesCard from '../CyclesCard/CyclesCard';
 import MessagesCard from '../MessagesCard/MessagesCard';
 import PriceCard from '../PriceCard/PriceCard';
+import IcpMetricsTable from '../IcpMetricsTable/IcpMetricsTable';
+import NetworkMetricsTable from '../NetworkMetricsTable/NetworkMetricsTable';
 import BlocksChart from '../BlocksChart/BlocksChart';
 import CanistersChart from '../CanistersChart/CanistersChart';
 import MessagesChart from '../MessagesChart/MessagesChart';
@@ -55,12 +57,39 @@ const GridCard = styled(Grid)`
       ((breakpoint === Breakpoints.XL || breakpoint === Breakpoints.LG) && `
         width: calc(25% - ${Constants.HOME_PAGE_MARGIN_SM_AND_UP*3/4 + 'px'});
       `) ||
-      ((breakpoint === Breakpoints.MD || breakpoint === Breakpoints.SM) && `
+      (breakpoint === Breakpoints.MD && `
         width: calc(50% - ${Constants.HOME_PAGE_MARGIN_SM_AND_UP/2 + 'px'});
+      `) ||
+      (breakpoint === Breakpoints.SM && `
+        width: 100%;
       `) ||
       (breakpoint === Breakpoints.XS && `
         padding-top: ${Constants.HOME_PAGE_MARGIN_XS + 'px'};
         width: 100%;
+      `)
+    }
+  }
+`;
+
+const GridTable = styled(Grid)`
+  && {
+    padding-top: ${Constants.HOME_PAGE_MARGIN_SM_AND_UP + 'px'};
+    ${({ breakpoint }) =>
+      ((breakpoint === Breakpoints.XL || breakpoint === Breakpoints.LG || breakpoint === Breakpoints.MD) && `
+        width: calc(50% - ${Constants.HOME_PAGE_MARGIN_SM_AND_UP/2 + 'px'});
+      `) ||
+      ((breakpoint === Breakpoints.SM || breakpoint === Breakpoints.XS) && `
+        width: 100%;
+      `)
+    }
+  }
+`;
+
+const GridTable2 = styled(GridTable)`
+  && {
+    ${({ breakpoint }) =>
+      ((breakpoint === Breakpoints.XS) && `
+        padding-top: ${Constants.HOME_PAGE_MARGIN_XS + 'px'};
       `)
     }
   }
@@ -115,6 +144,18 @@ const CardPrice = styled(PriceCard)`
   }
 `;
 
+const TableIcpMetrics = styled(IcpMetricsTable)`
+  && {
+    background: ${props => props.theme.colorTableBackgroundPrimary};
+  }
+`;
+
+const TableNetworkMetrics = styled(NetworkMetricsTable)`
+  && {
+    background: ${props => props.theme.colorTableBackgroundPrimary};
+  }
+`;
+
 // Disclaimer!!!
 const StyledPaper = styled(Paper)`
   && {
@@ -165,6 +206,7 @@ class HomePage extends TrackablePage {
       <div>
         {/*!!!{this.getSectionDisclaimer()}*/}
         {this.getSectionCards()}
+        {this.getSectionTables()}
         {this.getSectionCharts()}
       </div>
     );
@@ -242,6 +284,40 @@ class HomePage extends TrackablePage {
             <CardPrice cardIndex={3} />
           </Fade>
         </GridCard>
+      </GridSection>
+    );
+  }
+
+  /**
+   * Return the elements for the Tables section based on the current breakpoint.
+   * @return {Object} The elements for the Tables section based on the current breakpoint.
+   * @private
+   */
+  getSectionTables() {
+    const { breakpoint } = this.props;
+
+    return (
+      <GridSection container
+        direction='row'
+        justify='space-between'
+        alignItems='flex-start'
+        breakpoint={breakpoint}
+      >
+        <GridTable item breakpoint={breakpoint}>
+          <Fade
+            timeout={500}
+          >
+            <TableIcpMetrics breakpoint={breakpoint} />
+          </Fade>
+        </GridTable>
+        <GridTable2 item breakpoint={breakpoint}>
+          <Fade
+            delay={50}
+            timeout={500}
+          >
+            <TableNetworkMetrics breakpoint={breakpoint} />
+          </Fade>
+        </GridTable2>
       </GridSection>
     );
   }

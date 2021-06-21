@@ -7,14 +7,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import InfoTable from '../InfoTable/InfoTable';
+import InfoTable, { InfoTableTextColor } from '../InfoTable/InfoTable';
 import Constants from '../../constants';
 
 /**
  * This component displays a table with data centers info retrieved from
  * dashboard.internetcomputer.org/api.
  */
- class DataCentersTable extends Component {
+class DataCentersTable extends Component {
   static propTypes = {
     /**
      * The current Breakpoint, taking the desktop drawer (large screens) width into account.
@@ -92,7 +92,8 @@ import Constants from '../../constants';
    *  mapKey: A unique key that identifies the row.
    *  cells: An array of objects that describe the cells of the row, where each object contains:
    *    value: String containing the value of the cell.
-   *    isAltColor: Use the alternate color for the text of the cell.
+   *    color: Use the specified InfoTableTextColor for the text of the cell, or undefined to use
+   *      the default color.
    *    isRightAligned: True to right align the table cell content.
    * @return {Array} An array of objects that describe the body rows.
    * @protected
@@ -378,8 +379,8 @@ import Constants from '../../constants';
       countText = numberOf.count.toLocaleString();
 
     return [
-      {value: description, isAltColor: true, isRightAligned: false},
-      {value: countText, isAltColor: false, isRightAligned: true}
+      {value: description, color: InfoTableTextColor.LINK, isRightAligned: false},
+      {value: countText, isRightAligned: true}
     ];
   }
 
@@ -403,8 +404,8 @@ import Constants from '../../constants';
     }
 
     return [
-      {value: 'Avg Node Cores', isAltColor: true, isRightAligned: false},
-      {value: avgCoresText, isAltColor: false, isRightAligned: true}
+      {value: 'Avg Node Cores', color: InfoTableTextColor.LINK, isRightAligned: false},
+      {value: avgCoresText, isRightAligned: true}
     ];
   }
 
@@ -428,8 +429,8 @@ import Constants from '../../constants';
     }
 
     return [
-      {value: 'Avg Node Memory', isAltColor: true, isRightAligned: false},
-      {value: avgMemoryText, isAltColor: false, isRightAligned: true}
+      {value: 'Avg Node Memory', color: InfoTableTextColor.LINK, isRightAligned: false},
+      {value: avgMemoryText, isRightAligned: true}
     ];
   }
 
@@ -455,8 +456,8 @@ import Constants from '../../constants';
     }
 
     return [
-      {value: 'Avg DC Nodes', isAltColor: true, isRightAligned: false},
-      {value: avgNodesText, isAltColor: false, isRightAligned: true}
+      {value: 'Avg DC Nodes', color: InfoTableTextColor.LINK, isRightAligned: false},
+      {value: avgNodesText, isRightAligned: true}
     ];
   }
 
@@ -479,8 +480,8 @@ import Constants from '../../constants';
     }
 
     return [
-      {value: 'Memory', isAltColor: true, isRightAligned: false},
-      {value: memoryTotalText, isAltColor: false, isRightAligned: true}
+      {value: 'Memory', color: InfoTableTextColor.LINK, isRightAligned: false},
+      {value: memoryTotalText, isRightAligned: true}
     ];
   }
 
@@ -492,9 +493,8 @@ import Constants from '../../constants';
   getRowCellsSimulationSwitch() {
     const { handleSimulationSwitchChange, isSimulationOn } = this.props;
     return [
-      {value: 'Simulation', isAltColor: true, isRightAligned: false},
+      {value: 'Simulation', color: InfoTableTextColor.LINK, isRightAligned: false},
       {
-        isAltColor: false,
         isRightAligned: true,
         switch: {
           isChecked: isSimulationOn,

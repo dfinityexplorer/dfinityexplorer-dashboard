@@ -65,7 +65,7 @@ const TypographyValue = styled(Typography)`
   && {
     font-family: ${Constants.FONT_PRIMARY};
     font-weight: 200;
-    font-size: 28px;
+    font-size: 26px;
   }
 `;
 
