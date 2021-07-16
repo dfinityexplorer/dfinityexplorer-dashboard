@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-import React, { Component, Fragment } from 'react';
+import { Component, Fragment } from 'react';
 import {
   Route,
   HashRouter
@@ -22,6 +22,7 @@ import DataCentersPage from './Components/DataCentersPage/DataCentersPage';
 import TransactionPage from './Components/TransactionPage/TransactionPage';
 import TransactionsPage from './Components/TransactionsPage/TransactionsPage';
 import AboutPage from './Components/AboutPage/AboutPage';
+import SearchPage from './Components/SearchPage/SearchPage';
 import DEAppBar from './Components/DEAppBar/DEAppBar';
 import Footer from './Components/Footer/Footer';
 import Constants from './constants';
@@ -246,6 +247,7 @@ class App extends Component {
                       />
                     }
                   />
+                  <Route exact path="/search/:query" component={SearchPage} />
                   <FooterDiv
                     breakpoint={breakpoint}
                     isDesktopDrawerOpen={isDesktopDrawerOpen}

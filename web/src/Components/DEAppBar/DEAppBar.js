@@ -16,6 +16,7 @@ import {
   Fade,
   Grid,
   IconButton,
+  Input,
   List,
   ListItem,
   ListItemText,
@@ -28,11 +29,14 @@ import {
 } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import zIndex from '@material-ui/core/styles/zIndex';
+import CloseIcon from '@material-ui/icons/Close';
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
 import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
 import RevealFade from 'react-reveal/Fade';
 import RevealZoom from 'react-reveal/Zoom';
+import Downshift from 'downshift';
 import ResponsiveComponent from '../ResponsiveComponent/ResponsiveComponent'
 import {
   Breakpoints,
@@ -51,6 +55,14 @@ const StyledAppBar = styled(AppBar)`
   }
 `;
 
+const SearchAppBar = styled(AppBar)`
+  && {
+    background: white;
+    /* AppBar is above Drawer */
+    z-index: ${zIndex.drawer + 1};
+  }
+`;
+
 const StyledToolbar = styled(Toolbar)`
   && {
     padding-left: 12px;
@@ -58,6 +70,23 @@ const StyledToolbar = styled(Toolbar)`
     ${({ breakpoint }) =>
       breakpoint === Breakpoints.XS && `
         padding-left: 4px;
+        padding-right: 4px;
+      `
+    }
+  }
+`;
+
+const SearchToolbar = styled(Toolbar)`
+  && {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 16px;
+    padding-right: 12px;
+    ${({ breakpoint }) =>
+      breakpoint === Breakpoints.XS && `
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 8px;
         padding-right: 4px;
       `
     }
@@ -84,10 +113,13 @@ const TypographyAppName = styled(Typography)`
     font-weight: bold;
     font-size: 20px;
     user-select: none;
-    ${({ breakpoint }) =>
-      breakpoint === Breakpoints.XS && `
+    ${({ breakpoint, isxxs }) =>
+      (isxxs && `
+        font-size: 10px;
+      `) ||
+      (breakpoint === Breakpoints.XS && `
         font-size: 14px;
-      `
+      `)
     }
   }
 `;
@@ -201,6 +233,31 @@ const TypographyExplorer = styled(TypographyAppName)`
 
 */
 
+const InputSearch = styled(Input)`
+  && {
+    /*
+     * margin-top is used to center the Input vertically, and depends on font-size.
+     * DCM 21.apr.2018: After updating Material-UI, margin-top had to be adjusted for all
+     * breakpoints based on trial and error.
+     */
+    margin-top: 0.65rem;
+    color: ${props => props.theme.colorSearchText};
+    font-family: ${Constants.FONT_PRIMARY};
+    font-size: ${Constants.MATERIAL_FONT_SIZE_H6};
+    ${({ breakpoint }) =>
+      (breakpoint === Breakpoints.SM && `
+        margin-top: 0.875rem;
+        /* font-size "Body 2" is not small enough to fit a hash, but this is smallest we should
+           go. */
+        font-size: ${Constants.MATERIAL_FONT_SIZE_BODY_2};
+      `) ||
+      (breakpoint === Breakpoints.XS && `
+        margin-top: 0.625rem;
+      `)
+    }
+  }
+`;
+
 const StyledIconButton = styled(IconButton)`
   && {
     color: ${props => props.theme.colorAppBarTextButton};
@@ -221,6 +278,32 @@ const StyledMenuIcon = styled(MenuIcon)`
   && {
     width: 24px;
     height: 24px;
+  }
+`;
+
+const StyledSearchIcon = styled(SearchIcon)`
+  && {
+    width: 32px;
+    height: 32px;
+    ${({ breakpoint }) =>
+      breakpoint === Breakpoints.XS && `
+        width: 24px;
+        height: 24px;
+      `
+    }
+  }
+`;
+
+const StyledCloseIcon = styled(CloseIcon)`
+  && {
+    width: 32px;
+    height: 32px;
+    ${({ breakpoint }) =>
+      breakpoint === Breakpoints.XS && `
+        width: 24px;
+        height: 24px;
+      `
+    }
   }
 `;
 
@@ -366,9 +449,19 @@ class DEAppBar extends ResponsiveComponent {
   constructor() {
     super();
 
+    this.state = {
+      isSearchOn: false,
+      searchQuery: ''
+    };
+
     this.toolbarDivRef = React.createRef();
 
     // Bind to make 'this' work in callbacks.
+    this.handleSearchClick = this.handleSearchClick.bind(this);
+    this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handleDownshiftStateChange = this.handleDownshiftStateChange.bind(this);
+    this.handleDownshiftChange = this.handleDownshiftChange.bind(this);
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
     this.isActiveRoute = this.isActiveRoute.bind(this);
   }
 
@@ -378,13 +471,19 @@ class DEAppBar extends ResponsiveComponent {
    * @public
    */
   render() {
+    const { isSearchOn } = this.state;
     return (
       <Fragment>
         {/* Toolbar shim to compensate for AppBar position='fixed'. */}
         <div ref={this.toolbarDivRef}>
           <Toolbar />
         </div>
-        <Fade in={true} timeout={200} mountOnEnter unmountOnExit>
+        <Fade in={isSearchOn} timeout={200} mountOnEnter unmountOnExit>
+          <SearchAppBar elevation={2}>
+            {this.getToolbarSearchContent()}
+          </SearchAppBar>
+        </Fade>
+        <Fade in={!isSearchOn} timeout={200} mountOnEnter unmountOnExit>
           <StyledAppBar elevation={2}>
             {this.getToolbarDefaultContent()}
           </StyledAppBar>
@@ -424,6 +523,51 @@ class DEAppBar extends ResponsiveComponent {
   }
 
   /**
+   * Return the elements for the search toolbar based on the current breakpoint.
+   * @return {Object} The elements for the search toolbar based on the current breakpoint.
+   * @private
+   */
+  getToolbarSearchContent() {
+    const breakpoint = getBreakpoint();
+    return (
+      <SearchToolbar variant='dense' breakpoint={breakpoint}>
+        <Grid container direction='row' justify='space-between' alignItems='flex-start' wrap='nowrap'>
+          <Grid item style={{ flexGrow: '1' }}>
+            <Downshift
+              onStateChange={this.handleDownshiftStateChange}
+              onChange={this.handleDownshiftChange}
+              selectedItem={this.state.searchQuery}
+            >
+              {({ getInputProps }) => (
+                <div>
+                  <form onSubmit={this.handleSearchSubmit}>
+                    <InputSearch
+                      {...getInputProps({
+                        autoFocus: true,
+                        disableUnderline: true,
+                        fullWidth: true,
+                        placeholder: 'Search for transaction'
+                      })}
+                      breakpoint={breakpoint}
+                    />
+                  </form>
+                </div>
+              )}
+            </Downshift>
+          </Grid>
+          <Grid item>
+            <Zoom in={true} timeout={300}>
+              <IconButton onClick={this.handleCloseClick}>
+                <StyledCloseIcon breakpoint={breakpoint} />
+              </IconButton>
+            </Zoom>
+          </Grid>
+        </Grid>
+      </SearchToolbar>
+    );
+  }
+
+  /**
    * Return the elements for the toolbar based on the current breakpoint.
    * @return {Object} The elements for the toolbar based on the current breakpoint.
    * @private
@@ -437,6 +581,11 @@ class DEAppBar extends ResponsiveComponent {
             {this.getMenuButton()}
           </Grid>
           {this.getAppTitle()}
+          <Grid container alignItems='center' justify='flex-end' wrap='nowrap'>
+            <Grid item>
+              {this.getSearchButton()}
+            </Grid>
+          </Grid>
         </Grid>
       </StyledToolbar>
     );
@@ -469,6 +618,7 @@ class DEAppBar extends ResponsiveComponent {
    */
   getAppTitle() {
     const breakpoint = getBreakpoint();
+    const isXxs = window.matchMedia('(max-width: 359px)').matches
     return (
       <Link
         style={{ textDecoration: 'none' }}
@@ -486,7 +636,7 @@ class DEAppBar extends ResponsiveComponent {
               </ImgProductIcon>
             </Grid>
             <Grid item>
-              <TypographyDfinity breakpoint={breakpoint}>DFINITY</TypographyDfinity>
+              <TypographyDfinity breakpoint={breakpoint} isxxs={isXxs}>DFINITY</TypographyDfinity>
             </Grid>
             <RevealZoom timeout={350}>
               <Grid item>
@@ -494,7 +644,7 @@ class DEAppBar extends ResponsiveComponent {
               </Grid>
             </RevealZoom>
             <Grid item>
-              <TypographyExplorer breakpoint={breakpoint}>ExpIorer</TypographyExplorer>
+              <TypographyExplorer breakpoint={breakpoint} isxxs={isXxs}>ExpIorer</TypographyExplorer>
             </Grid>
           </RevealFade>
         </Grid>
@@ -603,6 +753,89 @@ class DEAppBar extends ResponsiveComponent {
         </List>
       </Fragment>
     );
+  }
+
+  /**
+   * Return the elements for the search button on the current breakpoint.
+   * @return {Object} The elements for the search button based on the current breakpoint.
+   * @private
+   */
+  getSearchButton() {
+    const breakpoint = getBreakpoint();
+    return (
+      <Zoom in={true} timeout={300}>
+        <StyledIconButton onClick={this.handleSearchClick}>
+          <StyledSearchIcon breakpoint={breakpoint} />
+        </StyledIconButton>
+      </Zoom>
+    );
+  }
+
+  /**
+   * Callback fired when the search button is clicked.
+   * @private
+   */
+  handleSearchClick() {
+    this.setState({
+      isSearchOn: true
+    });
+  }
+
+  /**
+   * Callback fired when the close button is clicked.
+   * @private
+   */
+  handleCloseClick() {
+    this.setState({
+      isSearchOn: false
+    });
+  }
+  
+ /**
+   * Callback fired any time the internal state of the Downshift component changes.
+   * @param {Object} changes The properties that have changed since the last state change.
+   * @private
+   */
+  handleDownshiftStateChange(changes) {
+    const { inputValue } = changes;
+    if (inputValue) {
+      this.setState({
+        searchQuery: inputValue
+      });
+    }
+  }
+
+  /**
+   * Callback fired when the value of the Downshift component changes.
+   * @param {Object} selectedItem The item that was just selected.
+   * @private
+   */
+  handleDownshiftChange(selectedItem) {
+    this.performSearch(selectedItem);
+  }
+
+  /**
+   * Callback fired when the SearchAppBar form is submitted.
+   * @param {Object} event The event source of the callback.
+   * @private
+   */
+  handleSearchSubmit(event) {
+    event.preventDefault();
+    this.performSearch(this.state.searchQuery);
+  }
+
+  /**
+   * Perform a search based on the specified search query.
+   * @param {String} searchQuery The search quert to use for the search.
+   * @private
+   */
+  performSearch(searchQuery) {
+    this.setState({
+      isSearchOn: false,
+      searchQuery: ''
+    });
+    if (this.props.routerRef)
+      this.props.routerRef.history.push(`/search/${searchQuery}`);
   }
 
   /**
