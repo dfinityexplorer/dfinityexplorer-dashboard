@@ -737,9 +737,9 @@ class DEAppBar extends ResponsiveComponent {
           </DrawerListItem>
           <DrawerListItem button component={Link} to='/txs' selected={this.isActiveRoute('/txs')}>
             <DrawerListItemIcon>
-              <SvgIcon>
-                <path d={Constants.ICON_SVG_PATH_MPS} />
-              </SvgIcon>
+              <DrawerSvgIcon>
+                <path d={Constants.ICON_SVG_PATH_TRANSACTIONS} />
+              </DrawerSvgIcon>
             </DrawerListItemIcon>
             <DrawerListItemText primary='Transactions' />
           </DrawerListItem>
