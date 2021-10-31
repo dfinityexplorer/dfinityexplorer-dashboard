@@ -7,15 +7,14 @@
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 import axios from 'axios';
-import BarChart from '../BarChart/BarChart';
-import Constants from '../../constants';
+import AreaChart from '../AreaChart/AreaChart';
 import roundDownDateToDay from '../../utils/roundDownDateToDay';
 
 /**
  * This component displays a number of canisters chart with data retrieved from
  * ic-api.internetcomputer.org.
  */
-class CanistersChart extends BarChart { 
+class CanistersChart extends AreaChart {
   static propTypes = {
     /**
      * The current Breakpoint, taking the desktop drawer (large screens) width into account.
@@ -49,10 +48,9 @@ class CanistersChart extends BarChart {
    * @public
    */
   componentDidMount() {
-    // Get a one week of daily data.
-    const endDate = roundDownDateToDay(new Date());
-    const startDate = new Date(endDate.getTime());
-    startDate.setDate(endDate.getDate() - 7);
+    // Get data since Genesis.
+    const endDate = new Date();
+    const startDate = new Date(2021, 4, 10); // Genesis: 5/10/2021
     const secondsInDay = 24 * 60 * 60;
     const url =
       `https://ic-api.internetcomputer.org/api/metrics/registered-canisters?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
@@ -60,13 +58,9 @@ class CanistersChart extends BarChart {
       .then(res => {
         //let values = res.data.data.result[0].values;
         let values = res.data.running_canisters;
-        // Use values[0] to get the starting number of canisters.
-        let prevTotal = Math.floor(values[0][1]);
-        const canistersData = values.slice(1).map((value) => {
+        const canistersData = values.map((value) => {
           const date = new Date(value[0] * 1000);
-          const total = Math.floor(value[1]);
-          const numCanisters = Math.max(total - prevTotal, 0);
-          prevTotal = total;
+          const numCanisters = Math.floor(value[1]);
           return {date: date.getTime(), numCanisters: numCanisters};
         });
         this.setState({
@@ -119,6 +113,26 @@ class CanistersChart extends BarChart {
    */
   getDataKeyY() {
     return 'numCanisters';
+  }
+
+  /**
+  * Return the minimum value of the domain for the Y-axis.
+  * @param {dataMin} value The minumum value of the data.
+  * @return {String} The minimum value of the domain for the Y-axis.
+  * @protected
+  */
+  getDomainMinY(dataMin) {
+    return Math.floor(dataMin);
+  }
+
+  /**
+  * Return the maximum value of the domain for the Y-axis.
+  * @param {dataMax} value The maximum value of the data.
+  * @return {String} The maximum value of the domain for the Y-axis.
+  * @protected
+  */
+  getDomainMaxY(dataMax) {
+    return Math.ceil(dataMax);
   }
 
   /**
