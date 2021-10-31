@@ -82,7 +82,7 @@ class MessagesCard extends Component {
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Avg Messages'
+        title='Message Throughput'
         value={messagesTimeText}
         svgIconPath={Constants.ICON_SVG_PATH_MPS}
       />
@@ -95,7 +95,7 @@ class MessagesCard extends Component {
    */
   pollForMessagesTime() {
     const url =
-      'https://ic-api.internetcomputer.org/api/metrics/message-execution-rate';
+      'https://ic-api.internetcomputer.org/api/v3/message-execution-rate';
     axios.get(url)
       .then(res => {
         if (res.data.message_execution_rate.length === 1 && res.data.message_execution_rate[0].length >= 2) {
