@@ -113,8 +113,8 @@ const TypographyAppName = styled(Typography)`
     font-weight: bold;
     font-size: 20px;
     user-select: none;
-    ${({ breakpoint, isxxs }) =>
-      (isxxs && `
+    ${({ breakpoint, $isxxs }) =>
+      ($isxxs && `
         font-size: 10px;
       `) ||
       (breakpoint === Breakpoints.XS && `
@@ -618,7 +618,7 @@ class DEAppBar extends ResponsiveComponent {
    */
   getAppTitle() {
     const breakpoint = getBreakpoint();
-    const isXxs = window.matchMedia('(max-width: 359px)').matches
+    const isXxs = window.matchMedia('(max-width: 359px)').matches;
     return (
       <Link
         style={{ textDecoration: 'none' }}
@@ -636,7 +636,7 @@ class DEAppBar extends ResponsiveComponent {
               </ImgProductIcon>
             </Grid>
             <Grid item>
-              <TypographyDfinity breakpoint={breakpoint} isxxs={isXxs}>DFINITY</TypographyDfinity>
+              <TypographyDfinity breakpoint={breakpoint} $isxxs={isXxs}>DFINITY</TypographyDfinity>
             </Grid>
             <RevealZoom timeout={350}>
               <Grid item>
@@ -644,7 +644,7 @@ class DEAppBar extends ResponsiveComponent {
               </Grid>
             </RevealZoom>
             <Grid item>
-              <TypographyExplorer breakpoint={breakpoint} isxxs={isXxs}>ExpIorer</TypographyExplorer>
+              <TypographyExplorer breakpoint={breakpoint} $isxxs={isXxs}>ExpIorer</TypographyExplorer>
             </Grid>
           </RevealFade>
         </Grid>
