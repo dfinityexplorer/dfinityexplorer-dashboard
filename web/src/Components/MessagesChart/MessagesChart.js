@@ -188,7 +188,7 @@ class MessagesChart extends BarChart {
    * @protected
    */
   getGetTooltipY(value) {
-    return `Messages: ${value.toLocaleString()}`;
+    return `New Messages: ${value.toLocaleString()}`;
   }
   /**
    * Return The duration of the chart animation.

@@ -190,7 +190,7 @@ class BlocksChart extends BarChart {
    * @protected
    */
   getGetTooltipY(value) {
-    return `Blocks: ${value.toLocaleString()}`;
+    return `New Blocks: ${value.toLocaleString()}`;
   }
 
   /**
