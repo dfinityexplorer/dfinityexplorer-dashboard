@@ -88,6 +88,18 @@ class CanistersChart extends AreaChart {
   }
 
   /**
+   * Return an optional value to display on the title line.
+   * @return {String} An optional value to display on the title line.
+   * @protected
+   */
+  getTitleValue() {
+    const { canistersData } = this.state;
+    return (canistersData.length > 0) ?
+      `${canistersData[canistersData.length - 1].numCanisters.toLocaleString()}` :
+      undefined;
+  }
+  
+  /**
    * Return an array of objects that describe the chart data.
    * @return {Array} An array of objects that describe the chart data.
    * @protected

@@ -32,6 +32,13 @@ const StyledPaper = styled(Paper)`
   }
 `;
 
+const TitleDiv = styled.div`
+  && {
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+
 const TypographyTitle = styled(Typography)`
   && {
     color: ${props => props.theme.colorBodyText};
@@ -85,10 +92,16 @@ class AreaChart extends Component {
   render() {
     const { breakpoint, chartHeight, theme } = this.props;
     const data = this.getData();
+    const titleValue = this.getTitleValue();
     const tooltipElevation = 2;
     return (
       <StyledPaper elevation={1}>
-        <TypographyTitle breakpoint={breakpoint}>{this.getTitle()}</TypographyTitle>
+        <TitleDiv>
+          <TypographyTitle breakpoint={breakpoint}>{this.getTitle()}</TypographyTitle>
+          { titleValue !== undefined &&
+            <TypographyTitle breakpoint={breakpoint}>{this.getTitleValue()}</TypographyTitle>
+          }
+        </TitleDiv>
         { data.length > 0 &&
           <ResponsiveContainer width='100%' height={chartHeight}>
             <StyledAreaChart
@@ -166,6 +179,15 @@ class AreaChart extends Component {
    */
   getTitle() {
     throw new Error('AreaChart.getTitle() not implemented.');
+  }
+
+  /**
+   * Return an optional value to display on the title line.
+   * @return {String} An optional value to display on the title line.
+   * @protected
+   */
+  getTitleValue() {
+    return undefined;
   }
 
   /**
