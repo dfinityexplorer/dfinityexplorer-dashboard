@@ -9,8 +9,6 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import InfoTable, { InfoTableTextColor } from '../InfoTable/InfoTable';
 import Constants from '../../constants';
-import getMaxAgeBonus from '../../utils/getMaxAgeBonus';
-import { Breakpoints } from '../../utils/breakpoint';
 
 /**
  * This component displays a table with ICP-related info.

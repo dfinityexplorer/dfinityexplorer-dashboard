@@ -7,17 +7,12 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {
-  Grid,
-  Paper, // Disclaimer!!!
-  Typography // Disclaimer!!!
-} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { duration, easing } from '@material-ui/core/styles/transitions';
 import Fade from 'react-reveal/Fade';
 import TrackablePage from '../TrackablePage/TrackablePage'
 import BlocksCard from '../BlocksCard/BlocksCard';
 import BlockTimeCard from '../BlockTimeCard/BlockTimeCard';
-//import CyclesCard from '../CyclesCard/CyclesCard';
 import MessagesCard from '../MessagesCard/MessagesCard';
 import PriceCard from '../PriceCard/PriceCard';
 import IcpMetricsTable from '../IcpMetricsTable/IcpMetricsTable';
@@ -26,6 +21,7 @@ import BlocksChart from '../BlocksChart/BlocksChart';
 import CanistersChart from '../CanistersChart/CanistersChart';
 import MessagesChart from '../MessagesChart/MessagesChart';
 import PriceChart from '../PriceChart/PriceChart';
+import StakedChart from '../StakedChart/StakedChart';
 import { Breakpoints } from '../../utils/breakpoint';
 import Constants from '../../constants';
 import { Fragment } from "react";
@@ -71,8 +67,10 @@ const GridCard = styled(Grid)`
   }
 `;
 
-const GridTable = styled(Grid)`
+const DivTable = styled.div`
   && {
+    display: flex;
+    flex-direction: column;
     padding-top: ${Constants.HOME_PAGE_MARGIN_SM_AND_UP + 'px'};
     ${({ breakpoint }) =>
       ((breakpoint === Breakpoints.XL || breakpoint === Breakpoints.LG || breakpoint === Breakpoints.MD) && `
@@ -85,13 +83,30 @@ const GridTable = styled(Grid)`
   }
 `;
 
+const GridTable = styled(Grid)`
+  && {
+    /* Obsolete, keep for now.
+    padding-top: ${Constants.HOME_PAGE_MARGIN_SM_AND_UP + 'px'};
+    ${({ breakpoint }) =>
+      ((breakpoint === Breakpoints.XL || breakpoint === Breakpoints.LG || breakpoint === Breakpoints.MD) && `
+        width: calc(50% - ${Constants.HOME_PAGE_MARGIN_SM_AND_UP/2 + 'px'});
+      `) ||
+      ((breakpoint === Breakpoints.SM || breakpoint === Breakpoints.XS) && `
+        width: 100%;
+      `)
+    }*/
+  }
+`;
+
 const GridTable2 = styled(GridTable)`
   && {
+    padding-top: ${Constants.HOME_PAGE_MARGIN_XS + 'px'};
+    /* Obsolete, keep for now.
     ${({ breakpoint }) =>
       ((breakpoint === Breakpoints.XS) && `
         padding-top: ${Constants.HOME_PAGE_MARGIN_XS + 'px'};
       `)
-    }
+    }*/
   }
 `;
 
@@ -123,13 +138,6 @@ const CardBlockTime = styled(BlockTimeCard)`
   }
 `;
 
-/*const CardCycles = styled(CyclesCard)`
-  && {
-    background: ${props => props.theme.colorDashCardBackground};
-    color: ${props => props.theme.colorBodyText};
-  }
-`;*/
-
 const CardMessages = styled(MessagesCard)`
   && {
     background: ${props => props.theme.colorDashCardBackground};
@@ -156,32 +164,9 @@ const TableNetworkMetrics = styled(NetworkMetricsTable)`
   }
 `;
 
-// Disclaimer!!!
-const StyledPaper = styled(Paper)`
+const ChartStaked = styled(StakedChart)`
   && {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-left: 8px;
-    padding-right: 8px;
-    margin-top: ${Constants.HOME_PAGE_MARGIN_SM_AND_UP + 'px'};
-    ${({ breakpoint }) =>
-      (breakpoint === Breakpoints.XS && `
-        margin-top: ${Constants.HOME_PAGE_MARGIN_XS + 'px'};
-      `)
-    }
-    background: ${props => props.theme.colorDashCardBackground};
-    color: ${props => props.theme.colorBodyText};
-  }
-`;
-
-// Disclaimer!!!
-const TypographyTitle = styled(Typography)`
-  && {
-    background: ${props => props.theme.colorDashCardBackground};
-    color: ${props => props.theme.colorBodyText};
-    font-family: ${Constants.FONT_PRIMARY};
-    font-weight: 300;
-    font-size: 14px;
+    background: ${props => props.theme.colorDataCentersCardBackground};
   }
 `;
 
@@ -204,36 +189,10 @@ class HomePage extends TrackablePage {
   render() {
     return (
       <div>
-        {/*!!!{this.getSectionDisclaimer()}*/}
         {this.getSectionCards()}
         {this.getSectionTables()}
         {this.getSectionCharts()}
       </div>
-    );
-  }
-
-  /**
-   * Return the elements for the Disclaimer section based on the current breakpoint.
-   * @return {Object} The elements for the Disclaimer section based on the current breakpoint.
-   * @private
-   */
-  getSectionDisclaimer()
-  {
-    const { breakpoint } = this.props;
-
-    return (
-      <GridSection container
-        direction='row'
-        justify='center'
-        alignItems='flex-start'
-        breakpoint={breakpoint}
-      >
-        <StyledPaper elevation={1} breakpoint={breakpoint}>
-          <TypographyTitle>
-            {'Site Under Development'}
-          </TypographyTitle>
-        </StyledPaper>
-      </GridSection>
     );
   }
 
@@ -303,21 +262,35 @@ class HomePage extends TrackablePage {
         alignItems='flex-start'
         breakpoint={breakpoint}
       >
-        <GridTable item breakpoint={breakpoint}>
+        <DivTable breakpoint={breakpoint}>
+          <GridTable item breakpoint={breakpoint}>
+            <Fade
+              timeout={500}
+            >
+              <TableIcpMetrics breakpoint={breakpoint} />
+            </Fade>
+          </GridTable>
+          <GridTable2 item breakpoint={breakpoint}>
+            <Fade
+              delay={50}
+              timeout={500}
+            >
+              <TableNetworkMetrics breakpoint={breakpoint} />
+            </Fade>
+          </GridTable2>
+        </DivTable>
+        <GridChart item breakpoint={breakpoint}>
           <Fade
+            delay={100}
             timeout={500}
           >
-            <TableIcpMetrics breakpoint={breakpoint} />
+            <ChartStaked
+              breakpoint={breakpoint}
+              chartHeight={Constants.HOME_PAGE_STAKED_ICP_CHART_HEIGHT}
+              label={true}
+            />
           </Fade>
-        </GridTable>
-        <GridTable2 item breakpoint={breakpoint}>
-          <Fade
-            delay={50}
-            timeout={500}
-          >
-            <TableNetworkMetrics breakpoint={breakpoint} />
-          </Fade>
-        </GridTable2>
+        </GridChart>
       </GridSection>
     );
   }

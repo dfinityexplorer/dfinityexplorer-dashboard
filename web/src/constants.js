@@ -120,6 +120,7 @@ const Constants = Object.freeze({
   INFO_TABLE_ROW_HEIGHT_SM_AND_UP: 30,
   HOME_PAGE_MARGIN_XS: 8,
   HOME_PAGE_MARGIN_SM_AND_UP: 32,
+  HOME_PAGE_STAKED_ICP_CHART_HEIGHT: 290,
   // Care must be taken if these table heights are changed, to avoid a glitch that occurs with
   // certain heights where the row slide in has a 1px stutter following the animation.
   TABLE_ROW_HEIGHT_XS: 38,

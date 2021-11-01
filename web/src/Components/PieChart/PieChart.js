@@ -16,6 +16,7 @@ import {
   Cell,
   PieChart as RechartsPieChart,
   Pie,
+  Text,
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
@@ -66,18 +67,35 @@ class PieChart extends Component {
      */
     chartHeight: PropTypes.number.isRequired,
     /**
+     * Indicates whether to render labels.
+     */
+    label: PropTypes.bool,
+    /**
      * The styled-components theme.
      */
     theme: PropTypes.object.isRequired
   };
-  
+
+  /**
+   * Return a ReactElement to render for the label.
+   * @param {Object} props Label rendering props.
+   * @returns {ReactElement} Element to render for the label.
+   */
+  renderCustomizedLabel(props) {
+    return (
+      <Text {...props} alignmentBaseline='middle' className='recharts-pie-label-text'>
+        {props.name}
+      </Text>
+    );
+  }
+
   /**
    * Return a reference to a React element to render into the DOM.
    * @return {Object} A reference to a React element to render into the DOM.
    * @public
    */
   render() {
-    const { breakpoint, className, chartHeight, theme } = this.props;
+    const { breakpoint, className, chartHeight, label, theme } = this.props;
     const data = this.getData();
     const tooltipElevation = 2;
     return (
@@ -94,6 +112,7 @@ class PieChart extends Component {
               <Pie
                 data={data}
                 dataKey='value'
+                label={label ? this.renderCustomizedLabel : undefined}
               >
                 {data.map(entry => (
                   <Cell

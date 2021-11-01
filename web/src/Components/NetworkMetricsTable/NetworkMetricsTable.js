@@ -127,7 +127,7 @@ class NetworkMetricsTable extends Component {
       },
       {
         mapKey: 4,
-        cells: this.getRowCellsMetric('Internet Identity Accounts', internetIdentityAccounts)
+        cells: this.getRowCellsMetric('Internet Identity Anchors', internetIdentityAccounts)
       }
     ];
   }
