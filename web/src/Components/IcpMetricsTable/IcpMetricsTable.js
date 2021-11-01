@@ -39,11 +39,12 @@ class IcpMetricsTable extends Component {
     this.getBodyRows = this.getBodyRows.bind(this);
 
     this.state = {
-      circulatingSupply: {value: null, error: 0},
+      circulatingSupplyIcp: {value: null, error: 0},
       dilutedCap: {value: null, error: 0},
-      lockedInNeurons: {minValue: null, maxValue: null, error: 0},
+      // Obsolete, keep for now. lockedInNeurons: {minValue: null, maxValue: null, error: 0},
       marketCap: {value: null, error: 0},
-      totalSupply: {value: null, error: 0}
+      totalStakedIcp: {value: null, error: 0},
+      totalSupplyIcp: {value: null, error: 0}
     };
   }
 
@@ -123,7 +124,7 @@ class IcpMetricsTable extends Component {
       },
       {
         mapKey: 4,
-        cells: this.getRowCellsLockedInNeurons()
+        cells: this.getRowCellsTotalStaked()
       }
     ];
   }
@@ -135,7 +136,29 @@ class IcpMetricsTable extends Component {
   getNnsMetrics() {
     const url = 'https://ic-api.internetcomputer.org/api/nns/metrics';
     axios.get(url)
-      .then(res => {
+      .then(res => { 
+        const totalStakedE8s = res.data.metrics.find(element => {
+          return element.name === 'governance_total_staked_e8s'
+        });
+        const totalStakedIcp = {
+          value: parseInt(totalStakedE8s.samples[0].value) / 100000000,
+          error: 0
+        };
+        this.setState({
+          totalStakedIcp: totalStakedIcp
+        });
+      })
+      .catch(() => {
+        this.setState(({ totalStakedIcp }) => ({
+          totalStakedIcp: {
+            ...totalStakedIcp,
+            error: totalStakedIcp.error + 1
+          }
+        }))
+      });
+    /* Obsolete, keep for now.
+    axios.get(url)
+      .then(res => { 
         // Calculate ICP Locked in Neurons as a range. It is not currently possible to obtain the
         // exact value.
         const totalVotingPowerE8s = res.data.metrics.find(element => {
@@ -161,6 +184,7 @@ class IcpMetricsTable extends Component {
           }
         }))
       });
+    */
   }
 
   /**
@@ -172,35 +196,35 @@ class IcpMetricsTable extends Component {
       `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
     axios.get(url)
       .then(res => {
-        const circulatingSupply = {
+        const circulatingSupplyIcp = {
           value: parseFloat(res.data[0].circulating_supply),
           error: 0
         };
-        const _totalSupply = parseFloat(res.data[0].max_supply);
+        const _totalSupplyIcp = parseFloat(res.data[0].max_supply);
         const dilutedCap = {
-          value: _totalSupply * parseFloat(res.data[0].price),
+          value: _totalSupplyIcp * parseFloat(res.data[0].price),
           error: 0
         };
         const marketCap = {
           value: parseFloat(res.data[0].market_cap),
           error: 0
         };
-        const totalSupply = {
-          value: _totalSupply,
+        const totalSupplyIcp = {
+          value: _totalSupplyIcp,
           error: 0
         };
         this.setState({
-          circulatingSupply: circulatingSupply,
+          circulatingSupplyIcp: circulatingSupplyIcp,
           dilutedCap: dilutedCap,
           marketCap: marketCap,
-          totalSupply: totalSupply
+          totalSupplyIcp: totalSupplyIcp
         });
       })
       .catch(() => {
-        this.setState(({ circulatingSupply, dilutedCap, marketCap, totalSupply }) => ({
-          circulatingSupply: {
-            ...circulatingSupply,
-            error: circulatingSupply.error + 1
+        this.setState(({ circulatingSupplyIcp, dilutedCap, marketCap, totalSupplyIcp }) => ({
+          circulatingSupplyIcp: {
+            ...circulatingSupplyIcp,
+            error: circulatingSupplyIcp.error + 1
           },
           dilutedCap: {
             ...dilutedCap,
@@ -210,37 +234,37 @@ class IcpMetricsTable extends Component {
             ...marketCap,
             error: marketCap.error + 1
           },
-          totalSupply: {
-            ...totalSupply,
-            error: totalSupply.error + 1
+          totalSupplyIcp: {
+            ...totalSupplyIcp,
+            error: totalSupplyIcp.error + 1
           }
         }));
       });
   }
 
   /**
-   * Return the table cells for the Circulating ICP Supply row.
+   * Return the table cells for the Circulating Supply row.
    * @return {Array} the table cells for the Circulating Supply row.
    * @private
    */
   getRowCellsCirculatingSupply() {
-    const { circulatingSupply, totalSupply } = this.state;
+    const { circulatingSupplyIcp, totalSupplyIcp } = this.state;
 
     let metricText;
-    if (circulatingSupply.error >= Constants.NETWORK_ERROR_THRESHOLD
-      || totalSupply.error >= Constants.NETWORK_ERROR_THRESHOLD)
+    if (circulatingSupplyIcp.error >= Constants.NETWORK_ERROR_THRESHOLD
+      || totalSupplyIcp.error >= Constants.NETWORK_ERROR_THRESHOLD)
       metricText = 'Network error';
-    else if (circulatingSupply.value === null || totalSupply.value === null)
+    else if (circulatingSupplyIcp.value === null || totalSupplyIcp.value === null)
       metricText = 'Loading...';
     else {
-      const circulatingSupplyPercent = circulatingSupply.value / totalSupply.value * 100;                                    
+      const circulatingSupplyPercent = circulatingSupplyIcp.value / totalSupplyIcp.value * 100;
       metricText =
-        Math.round(circulatingSupply.value).toLocaleString() +
-        ' (' + circulatingSupplyPercent.toFixed(1) + '%)';
+        Math.round(circulatingSupplyIcp.value).toLocaleString() +
+        ' ICP (' + circulatingSupplyPercent.toFixed(1) + '%)';
     }
 
     return [
-      {value: 'Circulating ICP Supply', color: InfoTableTextColor.GRAY, isRightAligned: false},
+      {value: 'Circulating Supply', color: InfoTableTextColor.GRAY, isRightAligned: false},
       {value: metricText, isRightAligned: true}
     ];
   }
@@ -272,23 +296,24 @@ class IcpMetricsTable extends Component {
    * @return {Array} The table cells for the ICP Locked in Neurons row.
    * @private
    */
+  /* Obsolete, keep for now.
   getRowCellsLockedInNeurons() {
     const { breakpoint } = this.props;
-    const { lockedInNeurons, totalSupply } = this.state;
+    const { lockedInNeurons, totalSupplyIcp } = this.state;
 
     let metricText;
     if (lockedInNeurons.error >= Constants.NETWORK_ERROR_THRESHOLD
-      || totalSupply.error >= Constants.NETWORK_ERROR_THRESHOLD)
+      || totalSupplyIcp.error >= Constants.NETWORK_ERROR_THRESHOLD)
       metricText = 'Network error';
-    else if (lockedInNeurons.minValue === null || totalSupply.value === null)
+    else if (lockedInNeurons.minValue === null || totalSupplyIcp.value === null)
       metricText = 'Loading...';
     else {
       const lockedInNeuronsMinM = Math.round(lockedInNeurons.minValue / 1000000);
       const lockedInNeuronsMaxM = Math.round(lockedInNeurons.maxValue / 1000000);
       const lockedInNeuronsMinPercent =
-        Math.round(lockedInNeurons.minValue / totalSupply.value * 100);                                    
+        Math.round(lockedInNeurons.minValue / totalSupplyIcp.value * 100);                                    
       const lockedInNeuronsMaxPercent =
-        Math.round(lockedInNeurons.maxValue / totalSupply.value * 100);                                    
+        Math.round(lockedInNeurons.maxValue / totalSupplyIcp.value * 100);                                    
       metricText =
         lockedInNeuronsMinM.toLocaleString(
           undefined, {'minimumFractionDigits': 0, 'maximumFractionDigits': 0}) +
@@ -306,31 +331,58 @@ class IcpMetricsTable extends Component {
       {value: 'ICP Locked in Neurons', color: InfoTableTextColor.GRAY, isRightAligned: false},
       {value: metricText, isRightAligned: true}
     ];
-  }
+  }*/
 
   /**
-   * Return the table cells for the Total ICP Supply row.
-   * @param {String} description The description text of the metric object.
-   * @param {Object} metric The metric object.
-   * @return {Array} The table cells for the specified ICP-value row.
+   * Return the table cells for the Total Staked row.
+   * @return {Array} the table cells for the Total Staked row.
    * @private
    */
-  getRowCellsTotalSupply() {
-    const { totalSupply } = this.state;
+  getRowCellsTotalStaked() {
+    const { totalStakedIcp, totalSupplyIcp } = this.state;
 
     let metricText;
-    if (totalSupply.error >= Constants.NETWORK_ERROR_THRESHOLD)
+    if (totalStakedIcp.error >= Constants.NETWORK_ERROR_THRESHOLD
+      || totalSupplyIcp.error >= Constants.NETWORK_ERROR_THRESHOLD)
       metricText = 'Network error';
-    else if (totalSupply.value === null)
+    else if (totalStakedIcp.value === null || totalSupplyIcp.value === null)
       metricText = 'Loading...';
     else {
+      const totalStakedPercent = totalStakedIcp.value / totalSupplyIcp.value * 100;
       metricText =
-        totalSupply.value.toLocaleString(
-          undefined, {'minimumFractionDigits': 0, 'maximumFractionDigits': 0});
+        Math.round(totalStakedIcp.value).toLocaleString() +
+        ' ICP (' + totalStakedPercent.toFixed(1) + '%)';
     }
 
     return [
-      {value: 'Total ICP Supply', color: InfoTableTextColor.GRAY, isRightAligned: false},
+      {value: 'Total Staked', color: InfoTableTextColor.GRAY, isRightAligned: false},
+      {value: metricText, isRightAligned: true}
+    ];
+  }
+
+  /**
+   * Return the table cells for the Total Supply row.
+   * @param {String} description The description text of the metric object.
+   * @param {Object} metric The metric object.
+   * @return {Array} The table cells for the Total Supply row.
+   * @private
+   */
+  getRowCellsTotalSupply() {
+    const { totalSupplyIcp } = this.state;
+
+    let metricText;
+    if (totalSupplyIcp.error >= Constants.NETWORK_ERROR_THRESHOLD)
+      metricText = 'Network error';
+    else if (totalSupplyIcp.value === null)
+      metricText = 'Loading...';
+    else {
+      metricText =
+      totalSupplyIcp.value.toLocaleString(
+          undefined, {'minimumFractionDigits': 0, 'maximumFractionDigits': 0}) + ' ICP';
+    }
+
+    return [
+      {value: 'Total Supply', color: InfoTableTextColor.GRAY, isRightAligned: false},
       {value: metricText, isRightAligned: true}
     ];
   }
