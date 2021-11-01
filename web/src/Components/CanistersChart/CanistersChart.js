@@ -81,7 +81,7 @@ class CanistersChart extends AreaChart {
    */
   getTitle() {
     const { error } = this.state;
-    let title = 'Canisters';
+    let title = 'Canisters (Smart Contracts)';
     if (error)
       title += ' - Network Error'
     return title;
