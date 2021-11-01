@@ -162,10 +162,6 @@ const TransactionsPagedTable = (
             toLink = `/acct/${transaction.account2Address}`;
         }
 
-        // Disable account links until account functionality is implemented!!!
-        fromLink = undefined;
-        toLink = undefined;
-
         return {
           mapKey: transaction.hash,
           cells: [

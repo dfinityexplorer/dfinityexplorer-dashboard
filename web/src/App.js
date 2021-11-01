@@ -17,14 +17,15 @@ import {
 } from '@material-ui/core';
 import { duration, easing } from '@material-ui/core/styles/transitions';
 import { GlobalStyle, themeLight, themeDark } from './theme/globalStyle';
-import HomePage from './Components/HomePage/HomePage';
-import DataCentersPage from './Components/DataCentersPage/DataCentersPage';
-import TransactionPage from './Components/TransactionPage/TransactionPage';
-import TransactionsPage from './Components/TransactionsPage/TransactionsPage';
 import AboutPage from './Components/AboutPage/AboutPage';
-import SearchPage from './Components/SearchPage/SearchPage';
+import AccountPage from './Components/AccountPage/AccountPage';
+import DataCentersPage from './Components/DataCentersPage/DataCentersPage';
 import DEAppBar from './Components/DEAppBar/DEAppBar';
 import Footer from './Components/Footer/Footer';
+import HomePage from './Components/HomePage/HomePage';
+import SearchPage from './Components/SearchPage/SearchPage';
+import TransactionPage from './Components/TransactionPage/TransactionPage';
+import TransactionsPage from './Components/TransactionsPage/TransactionsPage';
 import Constants from './constants';
 import { getBreakpoint, isBreakpointDesktop } from './utils/breakpoint';
 import { Breakpoints } from './utils/breakpoint';
@@ -235,6 +236,15 @@ class App extends Component {
                         breakpoint={breakpoint}
                         isDesktopDrawerOpen={isDesktopDrawerOpen}
                         isThemeDark={isThemeDark}
+                      />
+                    }
+                  />
+                  <Route
+                    exact path="/acct/:address"
+                    render={(props) => 
+                      <AccountPage
+                        {...props}
+                        breakpoint={breakpoint}
                       />
                     }
                   />

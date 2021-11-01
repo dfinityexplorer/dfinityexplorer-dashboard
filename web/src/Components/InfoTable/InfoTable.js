@@ -5,6 +5,7 @@
  */
 
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -63,7 +64,7 @@ const StyledTableCell = styled(TableCell)`
         props.theme.colorBodyTextLink)};
     font-family: ${Constants.FONT_PRIMARY};
     font-size: ${Constants.MATERIAL_FONT_SIZE_BODY_2};
-    white-space: nowrap;
+    white-space: ${props => props.$wrapText ? undefined : 'nowrap'};
     ${({ breakpoint, usesmallfontforxs }) =>
       ((breakpoint === Breakpoints.XS && usesmallfontforxs) && `
         font-size: ${Constants.MATERIAL_FONT_SIZE_CAPTION};
@@ -111,6 +112,16 @@ const TableCellHeader = styled(StyledTableCell)`
   }
 `;
 
+const StyledLink = styled(Link)`
+  && {
+    color: ${props => props.theme.colorBodyTextLink};
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
 const TypographyTitle = styled(Typography)`
   && {
     color: ${props => props.theme.colorBodyText};
@@ -149,6 +160,7 @@ class InfoTable extends Component {
      *  mapKey: A unique key that identifies the row.
      *  cells: An array of objects that describe the cells of the row, where each object contains:
      *    value: String containing the value of the cell, or undefined if switch is defined.
+     *    link: Optional string which provides a link for the cell (to= prop of Link).
      *    color: Use the specified InfoTableTextColor for the text of the cell, or undefined to use
      *      the default color.
      *    isRightAligned: True to right align the table cell content.
@@ -187,7 +199,11 @@ class InfoTable extends Component {
     /**
      * The optional title of the table.
      */
-    title: PropTypes.string
+    title: PropTypes.string,
+    /**
+     * Optionally wrap the table body cell text.
+     */
+    wrapText: PropTypes.bool
   };
 
   /**
@@ -273,7 +289,7 @@ class InfoTable extends Component {
    * @private
    */
   getBodyRowElement(bodyRow, rowIndex) {
-    const { breakpoint, showRowBorders, useSmallFontForXS } = this.props;
+    const { breakpoint, showRowBorders, useSmallFontForXS, wrapText } = this.props;
     return (
       <StyledTableRow breakpoint={breakpoint} key={bodyRow.mapKey}>
         {bodyRow.cells.map((cell, index) => {
@@ -287,6 +303,7 @@ class InfoTable extends Component {
               padding='checkbox'
               size='small'
               showborders={showRowBorders ? (rowIndex ? 1 : 2) : 0}
+              $wrapText={wrapText}
             >
               {
                 typeof cell.switch !== 'undefined' ?                               
@@ -299,7 +316,9 @@ class InfoTable extends Component {
                       onChange={cell.switch.onChange}
                     />
                   </div> :
-                  cell.value
+                  cell.link ?
+                    <StyledLink to={cell.link}>{cell.value}</StyledLink> :
+                    cell.value
               }
             </StyledTableCell>
           );
