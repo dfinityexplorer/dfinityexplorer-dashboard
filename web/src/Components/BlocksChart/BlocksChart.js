@@ -9,7 +9,6 @@ import { withTheme } from 'styled-components';
 import axios from 'axios';
 import BarChart from '../BarChart/BarChart';
 import Constants from '../../constants';
-// 2weeks!!!import roundDownDateToDay from '../../utils/roundDownDateToDay';
 
 /**
  * This component displays a number of blocks chart with data retrieved from
@@ -40,7 +39,6 @@ class BlocksChart extends BarChart {
 
     this.state = {
       blocksData: [],
-      prevDate: null,
       error: false
     };
   }
@@ -66,45 +64,6 @@ class BlocksChart extends BarChart {
     this.interval = null;
   }
   
-  /**
-   * Invoked by React immediately after a component is mounted (inserted into the tree). 
-   * @public
-   */
-  /*2weeks!!!componentDidMount() {
-    // Get a two weeks of daily data. Note that there is currently a bug in
-    // dashboard.dfinity.network where the last entry returned for this query is one day ago, not
-    // now.
-    const endDate = roundDownDateToDay(new Date());
-    const startDate = new Date(endDate.getTime());
-    startDate.setDate(endDate.getDate() - 15);
-    const secondsInDay = 24 * 60 * 60;
-    const url =
-      //New API!!!`https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}&ic=${Constants.IC_RELEASE}`;
-      `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D%22${Constants.IC_RELEASE}%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
-      //NO IC_RELEASE: `https://dashboard.dfinity.network/api/datasources/proxy/2/api/v1/query_range?query=sum%20(avg%20by%20(ic_subnet)%20(artifact_pool_consensus_height_stat%7Bic%3D~%22.%2B%22%2Cic_subnet%3D~%22.%2B%22%7D))&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
-    axios.get(url)
-      .then(res => {
-        let values = res.data.data.result[0].values; // new API: res.data.block!!!
-        // Use values[0] to get the starting block height.
-        let prevHeight = Math.floor(values[0][1]);
-        const blocksData = values.slice(1).map((value) => {
-          const date = new Date(value[0] * 1000);
-          const height = Math.floor(value[1]);
-          const numBlocks = Math.max(height - prevHeight, 0);
-          prevHeight = height;
-          return {date: date.getTime(), numBlocks: numBlocks};
-        });
-        this.setState({
-          blocksData: blocksData
-        });
-      })
-      .catch(() => {
-        this.setState({
-          error: true
-        });
-      });
-  }*/
-
   /**
    * Return the title of the chart.
    * @return {String} The title of the chart.
@@ -153,7 +112,6 @@ class BlocksChart extends BarChart {
    * @protected
    */
   getGetTickX(value) {
-    //2weeks!!!return new Date(value).toLocaleDateString('default', { timeZone: 'UTC' });
     return new Date(value).toLocaleTimeString();
   }
 
@@ -179,7 +137,6 @@ class BlocksChart extends BarChart {
    * @protected
    */
   getGetTooltipX(value) {
-    //2weeks!!!return new Date(value).toLocaleString('default', { timeZone: 'UTC' });
     return new Date(value).toLocaleTimeString();
   }
 
@@ -216,6 +173,7 @@ class BlocksChart extends BarChart {
     axios.get(url)
       .then(res => {
         let values = res.data.block;
+        values.pop(); // Workaround: Throw away last value, always higher than it should be.
         // Use values[0] to get the starting block height.
         let prevHeight = Math.floor(values[0][1]);
         const blocksData = values.slice(1).map((value) => {
@@ -227,7 +185,6 @@ class BlocksChart extends BarChart {
         });
         this.setState({
           blocksData: blocksData,
-          prevDate: endDate,
           error: false
         });
       })
@@ -242,31 +199,26 @@ class BlocksChart extends BarChart {
    * Poll for more blocks.
    * @private
    */
-  pollForMoreBlocks() {
-    const { prevDate } = this.state;
-    let endDate = new Date();
-    endDate = new Date(endDate.getTime() - 1 * 60000); // 1 minute ago to avoid API time discrepancy
-    const startDate = prevDate;
+  async pollForMoreBlocks() {
+    // Get data from 1 minute ago to avoid API time discrepancy.
+    const startDate = new Date((new Date()).getTime() - 61 * 1000);
+    const endDate = new Date((new Date()).getTime() - 60 * 1000);
     const seconds = 1;
     const url =
       `https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
-    // The startDate/endDate interval and resulting bar can be a minute or longer when window is out of focus!!!
-    // Chart time labels are correct, but this is still a problem!!! 
-    // Could we possibly chop the long interval bar into interval-second chunks?!!!
-    axios.get(url)
+    await axios.get(url)
       .then(res => {
         const values = res.data.block;
-        if (values.length >= 0) {
-          const prevHeight = Math.floor(values[0][1]);
+        if (values.length >= 2) {
+          const prevHeight = Math.floor(values[values.length - 2][1]);
           const curHeight = Math.floor(values[values.length - 1][1]);
           const date = new Date(values[values.length - 1][0] * 1000);
           const numBlocks = Math.max(curHeight - prevHeight, 0);
           const blocks = {date: date.getTime(), numBlocks: numBlocks};
           this.setState(prevState => ({
             blocksData: prevState.blocksData.slice(1).concat(blocks),
-            prevDate: endDate,
             error: false
-          }));  
+          }));
         }
       })
       .catch(() => {
