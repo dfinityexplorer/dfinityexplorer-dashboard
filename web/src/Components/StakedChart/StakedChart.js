@@ -41,7 +41,6 @@ class StakedChart extends PieChart {
     super(props);
 
     this.state = {
-      dissolvedNeuronsIcp: null,
       dissolvingNeuronsIcp: null,
       error: 0,
       notDissolvingNeuronsIcp: null
@@ -79,12 +78,10 @@ class StakedChart extends PieChart {
    * @protected
    */
   getData() {
-    const { dissolvedNeuronsIcp, dissolvingNeuronsIcp, notDissolvingNeuronsIcp } = this.state;
+    const { dissolvingNeuronsIcp, notDissolvingNeuronsIcp } = this.state;
     const { theme } = this.props;
 
-    if (dissolvedNeuronsIcp !== null && dissolvingNeuronsIcp !== null
-      && notDissolvingNeuronsIcp !== null) {
-
+    if (dissolvingNeuronsIcp !== null && notDissolvingNeuronsIcp !== null) {
       const data = [{
           fill: theme.colorPieChart[2],
           mapKey: 0,
@@ -95,11 +92,6 @@ class StakedChart extends PieChart {
           mapKey: 1,
           name: 'Dissolving',
           value: Math.round(dissolvingNeuronsIcp)
-        }, {
-          fill: theme.colorPieChart[4],
-          mapKey: 2,
-          name: 'Dissolved',
-          value: Math.round(dissolvedNeuronsIcp)
         }
       ];
 
@@ -117,12 +109,6 @@ class StakedChart extends PieChart {
     const url = 'https://ic-api.internetcomputer.org/api/nns/metrics';
     axios.get(url)
       .then(res => { 
-        // Dissolved Neurons ICP
-        const dissolvedNeuronsE8s = res.data.metrics.find(element => {
-          return element.name === 'governance_dissolved_neurons_e8s'
-        });
-        const dissolvedNeuronsIcp = parseInt(dissolvedNeuronsE8s.samples[0].value) / 100000000;
-
         // Dissolving Neurons ICP
         const dissolvingNeuronsE8s = res.data.metrics.find(element => {
           return element.name === 'governance_dissolving_neurons_e8s_count'
@@ -138,7 +124,6 @@ class StakedChart extends PieChart {
 
         this.setState({
           error: 0,
-          dissolvedNeuronsIcp: dissolvedNeuronsIcp,
           dissolvingNeuronsIcp: dissolvingNeuronsIcp,
           notDissolvingNeuronsIcp: notDissolvingNeuronsIcp,
         });

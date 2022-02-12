@@ -134,12 +134,22 @@ class IcpMetricsTable extends Component {
   getNnsMetrics() {
     const url = 'https://ic-api.internetcomputer.org/api/nns/metrics';
     axios.get(url)
-      .then(res => { 
-        const totalStakedE8s = res.data.metrics.find(element => {
-          return element.name === 'governance_total_staked_e8s'
+      .then(res => {
+        // Dissolving Neurons ICP
+        const dissolvingNeuronsE8s = res.data.metrics.find(element => {
+          return element.name === 'governance_dissolving_neurons_e8s_count'
         });
+        const dissolvingNeuronsIcp = parseInt(dissolvingNeuronsE8s.samples[0].value) / 100000000;
+
+        // Not Dissolving Neurons ICP
+        const notDissolvingNeuronsE8s = res.data.metrics.find(element => {
+          return element.name === 'governance_not_dissolving_neurons_e8s_count'
+        });
+        const notDissolvingNeuronsIcp =
+          parseInt(notDissolvingNeuronsE8s.samples[0].value) / 100000000;
+
         const totalStakedIcp = {
-          value: parseInt(totalStakedE8s.samples[0].value) / 100000000,
+          value: dissolvingNeuronsIcp + notDissolvingNeuronsIcp,
           error: 0
         };
         this.setState({
@@ -254,12 +264,8 @@ class IcpMetricsTable extends Component {
       metricText = 'Network error';
     else if (circulatingSupplyIcp.value === null || totalSupplyIcp.value === null)
       metricText = 'Loading...';
-    else {
-      const circulatingSupplyPercent = circulatingSupplyIcp.value / totalSupplyIcp.value * 100;
-      metricText =
-        Math.round(circulatingSupplyIcp.value).toLocaleString() +
-        ' ICP (' + circulatingSupplyPercent.toFixed(1) + '%)';
-    }
+    else
+      metricText = Math.round(circulatingSupplyIcp.value).toLocaleString() + ' ICP';
 
     return [
       {value: 'Circulating Supply', color: InfoTableTextColor.GRAY, isRightAligned: false},
