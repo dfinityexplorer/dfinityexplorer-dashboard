@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/static/js/main.cf7248b4.chunk.js",
-    "main.js.map": "/static/js/main.cf7248b4.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.bdde1970.js",
-    "runtime-main.js.map": "/static/js/runtime-main.bdde1970.js.map",
-    "static/js/2.4f6bafc6.chunk.js": "/static/js/2.4f6bafc6.chunk.js",
-    "static/js/2.4f6bafc6.chunk.js.map": "/static/js/2.4f6bafc6.chunk.js.map",
+    "main.js": "/static/js/main.fecff928.chunk.js",
+    "main.js.map": "/static/js/main.fecff928.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.183ea88b.js",
+    "runtime-main.js.map": "/static/js/runtime-main.183ea88b.js.map",
+    "static/js/2.46f92ee2.chunk.js": "/static/js/2.46f92ee2.chunk.js",
+    "static/js/2.46f92ee2.chunk.js.map": "/static/js/2.46f92ee2.chunk.js.map",
     "index.html": "/index.html",
-    "static/js/2.4f6bafc6.chunk.js.LICENSE.txt": "/static/js/2.4f6bafc6.chunk.js.LICENSE.txt",
-    "static/js/main.cf7248b4.chunk.js.LICENSE.txt": "/static/js/main.cf7248b4.chunk.js.LICENSE.txt",
+    "static/js/2.46f92ee2.chunk.js.LICENSE.txt": "/static/js/2.46f92ee2.chunk.js.LICENSE.txt",
+    "static/js/main.fecff928.chunk.js.LICENSE.txt": "/static/js/main.fecff928.chunk.js.LICENSE.txt",
     "static/media/banner-x-horizon.9056e3df.png": "/static/media/banner-x-horizon.9056e3df.png",
     "static/media/dfinity-earth-day.6ac0770c.jpg": "/static/media/dfinity-earth-day.6ac0770c.jpg",
     "static/media/dfinity-earth-night.37b200bd.jpg": "/static/media/dfinity-earth-night.37b200bd.jpg",
@@ -26,8 +26,8 @@
     "static/media/styled-components-logo-light-mode.44706a78.png": "/static/media/styled-components-logo-light-mode.44706a78.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.bdde1970.js",
-    "static/js/2.4f6bafc6.chunk.js",
-    "static/js/main.cf7248b4.chunk.js"
+    "static/js/runtime-main.183ea88b.js",
+    "static/js/2.46f92ee2.chunk.js",
+    "static/js/main.fecff928.chunk.js"
   ]
 }
