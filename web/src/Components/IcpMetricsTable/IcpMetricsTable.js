@@ -39,7 +39,6 @@ class IcpMetricsTable extends Component {
     this.state = {
       circulatingSupplyIcp: {value: null, error: 0},
       dilutedCap: {value: null, error: 0},
-      // Obsolete, keep for now. lockedInNeurons: {minValue: null, maxValue: null, error: 0},
       marketCap: {value: null, error: 0},
       totalStakedIcp: {value: null, error: 0},
       totalSupplyIcp: {value: null, error: 0}
@@ -50,15 +49,19 @@ class IcpMetricsTable extends Component {
    * Invoked by React immediately after a component is mounted (inserted into the tree). 
    * @public
    */
-  componentDidMount() {  
+  componentDidMount() {
+    this.getCirculatingSupply();
     this.getNomicsMetrics(); 
     this.getNnsMetrics();
+    this.getTotalSupply();
 
     // Poll for new data using intervals.
     this.interval = setInterval(
       () => {
+        this.getCirculatingSupply();
         this.getNomicsMetrics(); 
         this.getNnsMetrics();
+        this.getTotalSupply();
       },
       Constants.ICP_METRICS_INTERVAL_MS);
   }
@@ -128,6 +131,32 @@ class IcpMetricsTable extends Component {
   }
 
   /**
+   * Get the circulating supply.
+   * @private
+   */
+  getCirculatingSupply() {
+    const url = 'https://ledger-api.internetcomputer.org/supply/circulating/latest';
+    axios.get(url)
+      .then(res => {
+        const circulatingSupplyIcp = {
+          value: parseInt(res.data[1]) / 100000000,
+          error: 0
+        };
+        this.setState({
+          circulatingSupplyIcp: circulatingSupplyIcp
+        });
+      })
+      .catch(() => {
+        this.setState(({ circulatingSupplyIcp }) => ({
+          circulatingSupplyIcp: {
+            ...circulatingSupplyIcp,
+            error: circulatingSupplyIcp.error + 1
+          }
+        }))
+      });
+  }
+
+  /**
    * Get the metrics that come from the NNS.
    * @private
    */
@@ -164,35 +193,6 @@ class IcpMetricsTable extends Component {
           }
         }))
       });
-    /* Obsolete, keep for now.
-    axios.get(url)
-      .then(res => { 
-        // Calculate ICP Locked in Neurons as a range. It is not currently possible to obtain the
-        // exact value.
-        const totalVotingPowerE8s = res.data.metrics.find(element => {
-          return element.name === 'governance_voting_power_total'
-        });
-        const totalVotingPower = parseInt(totalVotingPowerE8s.samples[0].value) / 100000000;
-        const maxAgeBonus = getMaxAgeBonus();
-        const maxDissolveDelayBonus = 2;
-        const lockedInNeurons = {
-          minValue: totalVotingPower / (maxAgeBonus * maxDissolveDelayBonus),
-          maxValue: totalVotingPower,
-          error: 0
-        };
-        this.setState({
-          lockedInNeurons: lockedInNeurons
-        });
-      })
-      .catch(() => {
-        this.setState(({ lockedInNeurons }) => ({
-          lockedInNeurons: {
-            ...lockedInNeurons,
-            error: lockedInNeurons.error + 1
-          }
-        }))
-      });
-    */
   }
 
   /**
@@ -204,10 +204,6 @@ class IcpMetricsTable extends Component {
       `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
     axios.get(url)
       .then(res => {
-        const circulatingSupplyIcp = {
-          value: parseFloat(res.data[0].circulating_supply),
-          error: 0
-        };
         const _totalSupplyIcp = parseFloat(res.data[0].max_supply);
         const dilutedCap = {
           value: _totalSupplyIcp * parseFloat(res.data[0].price),
@@ -217,23 +213,13 @@ class IcpMetricsTable extends Component {
           value: parseFloat(res.data[0].market_cap),
           error: 0
         };
-        const totalSupplyIcp = {
-          value: _totalSupplyIcp,
-          error: 0
-        };
         this.setState({
-          circulatingSupplyIcp: circulatingSupplyIcp,
           dilutedCap: dilutedCap,
-          marketCap: marketCap,
-          totalSupplyIcp: totalSupplyIcp
+          marketCap: marketCap
         });
       })
       .catch(() => {
-        this.setState(({ circulatingSupplyIcp, dilutedCap, marketCap, totalSupplyIcp }) => ({
-          circulatingSupplyIcp: {
-            ...circulatingSupplyIcp,
-            error: circulatingSupplyIcp.error + 1
-          },
+        this.setState(({ dilutedCap, marketCap }) => ({
           dilutedCap: {
             ...dilutedCap,
             error: dilutedCap.error + 1
@@ -241,12 +227,34 @@ class IcpMetricsTable extends Component {
           marketCap: {
             ...marketCap,
             error: marketCap.error + 1
-          },
+          }
+        }));
+      });
+  }
+
+  /**
+   * Get the total supply.
+   * @private
+   */
+  getTotalSupply() {
+    const url = 'https://ledger-api.internetcomputer.org/supply/total/latest';
+    axios.get(url)
+      .then(res => {
+        const totalSupplyIcp = {
+          value: parseInt(res.data.[1]) / 100000000,
+          error: 0
+        };
+        this.setState({
+          totalSupplyIcp: totalSupplyIcp
+        });
+      })
+      .catch(() => {
+        this.setState(({ totalSupplyIcp }) => ({
           totalSupplyIcp: {
             ...totalSupplyIcp,
             error: totalSupplyIcp.error + 1
           }
-        }));
+        }))
       });
   }
 
@@ -294,48 +302,6 @@ class IcpMetricsTable extends Component {
       {value: metricText, isRightAligned: true}
     ];
   }
-
-  /**
-   * Return the table cells for the ICP Locked in Neurons row.
-   * @return {Array} The table cells for the ICP Locked in Neurons row.
-   * @private
-   */
-  /* Obsolete, keep for now.
-  getRowCellsLockedInNeurons() {
-    const { breakpoint } = this.props;
-    const { lockedInNeurons, totalSupplyIcp } = this.state;
-
-    let metricText;
-    if (lockedInNeurons.error >= Constants.NETWORK_ERROR_THRESHOLD
-      || totalSupplyIcp.error >= Constants.NETWORK_ERROR_THRESHOLD)
-      metricText = 'Network error';
-    else if (lockedInNeurons.minValue === null || totalSupplyIcp.value === null)
-      metricText = 'Loading...';
-    else {
-      const lockedInNeuronsMinM = Math.round(lockedInNeurons.minValue / 1000000);
-      const lockedInNeuronsMaxM = Math.round(lockedInNeurons.maxValue / 1000000);
-      const lockedInNeuronsMinPercent =
-        Math.round(lockedInNeurons.minValue / totalSupplyIcp.value * 100);                                    
-      const lockedInNeuronsMaxPercent =
-        Math.round(lockedInNeurons.maxValue / totalSupplyIcp.value * 100);                                    
-      metricText =
-        lockedInNeuronsMinM.toLocaleString(
-          undefined, {'minimumFractionDigits': 0, 'maximumFractionDigits': 0}) +
-        (breakpoint === Breakpoints.XS ? 'M-' : 'M - ') +
-        lockedInNeuronsMaxM.toLocaleString(
-          undefined, {'minimumFractionDigits': 0, 'maximumFractionDigits': 0}) +
-        'M (' +
-        lockedInNeuronsMinPercent.toLocaleString() +
-        (breakpoint === Breakpoints.XS ? '%-' : '% - ') +
-        lockedInNeuronsMaxPercent.toLocaleString() +
-        '%)';
-    }
-
-    return [
-      {value: 'ICP Locked in Neurons', color: InfoTableTextColor.GRAY, isRightAligned: false},
-      {value: metricText, isRightAligned: true}
-    ];
-  }*/
 
   /**
    * Return the table cells for the Total Staked row.
