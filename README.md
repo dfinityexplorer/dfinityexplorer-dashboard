@@ -1,8 +1,8 @@
-# DFINITY Explorer
+# ICP Explorer
 [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/dfinityexplorer/dfinityexplorer-dashboard/blob/main/LICENSE)
-[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/dfinityexplorer)
+[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/icpexplorer)
 
-[DFINITY Explorer](https://www.dfinityexplorer.org/) DFINITY Explorer is an open-source network dashboard built by the DFINITY community.
+[ICP Explorer](https://www.icpexplorer.org/) is an open-source network dashboard built by the Internet Computer community.
 
 ## Open-Source Libraries Used
 * D3
@@ -25,7 +25,7 @@
 * throttle-debounce
 
 # APIs Used
-* DFINITY
+* Internet Computer Association
 * Nomics
 
 ## Code of Conduct
@@ -34,4 +34,4 @@ Please note that this project is released with a [Contributor Code of Conduct](h
 
 ## Copyright and License
 
-Copyright 2018-2021 the [dfinityexplorer contributors](https://github.com/dfinityexplorer/dfinityexplorer-dashboard/graphs/contributors). Code released under the [MIT License](https://github.com/dfinityexplorer/dfinityexplorer-dashboard/blob/main/LICENSE).
+Copyright 2018-2022 the [icpexplorer contributors](https://github.com/dfinityexplorer/dfinityexplorer-dashboard/graphs/contributors). Code released under the [MIT License](https://github.com/dfinityexplorer/dfinityexplorer-dashboard/blob/main/LICENSE).
