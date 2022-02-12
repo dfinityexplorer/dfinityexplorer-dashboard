@@ -1,6 +1,6 @@
 /**
  * @file StakedChart
- * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 

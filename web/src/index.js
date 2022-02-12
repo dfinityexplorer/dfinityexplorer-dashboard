@@ -1,6 +1,6 @@
 /**
  * @file index
- * @copyright Copyright (c) 2018-2021 Dylan Miller, Todd Kitchens, and dfinityexplorer contributors
+ * @copyright Copyright (c) 2018-2022 Dylan Miller, Todd Kitchens, and icpexplorer contributors
  * @license MIT License
  */
 

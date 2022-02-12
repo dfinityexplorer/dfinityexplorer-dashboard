@@ -1,6 +1,6 @@
 /**
  * @file AboutPage
- * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -24,7 +24,7 @@ import ImageLinkGrid from '../ImageLinkGrid/ImageLinkGrid';
 import { Breakpoints } from '../../utils/breakpoint';
 import Constants from '../../constants';
 import bannerXHorizon from './banner-x-horizon.png';
-import dfinityExplorerLogo from './dfinity-explorer-logo-large.png';
+import icpExplorerLogo from './dfinity-explorer-logo-large.png';
 import dfinityLogoDark from './dfinity-logo-dark-mode.png';
 import dfinityLogoLight from './dfinity-logo-light-mode.png';
 import githubOctocat from './github-octocat.png';
@@ -368,7 +368,7 @@ class AboutPage extends TrackablePage {
               {' once had a goal of building their foundation into a “NASA for decentralization”. '}
               {'There have in fact been '}
               <StyledA href={Constants.URI_NASA_EXPLORER} target='_blank' rel='noopener noreferrer'>89 NASA “Explorer” missions</StyledA>
-              {' since 1958, carrying a wide variety of scientific investigations. We want DFINITY '}
+              {' since 1958, carrying a wide variety of scientific investigations. We want ICP '}
               {'Explorer to be the perfect vehicle to explore the Internet Computer universe.'}
               &nbsp;&nbsp;🚀
             </TypographyBody>
@@ -396,7 +396,7 @@ class AboutPage extends TrackablePage {
             </TypographyHeading>
             <br />
             <TypographyBody>
-              {'DFINITY Explorer is an open-source project under the '}
+              {'ICP Explorer is an open-source project under the '}
               <StyledA href={Constants.URI_GITHUB_MIT_LICENSE} target='_blank' rel='noopener noreferrer'>MIT license</StyledA>
               {', providing transparency, reliability, and security.'}
             </TypographyBody>
@@ -412,7 +412,7 @@ class AboutPage extends TrackablePage {
           <Grid container direction='row' justify='center' alignItems='center'>
             <Flip right timeout={800}>
               <ImgSection
-                src={dfinityExplorerLogo}
+                src={icpExplorerLogo}
                 alt='logo'>
               </ImgSection>
             </Flip>
@@ -440,7 +440,7 @@ class AboutPage extends TrackablePage {
             <PaperTwitter elevation={2} breakpoint={breakpoint}>
               <TwitterTimelineEmbed
                 sourceType='profile'
-                screenName='dfinityexplorer'
+                screenName='icpexplorer'
                 theme={theme}
                 options={{height: 432}}
                 // Setting key here is a bit of a hack. Since TwitterTimelineEmbed only uses the theme
@@ -463,7 +463,7 @@ class AboutPage extends TrackablePage {
             <br />
             <TypographyBody>
               {'Follow '}
-              <StyledA href={Constants.URI_TWITTER_DFINITY_EXPLORER} target='_blank' rel='noopener noreferrer'>@dfinityexplorer</StyledA>
+              <StyledA href={Constants.URI_TWITTER_ICP_EXPLORER} target='_blank' rel='noopener noreferrer'>@icpexplorer</StyledA>
               {' on Twitter to learn about the latest Internet Computer-related news, videos, and events.'}
             </TypographyBody>
             <br />
@@ -501,7 +501,7 @@ class AboutPage extends TrackablePage {
             </TypographyHeading>
             <br />
             <TypographyBody>
-              {'DFINITY Explorer is a cooperative effort, made with '}
+              {'ICP Explorer is a cooperative effort, made with '}
               <SpanHeart>♥</SpanHeart>
               {' by '}
               <StyledA href={Constants.URI_GITHUB_DYLAN} target='_blank' rel='noopener noreferrer'>@dylancm4</StyledA>

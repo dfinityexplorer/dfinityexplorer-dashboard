@@ -1,6 +1,6 @@
 /**
  * @file Footer
- * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -212,7 +212,7 @@ class Footer extends ResponsiveComponent {
           <AwesomeIconButtonGrid item breakpoint={breakpoint}>
             <AwesomeIconButton
               color='inherit'
-              href={Constants.URI_TWITTER_DFINITY_EXPLORER}
+              href={Constants.URI_TWITTER_ICP_EXPLORER}
               target='_blank'
               rel='noopener noreferrer'
             >

@@ -1,8 +1,8 @@
 {
-  "name": "dfinityexplorer",
+  "name": "icpexplorer",
   "version": "0.0.2",
   "private": true,
-  "homepage": "https://www.dfinityexplorer.org",
+  "homepage": "https://www.icpexplorer.org",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",

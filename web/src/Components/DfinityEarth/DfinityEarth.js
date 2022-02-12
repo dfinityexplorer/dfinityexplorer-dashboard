@@ -1,6 +1,6 @@
 /**
  * @file DfinityEarth
- * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -29,7 +29,7 @@ class DfinityEarthWithSize extends Component {
     breakpoint: PropTypes.number.isRequired,
     /**
      * True if the desktop drawer (large screens) is open. Optional, applies only to
-     * dfinityexplorer.org.
+     * icpexplorer.org.
      */    
     isDesktopDrawerOpen: PropTypes.bool,
     /**
@@ -101,7 +101,7 @@ class DfinityEarth extends Component {
     height: PropTypes.number.isRequired,
     /**
      * True if the desktop drawer (large screens) is open. Optional, applies only to
-     * dfinityexplorer.org.
+     * icpexplorer.org.
      */    
     isDesktopDrawerOpen: PropTypes.bool,
     /**

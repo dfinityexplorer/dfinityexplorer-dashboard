@@ -1,6 +1,6 @@
 /**
  * @file constants
- * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -20,7 +20,7 @@ const Constants = Object.freeze({
   URI_GITHUB_DYLAN: 'https://github.com/dylancm4',
   URI_GITHUB_MIT_LICENSE: 'https://github.com/dfinityexplorer/dfinityexplorer/blob/master/LICENSE',
   URI_NASA_EXPLORER: 'https://nssdc.gsfc.nasa.gov/multi/explorer.html',
-  URI_TWITTER_DFINITY_EXPLORER: 'https://twitter.com/dfinityexplorer',
+  URI_TWITTER_ICP_EXPLORER: 'https://twitter.com/icpexplorer',
   // Remove colors that are not used!!!
   COLOR_DFINITY_BLACK: 'rgb(41, 42, 46)', // from dfinity.org/press
   COLOR_DFINITY_BLACK_LIGHTER: 'rgb(73, 75, 82)', //  COLOR_DFINITY_BLACK scaled lighter

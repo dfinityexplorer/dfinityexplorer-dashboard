@@ -1,6 +1,6 @@
 /**
  * @file App
- * @copyright Copyright (c) 2018-2021 Dylan Miller, Todd Kitchens, an dfinityexplorer contributors
+ * @copyright Copyright (c) 2018-2022 Dylan Miller, Todd Kitchens, an icpexplorer contributors
  * @license MIT License
  */
 
@@ -32,7 +32,7 @@ import { Breakpoints } from './utils/breakpoint';
 
 // Initialize the react-ga library. We do not need user consent to be GDPR compliant. According to
 // Google: "When using Google Analytics Advertising Features, you must also comply with the European
-// Union User Consent Policy." Advertising Features are not enabled for DFINITY Explorer. Under the
+// Union User Consent Policy." Advertising Features are not enabled for ICP Explorer. Under the
 // GDPR, an IP address is considered Personally Identifiable Information (PII), so we anonymize the
 // IP addresses sent to Google Analytics.
 ReactGA.initialize(Constants.GOOGLE_ANALYTICS_TRACKING_ID);

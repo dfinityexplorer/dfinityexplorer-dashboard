@@ -1,6 +1,6 @@
 /**
  * @file MessagesChart
- * @copyright Copyright (c) 2018-2021 Dylan Miller and dfinityexplorer contributors
+ * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -72,7 +72,7 @@ class MessagesChart extends BarChart {
    */
   componentDidMount() {
     // Get 24 hours of hourly data. Daily data does not currently work, because
-    // dashboard.dfinity.network returns glitchy data for some days within past week.
+    // ic-api.internetcomputer.org returns glitchy data for some days within past week.
     const endDate = roundDownDateToHour(new Date());
     const startDate = new Date(endDate.getTime());
     startDate.setDate(endDate.getDate() - 1);
