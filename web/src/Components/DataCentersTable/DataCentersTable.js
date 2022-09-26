@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import InfoTable, { InfoTableTextColor } from '../InfoTable/InfoTable';
@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a table with data centers info retrieved from
- * dashboard.internetcomputer.org/api.
+ * ic-api.internetcomputer.org/api.
  */
 class DataCentersTable extends Component {
   static propTypes = {
@@ -161,7 +161,7 @@ class DataCentersTable extends Component {
    * @private
    */
   getMemoryTotal() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-memory-total`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/ic-memory-total';
     axios.get(url)
       .then(res => {
         if (res.data.ic_memory_total.length === 1 && res.data.ic_memory_total[0].length === 2) {
@@ -189,12 +189,13 @@ class DataCentersTable extends Component {
    * @private
    */
   getNumberOfBoundaryNodes() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/boundary-nodes-count`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/boundary-nodes-count';
     axios.get(url)
       .then(res => {
-        if (res.data.boundary_nodes_count.length === 2) {
+        if (res.data.boundary_nodes_count.length === 1 &&
+          res.data.boundary_nodes_count[0].length === 2) {
           const numberOfBoundaryNodes = {
-            count: parseInt(res.data.boundary_nodes_count[1]),
+            count: parseInt(res.data.boundary_nodes_count[0][1]),
             error: 0
           };
           this.setState({
@@ -217,7 +218,7 @@ class DataCentersTable extends Component {
    * @private
    */
   getNumberOfCpuCores() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-cpu-cores`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/ic-cpu-cores';
     axios.get(url)
       .then(res => {
         if (res.data.ic_cpu_cores.length === 1 && res.data.ic_cpu_cores[0].length === 2) {
@@ -245,13 +246,13 @@ class DataCentersTable extends Component {
    * @private
    */
   getNumberOfDataCenters() {
-    const url = `https://ic-api.internetcomputer.org/api/locations`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/data-centers';
     axios.get(url)
       .then(res => {
         // Create an array of data center locations.
-        let locations = res.data.map((value) => {
+        let locations = res.data.data_centers.map((value) => {
           return {
-            numNodes: parseInt(value.total_nodes)
+            numNodes: value.total_nodes
           };
         });
 
@@ -283,12 +284,12 @@ class DataCentersTable extends Component {
    * @private
    */
   getNumberOfNodes() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-nodes-count`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/ic-nodes-count';
     axios.get(url)
       .then(res => {
-        if (res.data.ic_nodes_count.length === 1 && res.data.ic_nodes_count[0].length === 2) {
+        if (res.data.total_nodes.length === 1 && res.data.total_nodes[0].length === 2) {
           const numberOfNodes = {
-            count: parseInt(res.data.ic_nodes_count[0][1]),
+            count: parseInt(res.data.total_nodes[0][1]),
             error: 0
           };
           this.setState({
@@ -311,18 +312,16 @@ class DataCentersTable extends Component {
    * @private
    */
    getNumberOfNodeProviders() {
-    const url = `https://ic-api.internetcomputer.org/api/node-providers/count`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/node-providers-count';
     axios.get(url)
       .then(res => {
-        if (res.data.node_providers.length === 1) {
-          const numberOfNodeProviders = {
-            count: parseInt(res.data.node_providers[0].node_providers),
-            error: 0
-          };
-          this.setState({
-            numberOfNodeProviders: numberOfNodeProviders
-          });
-        }
+        const numberOfNodeProviders = {
+          count: parseInt(res.data.count),
+          error: 0
+        };
+        this.setState({
+          numberOfNodeProviders: numberOfNodeProviders
+        });
       })
       .catch(() => {
         this.setState(({ numberOfNodeProviders }) => ({
@@ -339,12 +338,12 @@ class DataCentersTable extends Component {
    * @private
    */
   getNumberOfSubnets() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-subnet-total`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/ic-subnet-total';
     axios.get(url)
       .then(res => {
-        if (res.data.ic_subnet_total.length === 2) {
+        if (res.data.ic_subnet_total.length === 1 && res.data.ic_subnet_total[0].length === 2) {
           const numberOfSubnets = {
-            count: parseInt(res.data.ic_subnet_total[1]),
+            count: parseInt(res.data.ic_subnet_total[0][1]),
             error: 0
           };
           this.setState({

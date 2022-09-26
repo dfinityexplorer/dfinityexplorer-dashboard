@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with the current number of subnets retrieved from
- * dashboard.internetcomputer.org/api.
+ * ic-api.internetcomputer.org/api.
  */
  class SubnetsCard extends Component {
   static propTypes = {
@@ -81,12 +81,12 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfSubnets() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-subnet-total`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/ic-subnet-total';
     axios.get(url)
       .then(res => {
-        if (res.data.ic_subnet_total.length === 2) {
+        if (res.data.ic_subnet_total.length === 1 && res.data.ic_subnet_total[0].length === 2) {
           let { numberOfSubnets } = this.state;
-          const newNumberOfSubnets = parseInt(res.data.ic_subnet_total[1]);
+          const newNumberOfSubnets = parseInt(res.data.ic_subnet_total[0][1]);
           if (newNumberOfSubnets > numberOfSubnets) {
             this.setState({
               numberOfSubnets: newNumberOfSubnets,

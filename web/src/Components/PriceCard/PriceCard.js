@@ -130,20 +130,6 @@ class PriceCard extends Component {
         }));
       });
   }
-
-  /**
-   * Return a string for the date in RFC 3339 (URI escaped) format.
-   * @param {Object} date The date to create the string for.
-   * @return {String} A string for the date in RFC 3339 (URI escaped) format.
-   * @private
-   */
-  dateToRfc3339(date) { // Duplicated function, move to utils!!!
-    // Use toISOString(), removing the fraction of seconds (i.e, after decimal point).
-    const isoNoFraction = date.toISOString().split('.')[0] + 'Z'
-
-    // Escape all ':' characters.
-    return isoNoFraction.replace(/:/g, '%3A');
-  }
 }
 
 export default PriceCard;

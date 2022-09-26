@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with the current number of CPU cores retrieved from
- * dashboard.internetcomputer.org/api.
+ * ic-api.internetcomputer.org/api.
  */
  class CpuCoresCard extends Component {
   static propTypes = {
@@ -81,7 +81,7 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfCpuCores() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-cpu-cores`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/ic-cpu-cores';
     axios.get(url)
       .then(res => {
         if (res.data.ic_cpu_cores.length === 2) {

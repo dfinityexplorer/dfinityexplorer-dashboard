@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import DashCard from '../DashCard/DashCard';
@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with the cycles burned retrieved from
- * dashboard.internetcomputer.org/api.
+ * ic-api.internetcomputer.org/api.
  */
  class CyclesCard extends Component {
   static propTypes = {
@@ -35,7 +35,7 @@ import Constants from '../../constants';
     super(props);
 
     this.state = {
-      cyclesBurned: -1,
+      cycleBurnRate: -1,
       error: 0
     };
   }
@@ -68,24 +68,26 @@ import Constants from '../../constants';
    */
   render() {
     let { cardIndex, className } = this.props;
-    let { cyclesBurned, error } = this.state;
+    let { cycleBurnRate, error } = this.state;
     
-    let cyclesBurnedText;
+    let cyclesBurnRateText;
     if (error >= Constants.NETWORK_ERROR_THRESHOLD)
-      cyclesBurnedText = 'Network error';
-    else if (cyclesBurned === -1)
-      cyclesBurnedText = 'Loading...';
+      cyclesBurnRateText = 'Network error';
+    else if (cycleBurnRate === -1)
+      cyclesBurnRateText = 'Loading...';
     else {
-      const trillionCyclesBurned = cyclesBurned / 1000000000000;
-      cyclesBurnedText = trillionCyclesBurned.toFixed(3) + 'T';
+      cyclesBurnRateText =
+      (cycleBurnRate / 1000000000).toLocaleString(
+        undefined, { 'minimumFractionDigits': 1, 'maximumFractionDigits': 1 }) +
+      'B Cycles/s';
     }
 
     return (
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Cycles Burned'
-        value={cyclesBurnedText}
+        title='Cycle Burn Rate'
+        value={cyclesBurnRateText}
         svgIconPath={Constants.ICON_SVG_PATH_CYCLES_BURNED}
       />
     );
@@ -96,25 +98,12 @@ import Constants from '../../constants';
    * @private
    */
   pollForCyclesBurned() {
-    const url =
-      `https://ic-api.internetcomputer.org/api/metrics/cycles-burned`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/cycle-burn-rate';
     axios.get(url)
       .then(res => {
-        if (res.data.cycles_burned.length === 2) {
-          let { cyclesBurned } = this.state;
-          const newCyclesBurned = parseInt(res.data.cycles_burned[1]);
-          if (newCyclesBurned > cyclesBurned) {
-            this.setState({
-              cyclesBurned: newCyclesBurned,
-              error: 0
-            });
-          }
-        }
-        // Special case for "{cycles_burned: 0}", which occurs pre-Genesis as networks are changed
-        // around. This should not be needed post-Genesis.
-        else if (res.data.cycles_burned === 0) {
+        if (res.data.cycle_burn_rate[0].length === 2) {
           this.setState({
-            cyclesBurned: 0,
+            cycleBurnRate: parseInt(res.data.cycle_burn_rate[0][1]),
             error: 0
           });
         }

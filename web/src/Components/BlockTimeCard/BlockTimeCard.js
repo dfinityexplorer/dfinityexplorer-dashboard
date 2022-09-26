@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import DashCard from '../DashCard/DashCard';
@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with seconds per block retrieved from
- * dashboard.internetcomputer.org/api.
+ * ic-api.internetcomputer.org/api.
  */
 class BlockTimeCard extends Component {
   static propTypes = {
@@ -94,7 +94,7 @@ class BlockTimeCard extends Component {
    * @private
    */
   pollForBlockTime() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/block-rate`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/block-rate';
     axios.get(url)
       .then(res => {
         if (res.data.block_rate.length === 1 && res.data.block_rate[0].length === 2) {

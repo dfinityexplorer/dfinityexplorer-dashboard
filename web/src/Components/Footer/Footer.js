@@ -257,14 +257,15 @@ class Footer extends ResponsiveComponent {
    * @private
    */
    getCopyrightText() {
+    const year = (new Date()).getFullYear();
     const breakpoint = getBreakpoint();
     switch (breakpoint) {
       case Breakpoints.XS:
-        return '© 2021 IC Explorer';
+        return `© ${year} IC Explorer`;
       case Breakpoints.SM:
-        return '© 2021 Internet Computer Explorer';
+        return `© ${year} Internet Computer Explorer`;
       default:
-        return '© 2021 Internet Computer Explorer | All rights reserved';
+        return `© ${year} Internet Computer Explorer | All rights reserved`;
     }
   }
 

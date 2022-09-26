@@ -137,11 +137,11 @@ class NetworkMetricsTable extends Component {
    * @private
    */
   getInternetIdentityAccounts() {
-    const url = 'https://ic-api.internetcomputer.org/api/metrics/internet-identity-total';
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/internet-identity-user-count';
     axios.get(url)
       .then(res => {
         const internetIdentityAccounts = {
-          value: parseInt(res.data.internet_identity_total[0][1]),
+          value: parseInt(res.data.internet_identity_user_count[0][1]),
           error: 0
         };
         this.setState({
@@ -163,7 +163,7 @@ class NetworkMetricsTable extends Component {
    * @private
    */
   getNnsMetrics() {
-    const url = 'https://ic-api.internetcomputer.org/api/nns/metrics';
+    const url = 'https://ic-api.internetcomputer.org/api/v3/staking-metrics';
     axios.get(url)
       .then(res => {
         // Total Voting Power
@@ -175,7 +175,7 @@ class NetworkMetricsTable extends Component {
           error: 0
         };
 
-        // Daily Voting Rewards
+        // Daily Voting Rewards Maturity
         const lastRewardEventE8s = res.data.metrics.find(element => {
           return element.name === 'governance_last_rewards_event_e8s'
         });
@@ -225,11 +225,11 @@ class NetworkMetricsTable extends Component {
    * @private
    */
   getNnsProposalCount() {
-    const url = 'https://ic-api.internetcomputer.org/api/nns/proposals-count';
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/latest-proposal-id';
     axios.get(url)
       .then(res => {
         const nnsProposalCount = {
-          value: parseInt(res.data.proposals_count),
+          value: parseInt(res.data.latest_proposal_id),
           error: 0
         };
         this.setState({
@@ -274,8 +274,8 @@ class NetworkMetricsTable extends Component {
   }
 
   /**
-   * Return the table cells for the Daily Voting Rewards row.
-   * @return {Array} The table cells for the Daily Voting Rewards row.
+   * Return the table cells for the Daily Voting Rewards Maturity row.
+   * @return {Array} The table cells for the Daily Voting Rewards Maturity row.
    * @private
    */
   getRowCellsDailyVotingRewards() {
@@ -292,14 +292,14 @@ class NetworkMetricsTable extends Component {
         Math.round(icpToUsd.value * dailyVotingRewards.value / 1000000);
       metricText =
         Math.round(dailyVotingRewards.value).toLocaleString() +
-        ' ICP ($' +
+        ' ($' +
         dailyVotingRewardsUsdM.toLocaleString(
           undefined, {'minimumFractionDigits': 1, 'maximumFractionDigits': 1}) +
         'M)';
     }
 
     return [
-      {value: 'Daily Voting Rewards', color: InfoTableTextColor.GRAY, isRightAligned: false},
+      {value: 'Daily Voting Rewards Maturity', color: InfoTableTextColor.GRAY, isRightAligned: false},
       {value: metricText, isRightAligned: true}
     ];
   }

@@ -87,7 +87,7 @@ class DfinityEarthWithSize extends Component {
 
 /**
  * This component displays DFINITY Earth, a visualization of Internet Computer data centers on a 3D
- * globe, using data retrieved from dashboard.internetcomputer.org/api.
+ * globe, using data retrieved from ic-api.internetcomputer.org/api.
  */
 class DfinityEarth extends Component { 
   static propTypes = {
@@ -170,23 +170,20 @@ class DfinityEarth extends Component {
       });
     }
 
-    const url = `https://ic-api.internetcomputer.org/api/locations`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/data-centers';
     axios.get(url)
       .then(res => {
         // Create an array of data center locations.
-        let locations = res.data.map((value) => {
+        let locations = res.data.data_centers.map((value) => {
           // Remove any number from end of location name (e.g., "Chicago 2" -> "Chicago").
           const city = value.name.replace(/[\d\' ']+$/, '');
-          // Temporary workaround for tooltip width limit for XS.
-          if (value.node_operator === 'Hurricane Electric')
-            value.node_operator = 'Hurricane Elec.';
           return {
             key: value.key, // not currently used
             lat: value.latitude,
             lng: value.longitude,
             city: city,
-            dc: value.node_operator,
-            numNodes: parseInt(value.total_nodes)
+            dc: value.owner,
+            numNodes: value.total_nodes
           };
         });
 
@@ -238,8 +235,10 @@ class DfinityEarth extends Component {
         });
 
         // Create a random set of unique subnets.
-        const nodesPerSubnet = 7; // use a Constants value for this!!!
-        const numberOfSubnets = 8; // consider using /api/metrics/ic-subnet-total!!!
+        // It would be preferable to use the real number of subnets and number of nodes in each
+        // subnet, but that would result in too high of a CPU load.
+        const nodesPerSubnet = 7;
+        const numberOfSubnets = 8;
         const subnets = new Set();
         let i = 0;
         while (subnets.size !== numberOfSubnets) {

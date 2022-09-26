@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with the memory total retrieved from
- * dashboard.internetcomputer.org/api.
+ * ic-api.internetcomputer.org/api.
  */
  class MemoryCard extends Component {
   static propTypes = {
@@ -83,7 +83,7 @@ import Constants from '../../constants';
    * @private
    */
   getMemoryTotal() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-memory-total`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/ic-memory-total';
     axios.get(url)
       .then(res => {
         if (res.data.ic_memory_total.length === 2) {

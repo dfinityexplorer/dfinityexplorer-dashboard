@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
@@ -29,8 +29,8 @@ const ImgDiv = styled.div`
     justify-content: center;
     margin-top: 30px;
     margin-bottom: 34px;
-    margin-left: 30px;
-    margin-right: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
     width: 42px;
     height: 42px;
   }
@@ -46,7 +46,10 @@ const ImgCard = styled.img`
 const SvgIconCard = styled(SvgIcon)`
   && {
     /* The combination of margin, padding, and font-size explicitly set the height of the card. */
-    margin: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
     font-size: 42px;
     opacity: ${props => props.theme.colorDashCardIconOpacity};
     color: ${props => props.theme.colorDashCardIcon[props.cardindex]};

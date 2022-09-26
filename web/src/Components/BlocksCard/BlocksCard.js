@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import CountUp from 'react-countup';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -13,7 +13,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with the current block height retrieved from
- * dashboard.internetcomputer.org/api.
+ * ic-api.internetcomputer.org/api.
  */
  class BlocksCard extends Component {
   static propTypes = {
@@ -103,13 +103,12 @@ import Constants from '../../constants';
    * @private
    */
   pollForBlockHeight() {
-    const url =
-      `https://ic-api.internetcomputer.org/api/metrics/block`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/block-heights';
     axios.get(url)
       .then(res => {
-        if (res.data.block.length === 1 && res.data.block[0].length === 2) {
+        if (res.data.block_height.length === 1 && res.data.block_height[0].length === 2) {
           let { blockHeight } = this.state;
-          const newBlockHeight = parseInt(res.data.block[0][1]);
+          const newBlockHeight = res.data.block_height[0][1];
           if (newBlockHeight > blockHeight) {
             this.setState(prevState => ({
               prevBlockHeight:

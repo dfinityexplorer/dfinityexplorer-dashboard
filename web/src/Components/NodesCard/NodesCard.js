@@ -12,7 +12,7 @@ import Constants from '../../constants';
 
 /**
  * This component displays a dashboard card with the current number of nodes retrieved from
- * dashboard.internetcomputer.org/api.
+ * ic-api.internetcomputer.org/api.
  */
  class NodesCard extends Component {
   static propTypes = {
@@ -81,12 +81,12 @@ import Constants from '../../constants';
    * @private
    */
   getNumberOfNodes() {
-    const url = `https://ic-api.internetcomputer.org/api/metrics/ic-nodes-count`;
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/ic-nodes-count';
     axios.get(url)
       .then(res => {
-        if (res.data.ic_nodes_count.length === 2) {
+        if (res.data.total_nodes.length === 1 && res.data.total_nodes[0].length === 2) {
           let { numberOfNodes } = this.state;
-          const newNumberOfNodes = parseInt(res.data.ic_nodes_count[1]);
+          const newNumberOfNodes = parseInt(res.data.total_nodes[0][1]);
           if (newNumberOfNodes > numberOfNodes) {
             this.setState({
               numberOfNodes: newNumberOfNodes,

@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import InfoTable, { InfoTableTextColor } from '../InfoTable/InfoTable';
 import Constants from '../../constants';
@@ -12,7 +12,7 @@ import getLocationsByCountry from '../../utils/getLocationsByCountry';
 
 /**
  * This component displays a sorted table of countries by number of data centers, with data
- * retrieved from dashboard.internetcomputer.org/api.
+ * retrieved from ic-api.internetcomputer.org/api.
  */
  class CountriesTable extends Component {
   static propTypes = {

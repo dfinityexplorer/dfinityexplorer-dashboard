@@ -53,10 +53,9 @@ class CanistersChart extends AreaChart {
     const startDate = new Date(2021, 4, 10); // Genesis: 5/10/2021
     const secondsInDay = 24 * 60 * 60;
     const url =
-      `https://ic-api.internetcomputer.org/api/metrics/registered-canisters?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
+      `https://ic-api.internetcomputer.org/api/v3/metrics/registered-canisters-count?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInDay}`;
     axios.get(url)
       .then(res => {
-        //let values = res.data.data.result[0].values;
         let values = res.data.running_canisters;
         const canistersData = values.map((value) => {
           const date = new Date(value[0] * 1000);

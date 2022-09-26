@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import DashCard from '../DashCard/DashCard';
@@ -76,13 +76,13 @@ class MessagesCard extends Component {
     else if (messagesPerSecond === -1)
       messagesTimeText = 'Loading...';
     else
-      messagesTimeText = messagesPerSecond.toFixed(1) + ' mps';
+      messagesTimeText = messagesPerSecond.toFixed(1) + ' tps';
 
     return (
       <DashCard
         className={className}
         cardIndex={cardIndex}
-        title='Message Throughput'
+        title='Transaction Throughput'
         value={messagesTimeText}
         svgIconPath={Constants.ICON_SVG_PATH_MPS}
       />
@@ -94,8 +94,7 @@ class MessagesCard extends Component {
    * @private
    */
   pollForMessagesTime() {
-    const url =
-      'https://ic-api.internetcomputer.org/api/v3/message-execution-rate';
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/message-execution-rate';
     axios.get(url)
       .then(res => {
         if (res.data.message_execution_rate.length === 1 && res.data.message_execution_rate[0].length >= 2) {

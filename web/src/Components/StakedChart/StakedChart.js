@@ -106,7 +106,7 @@ class StakedChart extends PieChart {
    * @private
    */
    getNnsMetrics() {
-    const url = 'https://ic-api.internetcomputer.org/api/nns/metrics';
+    const url = 'https://ic-api.internetcomputer.org/api/v3/staking-metrics';
     axios.get(url)
       .then(res => { 
         // Dissolving Neurons ICP

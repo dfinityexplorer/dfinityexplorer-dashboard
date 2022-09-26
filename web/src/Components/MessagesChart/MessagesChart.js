@@ -78,7 +78,7 @@ class MessagesChart extends BarChart {
     startDate.setDate(endDate.getDate() - 1);
     const secondsInHour = 60 * 60;
     const url =
-      `https://ic-api.internetcomputer.org/api/metrics/messages-count?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInHour}`;
+      `https://ic-api.internetcomputer.org/api/v3/messages-counts-over-time-deprecated?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInHour}`;
     axios.get(url)
       .then(res => {
         let values = res.data.messages_count;
@@ -209,7 +209,7 @@ class MessagesChart extends BarChart {
     const startDate = new Date(endDate.getTime() - 2 * 60000); // 2 minutes ago
     const seconds = Constants.MESSAGES_CHART_POLL_INTERVAL_MS / 1000;
     const url =
-      `https://ic-api.internetcomputer.org/api/metrics/messages-count?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+      `https://ic-api.internetcomputer.org/api/v3/messages-counts-over-time-deprecated?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
     axios.get(url)
       .then(res => {
         let values = res.data.messages_count;
@@ -245,7 +245,7 @@ class MessagesChart extends BarChart {
     const startDate = prevDate;
     const seconds = 1;
     const url =
-      `https://ic-api.internetcomputer.org/api/metrics/messages-count?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+      `https://ic-api.internetcomputer.org/api/v3/messages-counts-over-time-deprecated?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
     axios.get(url)
       .then(res => {
         const values = res.data.messages_count;
