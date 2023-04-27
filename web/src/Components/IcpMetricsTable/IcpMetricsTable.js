@@ -38,8 +38,8 @@ class IcpMetricsTable extends Component {
 
     this.state = {
       circulatingSupplyIcp: {value: null, error: 0},
-      dilutedCap: {value: null, error: 0},
-      marketCap: {value: null, error: 0},
+      //pricing!!!dilutedCap: {value: null, error: 0},
+      //pricing!!!marketCap: {value: null, error: 0},
       totalStakedIcp: {value: null, error: 0},
       totalSupplyIcp: {value: null, error: 0}
     };
@@ -51,7 +51,7 @@ class IcpMetricsTable extends Component {
    */
   componentDidMount() {
     this.getCirculatingSupply();
-    this.getNomicsMetrics(); 
+    //pricing!!!this.getNomicsMetrics(); 
     this.getNnsMetrics();
     this.getTotalSupply();
 
@@ -59,7 +59,7 @@ class IcpMetricsTable extends Component {
     this.interval = setInterval(
       () => {
         this.getCirculatingSupply();
-        this.getNomicsMetrics(); 
+        //pricing!!!this.getNomicsMetrics(); 
         this.getNnsMetrics();
         this.getTotalSupply();
       },
@@ -104,17 +104,17 @@ class IcpMetricsTable extends Component {
    * @protected
    */
   getBodyRows() {
-    const { dilutedCap, marketCap } = this.state;
+    //pricing!!!const { dilutedCap, marketCap } = this.state;
 
     return [
-      {
+      /*pricing!!!{
         mapKey: 0,
         cells: this.getRowCellsDollarMetric('Market Cap', marketCap)
       },
       {
         mapKey: 1,
         cells: this.getRowCellsDollarMetric('Fully Diluted Market Cap', dilutedCap)
-      },
+      },*/
       {
         mapKey: 2,
         cells: this.getRowCellsTotalSupply()
@@ -199,7 +199,7 @@ class IcpMetricsTable extends Component {
    * Get the metrics that come from Nomics.
    * @private
    */
-  getNomicsMetrics() {
+  /*pricing!!!getNomicsMetrics() {
     const url =
       `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
     axios.get(url)
@@ -230,7 +230,7 @@ class IcpMetricsTable extends Component {
           }
         }));
       });
-  }
+  }*/
 
   /**
    * Get the total supply.

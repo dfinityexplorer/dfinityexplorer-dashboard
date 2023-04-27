@@ -189,7 +189,7 @@ class Footer extends ResponsiveComponent {
           </Grid>
         </LeftThirdGrid>
         <OneThirdGrid container direction='column' justify='center' alignItems='center'>
-          { this.props.location.pathname === '/' &&
+          {/*pricing!!! this.props.location.pathname === '/' &&
             <Grid item>
               <FooterTypography color='inherit'>Site Under Development</FooterTypography>
               <FooterTypography color='inherit'>
@@ -200,7 +200,7 @@ class Footer extends ResponsiveComponent {
                 {')'}
               </FooterTypography>
             </Grid>
-          }
+          */}
         </OneThirdGrid>
         <RightThirdGrid
           container direction='row'
@@ -274,7 +274,7 @@ class Footer extends ResponsiveComponent {
    * @return {String} The Nomics attribution link text.
    * @private
    */
-  getNomicsText() {
+  /*pricing!!!getNomicsText() {
     const breakpoint = getBreakpoint();
     switch (breakpoint) {
       case Breakpoints.XS:
@@ -282,7 +282,7 @@ class Footer extends ResponsiveComponent {
       default:
         return 'Crypto Market Cap & Pricing Data Provided By Nomics';
     }
-  }
+  }*/
 };
 
 export default withRouter(Footer);

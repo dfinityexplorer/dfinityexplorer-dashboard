@@ -145,13 +145,13 @@ class TransactionPage extends TrackablePage {
         });
       }
       else {
-        const url =
+        /*pricing!!!const url =
           `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
         const result = await axios.get(url);
-        const icpToUsd = parseFloat(result?.data[0]?.price);
+        const icpToUsd = parseFloat(result?.data[0]?.price);*/
 
         this.setState({
-          icpToUsd, icpToUsd,
+          icpToUsd: null,//pricing!!!icpToUsd,
           isLoading: false,
           rosettaError: null,
           transaction: transaction

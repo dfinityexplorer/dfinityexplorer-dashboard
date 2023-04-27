@@ -53,7 +53,7 @@ class NetworkMetricsTable extends Component {
    */
   componentDidMount() {
     this.getInternetIdentityAccounts();
-    this.getNomicsMetrics(); 
+    //pricing!!!this.getNomicsMetrics(); 
     this.getNnsMetrics();
     this.getNnsProposalCount();
 
@@ -61,7 +61,7 @@ class NetworkMetricsTable extends Component {
     this.interval = setInterval(
       () => {
         this.getInternetIdentityAccounts();
-        this.getNomicsMetrics(); 
+        //pricing!!!this.getNomicsMetrics(); 
         this.getNnsMetrics();
         this.getNnsProposalCount();
       },
@@ -250,7 +250,7 @@ class NetworkMetricsTable extends Component {
    * Get the metrics that come from Nomics.
    * @private
    */
-  getNomicsMetrics() {
+  /*pricing!!!getNomicsMetrics() {
     const url =
       `https://api.nomics.com/v1/currencies/ticker?key=${Constants.NOMICS_API_KEY}&ids=ICP&interval=1d`;
     axios.get(url)
@@ -271,7 +271,7 @@ class NetworkMetricsTable extends Component {
           }
         }));
       });
-  }
+  }*/
 
   /**
    * Return the table cells for the Daily Voting Rewards Maturity row.
@@ -285,17 +285,17 @@ class NetworkMetricsTable extends Component {
     if (dailyVotingRewards.error >= Constants.NETWORK_ERROR_THRESHOLD
       || icpToUsd.error >= Constants.NETWORK_ERROR_THRESHOLD)
       metricText = 'Network error';
-    else if (dailyVotingRewards.value === null || icpToUsd.value === null)
+    else if (dailyVotingRewards.value === null /*pricing!!!|| icpToUsd.value === null*/)
       metricText = 'Loading...';
     else {
-      const dailyVotingRewardsUsdM =
-        Math.round(icpToUsd.value * dailyVotingRewards.value / 1000000);
+      /*pricing!!!const dailyVotingRewardsUsdM =
+        Math.round(icpToUsd.value * dailyVotingRewards.value / 1000000);*/
       metricText =
-        Math.round(dailyVotingRewards.value).toLocaleString() +
+        Math.round(dailyVotingRewards.value).toLocaleString()/*pricing!!! +
         ' ($' +
         dailyVotingRewardsUsdM.toLocaleString(
           undefined, {'minimumFractionDigits': 1, 'maximumFractionDigits': 1}) +
-        'M)';
+        'M)'*/;
     }
 
     return [
