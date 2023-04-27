@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/static/js/main.2daa5268.chunk.js",
-    "main.js.map": "/static/js/main.2daa5268.chunk.js.map",
+    "main.js": "/static/js/main.f0e89894.chunk.js",
+    "main.js.map": "/static/js/main.f0e89894.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.183ea88b.js",
     "runtime-main.js.map": "/static/js/runtime-main.183ea88b.js.map",
-    "static/js/2.46f92ee2.chunk.js": "/static/js/2.46f92ee2.chunk.js",
-    "static/js/2.46f92ee2.chunk.js.map": "/static/js/2.46f92ee2.chunk.js.map",
+    "static/js/2.fbe06147.chunk.js": "/static/js/2.fbe06147.chunk.js",
+    "static/js/2.fbe06147.chunk.js.map": "/static/js/2.fbe06147.chunk.js.map",
     "index.html": "/index.html",
-    "static/js/2.46f92ee2.chunk.js.LICENSE.txt": "/static/js/2.46f92ee2.chunk.js.LICENSE.txt",
-    "static/js/main.2daa5268.chunk.js.LICENSE.txt": "/static/js/main.2daa5268.chunk.js.LICENSE.txt",
+    "static/js/2.fbe06147.chunk.js.LICENSE.txt": "/static/js/2.fbe06147.chunk.js.LICENSE.txt",
+    "static/js/main.f0e89894.chunk.js.LICENSE.txt": "/static/js/main.f0e89894.chunk.js.LICENSE.txt",
     "static/media/banner-x-horizon.9056e3df.png": "/static/media/banner-x-horizon.9056e3df.png",
     "static/media/dfinity-earth-day.6ac0770c.jpg": "/static/media/dfinity-earth-day.6ac0770c.jpg",
     "static/media/dfinity-earth-night.37b200bd.jpg": "/static/media/dfinity-earth-night.37b200bd.jpg",
@@ -17,7 +17,6 @@
     "static/media/dfinity-logo-dark-mode.833a5708.png": "/static/media/dfinity-logo-dark-mode.833a5708.png",
     "static/media/dfinity-logo-light-mode.4b1dc033.png": "/static/media/dfinity-logo-light-mode.4b1dc033.png",
     "static/media/github-octocat.f7138e25.png": "/static/media/github-octocat.f7138e25.png",
-    "static/media/icpLogo.8fe881f2.svg": "/static/media/icpLogo.8fe881f2.svg",
     "static/media/material-ui-logo.9f19218a.png": "/static/media/material-ui-logo.9f19218a.png",
     "static/media/nomics-logo-dark-mode.5b14d685.png": "/static/media/nomics-logo-dark-mode.5b14d685.png",
     "static/media/nomics-logo-light-mode.b7e4e88c.png": "/static/media/nomics-logo-light-mode.b7e4e88c.png",
@@ -27,7 +26,7 @@
   },
   "entrypoints": [
     "static/js/runtime-main.183ea88b.js",
-    "static/js/2.46f92ee2.chunk.js",
-    "static/js/main.2daa5268.chunk.js"
+    "static/js/2.fbe06147.chunk.js",
+    "static/js/main.f0e89894.chunk.js"
   ]
 }
