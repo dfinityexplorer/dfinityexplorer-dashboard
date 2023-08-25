@@ -35,6 +35,12 @@
  */
 
 /**
+ * @file IcpMetricsTable
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
+ * @license MIT License
+ */
+
+/**
  * @file MessagesChart
  * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
  * @license MIT License
@@ -42,13 +48,19 @@
 
 /**
  * @file NetworkMetricsTable
- * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
 /**
  * @file StakedChart
- * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
+ * @license MIT License
+ */
+
+/**
+ * @file getApiStakingSubnetSum
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -66,7 +78,7 @@
 
 /**
  * @file getLocationsByCountry
- * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
