@@ -1,6 +1,6 @@
 /**
  * @file IcpMetricsTable
- * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import InfoTable, { InfoTableTextColor } from '../InfoTable/InfoTable';
 import Constants from '../../constants';
+import getApiStakingSubnetSum from '../../utils/getApiStakingSubnetSum';
 
 /**
  * This component displays a table with ICP-related info.
@@ -161,21 +162,22 @@ class IcpMetricsTable extends Component {
    * @private
    */
   getNnsMetrics() {
-    const url = 'https://ic-api.internetcomputer.org/api/v3/staking-metrics';
+    const url = 'https://ic-api.internetcomputer.org/api/v3/governance-metrics';
     axios.get(url)
       .then(res => {
         // Dissolving Neurons ICP
         const dissolvingNeuronsE8s = res.data.metrics.find(element => {
-          return element.name === 'governance_dissolving_neurons_e8s_count'
+          return element.name === 'governance_dissolving_neurons_e8s'
         });
-        const dissolvingNeuronsIcp = parseInt(dissolvingNeuronsE8s.samples[0].value) / 100000000;
+        const dissolvingNeuronsIcp =
+          getApiStakingSubnetSum(dissolvingNeuronsE8s.subsets) / 100000000;
 
         // Not Dissolving Neurons ICP
         const notDissolvingNeuronsE8s = res.data.metrics.find(element => {
-          return element.name === 'governance_not_dissolving_neurons_e8s_count'
+          return element.name === 'governance_not_dissolving_neurons_e8s'
         });
         const notDissolvingNeuronsIcp =
-          parseInt(notDissolvingNeuronsE8s.samples[0].value) / 100000000;
+          getApiStakingSubnetSum(notDissolvingNeuronsE8s.subsets) / 100000000;
 
         const totalStakedIcp = {
           value: dissolvingNeuronsIcp + notDissolvingNeuronsIcp,

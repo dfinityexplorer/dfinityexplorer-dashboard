@@ -1,6 +1,6 @@
 /**
  * @file getLocationsByCountry
- * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -15,36 +15,54 @@ export default async function getLocationsByCountry() {
   // Future enhancement: Get the country name by latitude/longitude using an API such as:
   // http://geodb-cities-api.wirefreethought.com/docs/api/find-near-location
   const cityToCountryMap = new Map();
+  cityToCountryMap.set('Alabma', 'USA'); // sic
   cityToCountryMap.set('Allentown', 'USA');
   cityToCountryMap.set('Antwerp', 'Belgium');
   cityToCountryMap.set('Atlanta', 'USA');
   cityToCountryMap.set('Boston', 'USA');
   cityToCountryMap.set('Brussels', 'Belgium');
   cityToCountryMap.set('Bucharest', 'Romania');
+  cityToCountryMap.set('California', 'USA');
   cityToCountryMap.set('Chicago', 'USA');
+  cityToCountryMap.set('Colombo', 'Sri Lanka');
   cityToCountryMap.set('Dallas', 'USA');
   cityToCountryMap.set('Frankfurt', 'Germany');
   cityToCountryMap.set('Fremont', 'USA');
+  cityToCountryMap.set('Gauteng', 'South Africa');
   cityToCountryMap.set('Geneva', 'Switzerland');
+  cityToCountryMap.set('HongKong', 'China'); // sic
   cityToCountryMap.set('Houston', 'USA');
   cityToCountryMap.set('Jacksonville', 'USA');
   cityToCountryMap.set('Las Vegas', 'USA');
   cityToCountryMap.set('Ljubljana', 'Slovenia');
   cityToCountryMap.set('Maribor', 'Slovenia');
   cityToCountryMap.set('Marseille', 'France');
+  cityToCountryMap.set('Melbourne', 'Australia');
   cityToCountryMap.set('Miami', 'USA');
   cityToCountryMap.set('Munich', 'Germany');
+  cityToCountryMap.set('Navi Mumbai', 'India');
+  cityToCountryMap.set('New Delhi', 'India');
   cityToCountryMap.set('New York', 'USA');
+  cityToCountryMap.set('Normandie', 'France');
   cityToCountryMap.set('Orlando', 'USA');
+  cityToCountryMap.set('Paris', 'France');
   cityToCountryMap.set('Phoenix', 'USA');
   cityToCountryMap.set('Portland', 'USA');
+  cityToCountryMap.set('Quebec', 'Canada');
+  cityToCountryMap.set('Quebec l', 'Canada'); // sic
+  cityToCountryMap.set('Queensland', 'Australia');
   cityToCountryMap.set('San Jose', 'USA');
   cityToCountryMap.set('Singapore', 'Singapore');
   cityToCountryMap.set('Sterling', 'USA');
+  cityToCountryMap.set('South Moravian Region', 'Czech Republic');
+  cityToCountryMap.set('Stockholm', 'Sweden');
   cityToCountryMap.set('Tampa', 'USA');
+  cityToCountryMap.set('Tbilisi', 'Georgia');
   cityToCountryMap.set('Tokyo', 'Japan');
   cityToCountryMap.set('Toronto', 'Canada');
   cityToCountryMap.set('Vancouver', 'Canada');
+  cityToCountryMap.set('Vancouver', 'Canada');
+  cityToCountryMap.set('Vilnius', 'Lithuania');
   cityToCountryMap.set('Zurich', 'Switzerland');
 
   try {

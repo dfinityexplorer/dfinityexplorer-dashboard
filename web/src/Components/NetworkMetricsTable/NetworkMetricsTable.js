@@ -1,6 +1,6 @@
 /**
  * @file NetworkMetricsTable
- * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -163,7 +163,7 @@ class NetworkMetricsTable extends Component {
    * @private
    */
   getNnsMetrics() {
-    const url = 'https://ic-api.internetcomputer.org/api/v3/staking-metrics';
+    const url = 'https://ic-api.internetcomputer.org/api/v3/governance-metrics';
     axios.get(url)
       .then(res => {
         // Total Voting Power
@@ -171,7 +171,7 @@ class NetworkMetricsTable extends Component {
           return element.name === 'governance_voting_power_total'
         });
         const totalVotingPower = {
-          value: parseInt(totalVotingPowerE8s.samples[0].value) / 100000000,
+          value: Number(totalVotingPowerE8s.subsets[0].value[1]) / 100000000,
           error: 0
         };
 
@@ -179,7 +179,7 @@ class NetworkMetricsTable extends Component {
         const lastRewardEventE8s = res.data.metrics.find(element => {
           return element.name === 'governance_last_rewards_event_e8s'
         });
-        const lastRewardEvent = parseInt(lastRewardEventE8s.samples[0].value) / 100000000;
+        const lastRewardEvent = Number(lastRewardEventE8s.subsets[0].value[1]) / 100000000;
         const dailyVotingRewards = {
           value: lastRewardEvent,
           error: 0

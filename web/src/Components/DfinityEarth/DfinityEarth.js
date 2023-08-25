@@ -1,6 +1,6 @@
 /**
  * @file DfinityEarth
- * @copyright Copyright (c) 2018-2022 Dylan Miller and icpexplorer contributors
+ * @copyright Copyright (c) 2018-2023 Dylan Miller and icpexplorer contributors
  * @license MIT License
  */
 
@@ -236,9 +236,9 @@ class DfinityEarth extends Component {
 
         // Create a random set of unique subnets.
         // It would be preferable to use the real number of subnets and number of nodes in each
-        // subnet, but that would result in too high of a CPU load.
+        // subnet, but that would result in too high of a CPU load and too much visual noise.
         const nodesPerSubnet = 7;
-        const numberOfSubnets = 8;
+        const numberOfSubnets = 16;
         const subnets = new Set();
         let i = 0;
         while (subnets.size !== numberOfSubnets) {
