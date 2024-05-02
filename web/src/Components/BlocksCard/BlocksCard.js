@@ -46,11 +46,14 @@ import Constants from '../../constants';
    * Invoked by React immediately after a component is mounted (inserted into the tree). 
    * @public
    */
-  componentDidMount() {    
+  async componentDidMount() {   
+    // Get blocksPerSecond in order to set prevBlockHeight for the first time.
+    const blocksPerSecond = await this.getBlockTime();
+  
     // Update the block height using intervals.
-    this.pollForBlockHeight();
+    this.pollForBlockHeight(blocksPerSecond);
     this.interval = setInterval(
-      () => { this.pollForBlockHeight() },
+      () => { this.pollForBlockHeight(blocksPerSecond) },
       Constants.BLOCKS_CARD_POLL_INTERVAL_MS);
   }
 
@@ -102,17 +105,20 @@ import Constants from '../../constants';
    * Update the block height.
    * @private
    */
-  pollForBlockHeight() {
-    const url = 'https://ic-api.internetcomputer.org/api/v3/block-heights';
+  pollForBlockHeight(blocksPerSecond) {
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/block-height';
     axios.get(url)
       .then(res => {
-        if (res.data.block_height.length === 1 && res.data.block_height[0].length === 2) {
+        if (res.data.block_height.length === 2) {
           let { blockHeight } = this.state;
-          const newBlockHeight = res.data.block_height[0][1];
+          const newBlockHeight = parseInt(res.data.block_height[1]);
           if (newBlockHeight > blockHeight) {
             this.setState(prevState => ({
               prevBlockHeight:
-                prevState.prevBlockHeight !== -1 ? prevState.blockHeight : newBlockHeight,
+                prevState.prevBlockHeight !== -1 ?
+                  prevState.blockHeight :
+                  // When there is no prevBlockHeight, estimate it based on blocksPerSecond.
+                  newBlockHeight - blocksPerSecond * Constants.BLOCKS_CARD_POLL_INTERVAL_MS / 1000,
               blockHeight: newBlockHeight,
               error: 0
             }));  
@@ -124,6 +130,22 @@ import Constants from '../../constants';
           error: prevState.error + 1
         }));
       });
+  }
+
+  /**
+   * Get the block time.
+   * @private
+   */
+  async getBlockTime() {
+    const url = 'https://ic-api.internetcomputer.org/api/v3/metrics/block-rate';
+    try {
+      const res = await axios.get(url);
+      if (res.data.block_rate.length === 1 && res.data.block_rate[0].length === 2) {
+        return parseFloat(res.data.block_rate[0][1]);
+      }
+    } catch {
+    }
+    return 45; // default fallback if the block rate couldn't be retrieved
   }
 }
 

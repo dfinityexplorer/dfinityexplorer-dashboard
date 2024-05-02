@@ -8,10 +8,10 @@ import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 import axios from 'axios';
 import BarChart from '../BarChart/BarChart';
-import Constants from '../../constants';
 import roundDownDateToHour from '../../utils/roundDownDateToHour';
 
 /**
+ * THIS COMPONENT HAS BEEN DEPRECATED.
  * This component displays a number of messages chart with data retrieved from
  * ic-api.internetcomputer.org.
  */
@@ -77,6 +77,7 @@ class MessagesChart extends BarChart {
     const startDate = new Date(endDate.getTime());
     startDate.setDate(endDate.getDate() - 1);
     const secondsInHour = 60 * 60;
+    // This API endpoint no longer exists.
     const url =
       `https://ic-api.internetcomputer.org/api/v3/messages-counts-over-time-deprecated?&start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${secondsInHour}`;
     axios.get(url)

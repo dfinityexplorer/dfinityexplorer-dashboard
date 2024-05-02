@@ -165,14 +165,14 @@ class BlocksChart extends BarChart {
    */
   pollForInitialBlocks() {
     let endDate = new Date();
-    endDate = new Date(endDate.getTime() - 1 * 60000); // 1 minute ago to avoid API time discrepancy
-    const startDate = new Date(endDate.getTime() - 2 * 60000); // 2 minutes ago
-    const seconds = Constants.BLOCKS_CHART_POLL_INTERVAL_MS / 1000;
+    endDate = new Date(endDate.getTime() - 5 * 60 * 1000); // 5 minutes ago to avoid API time discrepancy
+    const startDate = new Date(endDate.getTime() - 60 * 60 * 1000); // 65 minutes ago
+    const seconds = Constants.BLOCKS_CHART_POLL_INTERVAL_MS / 1000; // 1 minute
     const url =
-      `https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+      `https://ic-api.internetcomputer.org/api/v3/metrics/block-height?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
     axios.get(url)
       .then(res => {
-        let values = res.data.block;
+        let values = res.data.block_height;
         values.pop(); // Workaround: Throw away last value, always higher than it should be.
         // Use values[0] to get the starting block height.
         let prevHeight = Math.floor(values[0][1]);
@@ -200,15 +200,15 @@ class BlocksChart extends BarChart {
    * @private
    */
   async pollForMoreBlocks() {
-    // Get data from 1 minute ago to avoid API time discrepancy.
-    const startDate = new Date((new Date()).getTime() - 61 * 1000);
-    const endDate = new Date((new Date()).getTime() - 60 * 1000);
-    const seconds = 1;
+    // * 5!!!
+    const endDate = new Date((new Date()).getTime() - 5 * 60 * 1000 ); // 5 minutes ago to avoid API time discrepancy
+    const startDate = new Date(endDate.getTime() - 60 * 1000); // 6 minutes ago
+    const seconds = Constants.BLOCKS_CHART_POLL_INTERVAL_MS / 1000; // 1 minute
     const url =
-      `https://ic-api.internetcomputer.org/api/metrics/block?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
+      `https://ic-api.internetcomputer.org/api/v3/metrics/block-height?start=${Math.floor(startDate.getTime() / 1000)}&end=${Math.floor(endDate.getTime() / 1000)}&step=${seconds}`;
     await axios.get(url)
       .then(res => {
-        const values = res.data.block;
+        const values = res.data.block_height;
         if (values.length >= 2) {
           const prevHeight = Math.floor(values[values.length - 2][1]);
           const curHeight = Math.floor(values[values.length - 1][1]);

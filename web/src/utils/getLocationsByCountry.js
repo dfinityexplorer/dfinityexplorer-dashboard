@@ -19,10 +19,14 @@ export default async function getLocationsByCountry() {
   cityToCountryMap.set('Allentown', 'USA');
   cityToCountryMap.set('Antwerp', 'Belgium');
   cityToCountryMap.set('Atlanta', 'USA');
+  cityToCountryMap.set('Barreiro', 'Portugal');
+  cityToCountryMap.set('Bogota', 'Colombia');
   cityToCountryMap.set('Boston', 'USA');
   cityToCountryMap.set('Brussels', 'Belgium');
   cityToCountryMap.set('Bucharest', 'Romania');
+  cityToCountryMap.set('CABA', 'Argentina');
   cityToCountryMap.set('California', 'USA');
+  cityToCountryMap.set('Cape Town', 'South Africa');
   cityToCountryMap.set('Chicago', 'USA');
   cityToCountryMap.set('Colombo', 'Sri Lanka');
   cityToCountryMap.set('Dallas', 'USA');
@@ -30,11 +34,15 @@ export default async function getLocationsByCountry() {
   cityToCountryMap.set('Fremont', 'USA');
   cityToCountryMap.set('Gauteng', 'South Africa');
   cityToCountryMap.set('Geneva', 'Switzerland');
+  cityToCountryMap.set('Greater Noida', 'India');  
   cityToCountryMap.set('HongKong', 'China'); // sic
   cityToCountryMap.set('Houston', 'USA');
   cityToCountryMap.set('Jacksonville', 'USA');
   cityToCountryMap.set('Las Vegas', 'USA');
+  cityToCountryMap.set('Lisbon', 'Portugal');
   cityToCountryMap.set('Ljubljana', 'Slovenia');
+  cityToCountryMap.set('London', 'United Kingdom');
+  cityToCountryMap.set('Madrid', 'Spain');
   cityToCountryMap.set('Maribor', 'Slovenia');
   cityToCountryMap.set('Marseille', 'France');
   cityToCountryMap.set('Melbourne', 'Australia');
@@ -45,24 +53,35 @@ export default async function getLocationsByCountry() {
   cityToCountryMap.set('New York', 'USA');
   cityToCountryMap.set('Normandie', 'France');
   cityToCountryMap.set('Orlando', 'USA');
+  cityToCountryMap.set('Panama City', 'Panama');
+  cityToCountryMap.set('Panvel', 'India');
   cityToCountryMap.set('Paris', 'France');
   cityToCountryMap.set('Phoenix', 'USA');
   cityToCountryMap.set('Portland', 'USA');
+  cityToCountryMap.set('Praha', 'Czech Republic');
   cityToCountryMap.set('Quebec', 'Canada');
   cityToCountryMap.set('Quebec l', 'Canada'); // sic
   cityToCountryMap.set('Queensland', 'Australia');
+  cityToCountryMap.set('Riga', 'Latvia');
   cityToCountryMap.set('San Jose', 'USA');
+  cityToCountryMap.set('San José', 'Costa Rica');
+  cityToCountryMap.set('Seoul', 'South Korea');
+  cityToCountryMap.set('Siauliai', 'Lithuania');
   cityToCountryMap.set('Singapore', 'Singapore');
   cityToCountryMap.set('Sterling', 'USA');
   cityToCountryMap.set('South Moravian Region', 'Czech Republic');
   cityToCountryMap.set('Stockholm', 'Sweden');
+  cityToCountryMap.set('Tallinn', 'Estonia');
   cityToCountryMap.set('Tampa', 'USA');
   cityToCountryMap.set('Tbilisi', 'Georgia');
+  cityToCountryMap.set('Tel Aviv', 'Israel');
   cityToCountryMap.set('Tokyo', 'Japan');
   cityToCountryMap.set('Toronto', 'Canada');
-  cityToCountryMap.set('Vancouver', 'Canada');
+  cityToCountryMap.set('Utah', 'USA');
   cityToCountryMap.set('Vancouver', 'Canada');
   cityToCountryMap.set('Vilnius', 'Lithuania');
+  cityToCountryMap.set('Warszawa', 'Poland');
+  cityToCountryMap.set('Zagreb', 'Croatia');
   cityToCountryMap.set('Zurich', 'Switzerland');
 
   try {

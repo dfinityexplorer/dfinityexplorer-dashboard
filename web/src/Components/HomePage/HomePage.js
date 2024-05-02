@@ -18,7 +18,6 @@ import IcpMetricsTable from '../IcpMetricsTable/IcpMetricsTable';
 import NetworkMetricsTable from '../NetworkMetricsTable/NetworkMetricsTable';
 import BlocksChart from '../BlocksChart/BlocksChart';
 import CanistersChart from '../CanistersChart/CanistersChart';
-import MessagesChart from '../MessagesChart/MessagesChart';
 //pricing!!!import PriceChart from '../PriceChart/PriceChart';
 import StakedChart from '../StakedChart/StakedChart';
 import { Breakpoints } from '../../utils/breakpoint';
@@ -360,13 +359,14 @@ class HomePage extends TrackablePage {
           alignItems='flex-start'
           breakpoint={breakpoint}
         >
-          <GridChart item breakpoint={breakpoint}>
+          <GridChartWide item breakpoint={breakpoint}>
             <Fade
               timeout={500}
             >
               <CanistersChart chartHeight={chartHeight} breakpoint={breakpoint} />
             </Fade>
-          </GridChart>
+          </GridChartWide>
+          {/* MessagesChart has been deprecated.
           <GridChart item breakpoint={breakpoint}>
             <Fade
               delay={50}
@@ -375,6 +375,7 @@ class HomePage extends TrackablePage {
               <MessagesChart chartHeight={chartHeight} breakpoint={breakpoint} />
             </Fade>
           </GridChart>
+          */}
         </GridSectionCharts2>
       </Fragment>
     );
